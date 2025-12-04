@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+    <!-- Page d'accueil - Priorité maximale -->
+    <url>
+        <loc>https://nextdriveimport.fr/</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Page index.html (alias de la page d'accueil) -->
+    <url>
+        <loc>https://nextdriveimport.fr/index.html</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Section Véhicules -->
+    <url>
+        <loc>https://nextdriveimport.fr/#vehicules</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Section Processus -->
+    <url>
+        <loc>https://nextdriveimport.fr/#processus</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Section FAQ -->
+    <url>
+        <loc>https://nextdriveimport.fr/#faq</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Section Avis -->
+    <url>
+        <loc>https://nextdriveimport.fr/#avis</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Section Garanties -->
+    <url>
+        <loc>https://nextdriveimport.fr/#garanties</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Formulaire Devis -->
+    <url>
+        <loc>https://nextdriveimport.fr/#devis</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- CGV -->
+    <url>
+        <loc>https://nextdriveimport.fr/cgv.html</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <!-- Page 404 -->
+    <url>
+        <loc>https://nextdriveimport.fr/404.html</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.1</priority>
+    </url>
+
+    <!-- 
+    Note: Les pages admin, login, mentions légales, politique de confidentialité, CGU et cookies 
+    sont volontairement exclues du sitemap car elles ont un meta robots "noindex, nofollow"
+    -->
+
+</urlset>

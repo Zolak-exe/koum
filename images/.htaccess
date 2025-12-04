@@ -1,0 +1,22 @@
+# Configuration du dossier images
+
+# Autoriser l'accès aux images
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Type MIME
+AddType image/webp .webp
+AddType image/svg+xml .svg
+
+# Cache long pour les images
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 year"
+</IfModule>
+
+# Compression
+<IfModule mod_deflate.c>
+    SetOutputFilter DEFLATE
+</IfModule>

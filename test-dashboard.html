@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Tests Complets - NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        .check-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #4b5563;
+        }
+
+        .check-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-pending {
+            border-left-color: #f59e0b;
+            color: #d1d5db;
+        }
+
+        .status-running {
+            border-left-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .status-success {
+            border-left-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .status-error {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-black mb-4">
+                🧪 Tests Complets
+            </h1>
+            <p class="text-2xl gradient-text font-bold">NEXT DRIVE IMPORT</p>
+            <p class="text-gray-400 mt-2" id="systemInfo">Chargement infos système...</p>
+
+            <div class="mt-8 flex justify-center gap-4">
+                <button onclick="runAllTests()"
+                    class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition transform hover:scale-105">
+                    🚀 Lancer tous les tests
+                </button>
+                <a href="test-new-workflow.html"
+                    class="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition">
+                    🔄 Tests Scénarios (Workflow)
+                </a>
+            </div>
+
+            <div class="mt-8 flex justify-center gap-6">
+                <div class="bg-gray-800 px-6 py-3 rounded-lg border border-gray-700">
+                    <span class="text-gray-400">Total:</span>
+                    <span class="text-white font-bold ml-2" id="totalTests">0</span>
+                </div>
+                <div class="bg-green-900/30 px-6 py-3 rounded-lg border border-green-900">
+                    <span class="text-gray-400">✅ Réussis:</span>
+                    <span class="text-green-400 font-bold ml-2" id="passedTests">0</span>
+                </div>
+                <div class="bg-red-900/30 px-6 py-3 rounded-lg border border-red-900">
+                    <span class="text-gray-400">❌ Échoués:</span>
+                    <span class="text-red-400 font-bold ml-2" id="failedTests">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container des tests -->
+        <div id="testsContainer" class="space-y-8">
+            <!-- Les sections seront générées ici par JS -->
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-gray-500 text-sm">
+            <p>Tests réalisés le <span id="testDate">-</span></p>
+            <p>Environnement: <span id="envInfo">-</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration des tests
+        const testConfig = {
+            frontend: {
+                title: "📄 Pages Frontend",
+                icon: "📄",
+                tests: [
+                    { id: 'home', name: "Page d'accueil (index.html)", url: 'index.html' },
+                    { id: 'admin_login', name: "Connexion admin (admin-login.html)", url: 'pages/admin-login.html' },
+                    { id: 'client_login', name: "Connexion client (login.html)", url: 'pages/login.html' },
+                    { id: 'admin_dash', name: "Tableau de bord admin (admin.html)", url: 'pages/admin.html' },
+                    { id: 'client_dash', name: "Espace client (client.html)", url: 'pages/client.html' },
+                    { id: 'register', name: "Inscription (register.html)", url: 'pages/register.html' }
+                ]
+            },
+            legal: {
+                title: "⚖️ Pages Légales",
+                icon: "⚖️",
+                tests: [
+                    { id: 'cgv', name: "CGV (cgv.html)", url: 'pages/cgv.html' },
+                    { id: 'cgu', name: "CGU (cgu.html)", url: 'pages/cgu.html' },
+                    { id: 'mentions', name: "Mentions légales (mentions-legales.html)", url: 'pages/mentions-legales.html' },
+                    { id: 'pdc', name: "Politique confidentialité (pdc.html)", url: 'pages/pdc.html' },
+                    { id: 'cookies', name: "Cookies (cookies.html)", url: 'pages/cookies.html' }
+                ]
+            },
+            api: {
+                title: "🔌 APIs Backend",
+                icon: "🔌",
+                tests: [
+                    { id: 'api_check_session', name: "check_session.php", url: 'api/check_session.php', method: 'GET' },
+                    { id: 'api_get_clients', name: "get-clients.php", url: 'api/get-clients.php', method: 'GET' },
+                    { id: 'api_chat', name: "chat.php (OPTIONS check)", url: 'api/chat.php', method: 'OPTIONS' },
+                    { id: 'api_submit', name: "submit-devis.php (OPTIONS check)", url: 'api/submit-devis.php', method: 'OPTIONS' },
+                    { id: 'api_account', name: "account-manager.php (OPTIONS check)", url: 'api/account-manager.php', method: 'OPTIONS' }
+                ]
+            },
+            assets: {
+                title: "🎨 Assets & Scripts",
+                icon: "🎨",
+                tests: [
+                    { id: 'css_style', name: "style.css", url: 'assets/css/style.css' },
+                    { id: 'js_script', name: "script.js", url: 'assets/js/script.js' },
+                    { id: 'js_devis', name: "devis-flow.js", url: 'assets/js/devis-flow.js' },
+                    { id: 'js_chat', name: "chat-client.js", url: 'assets/js/chat-client.js' },
+                    { id: 'js_admin', name: "admin-script.js", url: 'assets/js/admin-script.js' }
+                ]
+            },
+            system: {
+                title: "💾 Système & Données",
+                icon: "💾",
+                tests: [
+                    { id: 'sys_check', name: "Vérification Système (Permissions/Fichiers)", type: 'system' }
+                ]
+            }
+        };
+
+        // État global
+        let stats = { total: 0, passed: 0, failed: 0 };
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTests();
+            checkSystem();
+            document.getElementById('testDate').textContent = new Date().toLocaleString();
+        });
+
+        // Rendu des tests
+        function renderTests() {
+            const container = document.getElementById('testsContainer');
+            container.innerHTML = '';
+            stats.total = 0;
+
+            for (const [key, section] of Object.entries(testConfig)) {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'bg-gray-900 rounded-2xl p-6 border border-gray-800';
+
+                let testsHtml = '';
+                section.tests.forEach(test => {
+                    stats.total++;
+                    testsHtml += `
+                        <div id="test-${test.id}" class="check-item p-4 rounded-lg mb-2 flex justify-between items-center transition-all status-pending">
+                            <div class="flex items-center gap-3">
+                                <span class="status-icon">⏳</span>
+                                <span class="font-medium">${test.name}</span>
+                            </div>
+                            <span class="text-sm text-gray-500 status-msg">En attente</span>
+                        </div>
+                    `;
+                });
+
+                sectionDiv.innerHTML = `
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <span>${section.icon}</span> ${section.title}
+                    </h2>
+                    <div class="space-y-2">
+                        ${testsHtml}
+                    </div>
+                `;
+                container.appendChild(sectionDiv);
+            }
+            updateStats();
+        }
+
+        // Mise à jour des stats
+        function updateStats() {
+            document.getElementById('totalTests').textContent = stats.total;
+            document.getElementById('passedTests').textContent = stats.passed;
+            document.getElementById('failedTests').textContent = stats.failed;
+        }
+
+        // Mise à jour d'un test
+        function updateTestStatus(id, status, message) {
+            const el = document.getElementById(`test-${id}`);
+            if (!el) return;
+
+            el.className = el.className.replace(/status-\w+/, '') + ` status-${status}`;
+
+            const icon = el.querySelector('.status-icon');
+            const msg = el.querySelector('.status-msg');
+
+            if (status === 'running') {
+                icon.innerHTML = '<div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full spinner"></div>';
+                msg.textContent = 'En cours...';
+            } else if (status === 'success') {
+                icon.textContent = '✅';
+                msg.textContent = message || 'OK';
+                msg.className = 'text-sm text-green-400 status-msg';
+                stats.passed++;
+            } else if (status === 'error') {
+                icon.textContent = '❌';
+                msg.textContent = message || 'Erreur';
+                msg.className = 'text-sm text-red-400 status-msg';
+                stats.failed++;
+            }
+            updateStats();
+        }
+
+        // Vérification système via API
+        async function checkSystem() {
+            try {
+                const response = await fetch('api/test-system.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('systemInfo').textContent =
+                        `PHP ${data.system.php_version} | ${data.system.server_software}`;
+                    document.getElementById('envInfo').textContent = navigator.userAgent;
+                }
+            } catch (e) {
+                console.error("Erreur system check", e);
+            }
+        }
+
+        // Exécution de tous les tests
+        async function runAllTests() {
+            stats.passed = 0;
+            stats.failed = 0;
+            updateStats();
+
+            // Reset UI
+            document.querySelectorAll('.check-item').forEach(el => {
+                el.className = el.className.replace(/status-\w+/, '') + ' status-pending';
+                el.querySelector('.status-icon').textContent = '⏳';
+                el.querySelector('.status-msg').textContent = 'En attente';
+                el.querySelector('.status-msg').className = 'text-sm text-gray-500 status-msg';
+            });
+
+            // Exécution séquentielle par section pour ne pas surcharger
+            for (const [key, section] of Object.entries(testConfig)) {
+                for (const test of section.tests) {
+                    updateTestStatus(test.id, 'running');
+                    await runSingleTest(test);
+                    await new Promise(r => setTimeout(r, 100)); // Petit délai visuel
+                }
+            }
+        }
+
+        // Exécution d'un test individuel
+        async function runSingleTest(test) {
+            try {
+                if (test.type === 'system') {
+                    await runSystemTest(test);
+                    return;
+                }
+
+                const options = {
+                    method: test.method || 'GET',
+                    cache: 'no-store'
+                };
+
+                const response = await fetch(test.url, options);
+
+                if (response.ok) {
+                    updateTestStatus(test.id, 'success', `${response.status} OK`);
+                } else if (response.status === 401 || response.status === 403) {
+                    updateTestStatus(test.id, 'success', `🔒 Protégé (${response.status})`);
+                } else {
+                    updateTestStatus(test.id, 'error', `${response.status} ${response.statusText}`);
+                }
+
+            } catch (error) {
+                updateTestStatus(test.id, 'error', error.message);
+            }
+        }
+
+        // Test spécifique système
+        async function runSystemTest(test) {
+            try {
+                const response = await fetch('api/test-system.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    // Vérifier les fichiers critiques
+                    const files = data.system.files;
+                    const missingFiles = Object.entries(files).filter(([k, v]) => !v.exists).map(([k]) => k);
+                    const notWritable = Object.entries(files).filter(([k, v]) => v.exists && !v.writable).map(([k]) => k);
+
+                    if (missingFiles.length > 0) {
+                        updateTestStatus(test.id, 'error', `Manquant: ${missingFiles.join(', ')}`);
+                    } else if (notWritable.length > 0) {
+                        updateTestStatus(test.id, 'error', `Non inscriptible: ${notWritable.join(', ')}`);
+                    } else {
+                        updateTestStatus(test.id, 'success', 'Fichiers & Permissions OK');
+                    }
+                } else {
+                    updateTestStatus(test.id, 'error', 'Erreur API Système');
+                }
+            } catch (e) {
+                updateTestStatus(test.id, 'error', 'API Système inaccessible');
+            }
+        }
+    </script>
+</body>
+
+</html>

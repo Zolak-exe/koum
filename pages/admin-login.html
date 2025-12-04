@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Admin - NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/login-style.css">
+</head>
+
+<body class="antialiased">
+
+    <!-- Background Animé -->
+    <div class="bg-animated"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex items-center justify-center px-6 py-12">
+        <div class="max-w-md w-full relative z-10">
+
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <a href="../index.html" class="inline-block">
+                    <h1 class="text-3xl md:text-4xl font-black logo gradient-text mb-3">
+                        NEXT DRIVE IMPORT
+                    </h1>
+                </a>
+                <p class="text-gray-400 text-lg glow-text">
+                    🔐 Connexion Administrateur
+                </p>
+            </div>
+
+            <!-- Login Container -->
+            <div class="login-container rounded-2xl p-8 md:p-10">
+
+                <!-- Icon Lock -->
+                <div class="flex justify-center mb-8">
+                    <div class="icon-lock rounded-full flex items-center justify-center">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-bold text-center mb-2 text-white">Accès Administrateur</h2>
+                <p class="text-center text-gray-400 mb-8">Connexion sécurisée</p>
+
+                <!-- Error Alert (hidden) -->
+                <div id="errorAlert" class="hidden bg-red-900/30 border border-red-500 rounded-lg p-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span id="errorText" class="text-red-200 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Login Form -->
+                <form id="adminLoginForm" class="space-y-6">
+
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="block text-sm font-semibold mb-2 text-gray-300">
+                            Identifiant <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="username" name="username" required
+                                class="luxury-input w-full pl-10 pr-4 py-3 rounded-lg focus:ring-0" placeholder="admin"
+                                autocomplete="username">
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold mb-2 text-gray-300">
+                            Mot de passe <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <input type="password" id="password" name="password" required
+                                class="luxury-input w-full pl-10 pr-12 py-3 rounded-lg focus:ring-0"
+                                placeholder="••••••••" autocomplete="current-password">
+                            <button type="button" id="togglePassword"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-300">
+                                <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn"
+                        class="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <span id="btnText">🔓 Se connecter</span>
+                        <span id="btnLoading" class="hidden">
+                            <svg class="animate-spin inline-block w-5 h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                </path>
+                            </svg>
+                            Connexion...
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Back to Client Login -->
+                <div class="mt-6 text-center">
+                    <a href="login.html" class="text-gray-400 hover:text-primary text-sm transition">
+                        ← Retour à la connexion client
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Créer les particules
+        function createParticles() {
+            const container = document.querySelector('.particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Toggle Password Visibility
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+        });
+
+        // Gestion du formulaire de connexion admin
+        document.getElementById('adminLoginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const errorAlert = document.getElementById('errorAlert');
+            const errorText = document.getElementById('errorText');
+
+            // Désactiver le bouton
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            errorAlert.classList.add('hidden');
+
+            try {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+
+                const response = await fetch('../api/login_check.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Enregistrer la session admin dans sessionStorage
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userName', result.username);
+                    sessionStorage.setItem('userRole', 'admin');
+                    sessionStorage.setItem('isAdmin', 'true');
+
+                    // Succès - redirection vers admin.html
+                    window.location.href = 'admin.html';
+                } else {
+                    throw new Error(result.message || 'Identifiant ou mot de passe incorrect');
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                errorText.textContent = error.message;
+                errorAlert.classList.remove('hidden');
+
+                // Animation shake sur erreur
+                submitBtn.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    submitBtn.style.animation = '';
+                }, 500);
+
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

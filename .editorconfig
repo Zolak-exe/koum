@@ -1,0 +1,47 @@
+# EditorConfig pour NEXT DRIVE IMPORT
+# https://editorconfig.org
+
+root = true
+
+# Tous les fichiers
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Fichiers HTML
+[*.html]
+indent_style = space
+indent_size = 4
+
+# Fichiers CSS
+[*.css]
+indent_style = space
+indent_size = 4
+
+# Fichiers JavaScript
+[*.js]
+indent_style = space
+indent_size = 4
+quote_type = single
+
+# Fichiers PHP
+[*.php]
+indent_style = space
+indent_size = 4
+
+# Fichiers JSON
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Fichiers Markdown
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 2
+
+# Fichiers de configuration
+[{.htaccess,robots.txt}]
+indent_style = space
+indent_size = 2

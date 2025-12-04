@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vos Coordonnées - NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 relative"
+        style="background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);">
+        <div class="max-w-2xl w-full relative z-10">
+            <div class="text-center mb-12">
+                <div class="text-8xl mb-6">🎯</div>
+                <h1 class="text-6xl font-black text-white mb-6 glow-text logo">Parfait !</h1>
+                <p class="text-3xl text-gray-300 mb-4">Votre recherche est enregistrée</p>
+                <p class="text-gray-400 text-xl">Laissez-nous vos coordonnées afin que nos experts puissent vous recontacter</p>
+            </div>
+            <div class="card-3d rounded-3xl p-12 relative z-20">
+                <form id="contactForm" class="relative z-30">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-white font-semibold mb-2">Prénom *</label>
+                            <input type="text" id="prenom" name="prenom" required
+                                class="luxury-input w-full px-4 py-4 rounded-xl text-lg" placeholder="Jean">
+                        </div>
+                        <div>
+                            <label class="block text-white font-semibold mb-2">Nom *</label>
+                            <input type="text" id="nom" name="nom" required
+                                class="luxury-input w-full px-4 py-4 rounded-xl text-lg" placeholder="Dupont">
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-white font-semibold mb-2">Email *</label>
+                        <input type="email" id="email" name="email" required 
+                            class="luxury-input w-full px-4 py-4 rounded-xl text-lg"
+                            placeholder="jean.dupont@email.com">
+                    </div>
+                    <div class="mb-8">
+                        <label class="block text-white font-semibold mb-2">Téléphone *</label>
+                        <input type="tel" id="telephone" name="telephone" required
+                            class="luxury-input w-full px-4 py-4 rounded-xl text-lg" placeholder="06 12 34 56 78">
+                    </div>
+                    
+                    <button type="submit" id="submitBtn"
+                        class="btn-gradient w-full text-white py-6 rounded-xl font-bold text-xl mb-4 relative z-40 cursor-pointer"
+                        style="position: relative; z-index: 9999;">
+                        Recevoir mon devis gratuit
+                    </button>
+                    
+                    <p class="text-center text-gray-500 text-sm">
+                        Réponse sous 24h  • Données sécurisées
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/devis-script.js"></script>
+</body>
+</html>
