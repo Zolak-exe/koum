@@ -108,5 +108,25 @@
         "is_admin": false,
         "timestamp": "2025-11-27 00:58:15",
         "read": false
+    },
+    {
+        "id": "msg_6931fe1c35874",
+        "user_id": "test_user_1764883996213",
+        "user_email": "test@example.com",
+        "user_name": "Test User",
+        "message": "Test message 1764883996213",
+        "is_admin": false,
+        "timestamp": "2025-12-04 21:33:16",
+        "read": false
+    },
+    {
+        "id": "msg_6931fe1f468d5",
+        "user_id": "integrity_test",
+        "user_email": "integrity_test_1764883997250@example.com",
+        "user_name": "Integrity Test",
+        "message": "Message de test d&#039;intégrité",
+        "is_admin": false,
+        "timestamp": "2025-12-04 21:33:19",
+        "read": false
     }
 ]

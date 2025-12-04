@@ -9,7 +9,8 @@
 body {
     font-family: 'Inter', sans-serif;
     background: #000000;
-    overflow: hidden;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
 .logo {

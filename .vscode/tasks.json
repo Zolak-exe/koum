@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "▶️ Lancer le Site (Serveur PHP)",
+            "type": "shell",
+            "command": ".\\start_server.bat",
+            "windows": {
+                "command": ".\\start_server.bat"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
