@@ -580,17 +580,17 @@ const vehiclesData = {
         ]
     },
     ford: {
-        title: "Ford Focus RS",
-        image: "images/focusRS.webp",
-        description: "Hot hatch ultime avec moteur 4 cylindres turbo et transmission intégrale. Performance accessible et polyvalente.",
-        priceFR: "35 000 €",
-        priceImport: "18 000 €",
-        savings: "17 000 €",
+        title: "GOLF 7 GTI",
+        image: "images/golf-7-gti.jpeg",
+        description: "La compacte sportive allemande alliant un design sobre et dynamique, un 4-cylindres 2.0 TSI. Performance accessible et polyvalente.",
+        priceFR: "20 000 €",
+        priceImport: "15 000 €",
+        savings: "5 000 €",
         specs: [
-            { label: "Moteur", value: "4 cylindres 2.3L Turbo 350ch" },
-            { label: "Transmission", value: "Manuelle 6 vitesses" },
-            { label: "0-100 km/h", value: "4.7 secondes" },
-            { label: "Année", value: "2016-2018" },
+            { label: "Moteur", value: "4 cylindres 2L Turbo 220ch" },
+            { label: "Transmission", value: "Automatique 6 vitesses" },
+            { label: "0-100 km/h", value: "6,5 secondes" },
+            { label: "Année", value: "2013-2017" },
             { label: "Carburant", value: "Essence" }
         ]
     }
