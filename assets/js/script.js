@@ -581,7 +581,7 @@ const vehiclesData = {
     },
     ford: {
         title: "GOLF 7 GTI",
-        image: "images/golf-7-gti.jpeg",
+        image: "images/golf 7 gti.jpeg",
         description: "La compacte sportive allemande alliant un design sobre et dynamique, un 4-cylindres 2.0 TSI. Performance accessible et polyvalente.",
         priceFR: "20 000 €",
         priceImport: "15 000 €",
