@@ -1,0 +1,60 @@
+
+==================================================
+2025-12-22 00:11:38 - NOUVELLE DEMANDE
+==================================================
+
+Nouvelle demande de devis reçue:
+
+Client: Marius Picherit
+Email: siphshunse@gmail.com
+Téléphone: 0648652516
+
+Véhicule souhaité:
+- Marque: Volkswagen
+- Modèle: dsv
+- Budget: 250 000 €
+
+Année minimum: 2018
+Kilométrage maximum: 100000 km
+
+Options: kh
+
+Commentaires: :jk
+
+---
+ID Demande: devis_69488cb83aa342.73387805
+Date: 2025-12-22 00:11:36
+IP: ::1
+
+Lien admin: https://nextdriveimport.fr/admin.html
+
+
+==================================================
+2025-12-22 00:17:38 - NOUVELLE DEMANDE
+==================================================
+
+Nouvelle demande de devis reçue:
+
+Client: Marius Picherit
+Email: siphshunse@gmail.com
+Téléphone: 0648652516
+
+Véhicule souhaité:
+- Marque: Mercedes
+- Modèle: gu
+- Budget: 215 000 €
+
+Année minimum: 2011
+Kilométrage maximum: 100000 km
+
+Options: jk
+
+Commentaires:  
+
+---
+ID Demande: devis_69488e200332a5.13328847
+Date: 2025-12-22 00:17:36
+IP: ::1
+
+Lien admin: https://nextdriveimport.fr/admin.html
+

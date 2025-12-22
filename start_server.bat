@@ -11,4 +11,4 @@ echo Pour arreter le serveur, fermez cette fenetre ou faites Ctrl+C.
 echo.
 
 start http://localhost:8000
-php -S localhost:8000
+"%USERPROFILE%\scoop\shims\php.exe" -S localhost:8000

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // get-clients.php - VERSION 100% FONCTIONNELLE
 session_start();
 header('Content-Type: application/json');

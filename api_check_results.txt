@@ -1,0 +1,79 @@
+API check run: 12/22/2025 01:02:35
+Working dir: C:\Users\mariu\Documents\GitHub\koum
+\n=== account-manager.php ===
+URL: http://localhost:8000/api/account-manager.php
+GET ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+POST ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+\n=== auth.php ===
+URL: http://localhost:8000/api/auth.php
+GET ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+POST ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+\n=== chat.php ===
+URL: http://localhost:8000/api/chat.php
+GET ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+POST ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+\n=== check_session.php ===
+URL: http://localhost:8000/api/check_session.php
+GET: Status=200 Length=39
+GET Content Snippet: {"logged_in":false,"session_data":null}
+POST: Status=200 Length=39
+POST Content Snippet: {"logged_in":false,"session_data":null}
+\n=== devis-manager.php ===
+URL: http://localhost:8000/api/devis-manager.php
+GET ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+POST ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+\n=== generate-data.php ===
+URL: http://localhost:8000/api/generate-data.php
+GET: Status=200 Length=11674
+GET Content Snippet: ?? Génération des données - NEXT DRIVE IMPORT =============================================  ?? Nombre de clients trouvés: 40  ?? Génération des comptes clients...   ? Sophie Martin (sophie.martin@email.com)   ? Thomas Dubois (thomas.dubois@proton.me)   ? Marie Lambert (marie.lambert34@gmail.com)   ? Pierre Moreau (p.moreau@entreprise.fr)   ? Laura Petit (laura.petit@outlook.com)   ? Antoine Rousseau (antoine.r@proton.me)   ? Camille Leroy (camille.leroy@email.com)   ? Nicolas Blanc (nicolas.blanc@entreprise.fr)   ? Élodie Garnier (elodie.garnier@proton.me)   ? David Fontaine (david.fontaine@gmail.com)   ? Sarah Meyer (sarah.meyer@outlook.com)   ? Julien Schmitt (julien.schmitt@proton.me)   ? Céline Weber (celine.weber@email.com)   ? Marc Fischer (marc.fischer@entreprise.fr)   ? Anaïs Klein (anais.klein@gmail.com)   ? Alexandre Muller (alex.muller@proton.me)   ? Claire Hoffmann (claire.hoffmann@outlook.com)   ? Patrick Schneider (patrick.schneider@entreprise.fr)   ? Isabelle Wagner (is...[truncated]
+POST: Status=200 Length=11674
+POST Content Snippet: ?? Génération des données - NEXT DRIVE IMPORT =============================================  ?? Nombre de clients trouvés: 40  ?? Génération des comptes clients...   ? Sophie Martin (sophie.martin@email.com)   ? Thomas Dubois (thomas.dubois@proton.me)   ? Marie Lambert (marie.lambert34@gmail.com)   ? Pierre Moreau (p.moreau@entreprise.fr)   ? Laura Petit (laura.petit@outlook.com)   ? Antoine Rousseau (antoine.r@proton.me)   ? Camille Leroy (camille.leroy@email.com)   ? Nicolas Blanc (nicolas.blanc@entreprise.fr)   ? Élodie Garnier (elodie.garnier@proton.me)   ? David Fontaine (david.fontaine@gmail.com)   ? Sarah Meyer (sarah.meyer@outlook.com)   ? Julien Schmitt (julien.schmitt@proton.me)   ? Céline Weber (celine.weber@email.com)   ? Marc Fischer (marc.fischer@entreprise.fr)   ? Anaïs Klein (anais.klein@gmail.com)   ? Alexandre Muller (alex.muller@proton.me)   ? Claire Hoffmann (claire.hoffmann@outlook.com)   ? Patrick Schneider (patrick.schneider@entreprise.fr)   ? Isabelle Wagner (is...[truncated]
+\n=== get-clients.php ===
+URL: http://localhost:8000/api/get-clients.php
+GET ERROR: Le serveur distant a retourné une erreur : (401) Non autorisé.
+POST ERROR: Le serveur distant a retourné une erreur : (401) Non autorisé.
+\n=== init.php ===
+URL: http://localhost:8000/api/init.php
+GET: Status=200 Length=2895
+GET Content Snippet: <!DOCTYPE html>  <html lang="fr">  <head>      <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">      <title>Initialisation - NEXT DRIVE IMPORT</title>      <style>          body {              font-family: Arial, sans-serif;              background: #0a0a0a;              color: #fff;              padding: 40px;              max-width: 800px;              margin: 0 auto;          }          h1 { color: #FF6B35; }          .success { background: #10b981; padding: 15px; border-radius: 8px; margin: 10px 0; }          .error { background: #ef4444; padding: 15px; border-radius: 8px; margin: 10px 0; }          .info { background: #3b82f6; padding: 15px; border-radius: 8px; margin: 10px 0; }          code { background: #1a1a1a; padding: 2px 6px; border-radius: 4px; }          pre { background: #1a1a1a; padding: 15px; border-radius: 8px; overflow-x: auto; }      </style>  </head>  <body>      <h1>?? Initialisation NEXT DRIVE IMPORT</h1>      <p>...[truncated]
+POST: Status=200 Length=2895
+POST Content Snippet: <!DOCTYPE html>  <html lang="fr">  <head>      <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">      <title>Initialisation - NEXT DRIVE IMPORT</title>      <style>          body {              font-family: Arial, sans-serif;              background: #0a0a0a;              color: #fff;              padding: 40px;              max-width: 800px;              margin: 0 auto;          }          h1 { color: #FF6B35; }          .success { background: #10b981; padding: 15px; border-radius: 8px; margin: 10px 0; }          .error { background: #ef4444; padding: 15px; border-radius: 8px; margin: 10px 0; }          .info { background: #3b82f6; padding: 15px; border-radius: 8px; margin: 10px 0; }          code { background: #1a1a1a; padding: 2px 6px; border-radius: 4px; }          pre { background: #1a1a1a; padding: 15px; border-radius: 8px; overflow-x: auto; }      </style>  </head>  <body>      <h1>?? Initialisation NEXT DRIVE IMPORT</h1>      <p>...[truncated]
+\n=== init-database.php ===
+URL: http://localhost:8000/api/init-database.php
+GET: Status=200 Length=526
+GET Content Snippet: ?? Initialisation de NEXT DRIVE IMPORT =====================================  ??  accounts.json existe déjà  ??  devis.json existe déjà  ?? Permissions des fichiers:    accounts.json: 0666    devis.json: 0666  ?? Initialisation terminée avec succès! =====================================  ?? Prochaines étapes: 1. Connectez-vous avec le compte admin 2. Changez le mot de passe admin par défaut 3. Créez d'autres comptes si nécessaire  ?? IMPORTANT: Changez le mot de passe admin dès que possible! 
+POST: Status=200 Length=526
+POST Content Snippet: ?? Initialisation de NEXT DRIVE IMPORT =====================================  ??  accounts.json existe déjà  ??  devis.json existe déjà  ?? Permissions des fichiers:    accounts.json: 0666    devis.json: 0666  ?? Initialisation terminée avec succès! =====================================  ?? Prochaines étapes: 1. Connectez-vous avec le compte admin 2. Changez le mot de passe admin par défaut 3. Créez d'autres comptes si nécessaire  ?? IMPORTANT: Changez le mot de passe admin dès que possible! 
+\n=== login_check.php ===
+URL: http://localhost:8000/api/login_check.php
+GET ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+POST ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+\n=== logout.php ===
+URL: http://localhost:8000/api/logout.php
+GET ERROR: Le serveur distant a retourné une erreur : (404) Introuvable.
+POST ERROR: Le serveur distant a retourné une erreur : (404) Introuvable.
+\n=== save_clients.php ===
+URL: http://localhost:8000/api/save_clients.php
+GET ERROR: Le serveur distant a retourné une erreur : (405) Méthode non autorisée.
+POST ERROR: Le serveur distant a retourné une erreur : (401) Non autorisé.
+\n=== submit-devis.php ===
+URL: http://localhost:8000/api/submit-devis.php
+GET ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+POST ERROR: Le serveur distant a retourné une erreur : (400) Demande incorrecte.
+\n=== test-auth.php ===
+URL: http://localhost:8000/api/test-auth.php
+GET: Status=200 Length=53403
+GET Content Snippet: <h1>Test Auth System</h1><h2>Test 1: Fichier clients.json</h2>? Le fichier existe<br>Permissions: 0666<br>Contenu actuel:<br><pre>[     {         &quot;id&quot;: &quot;1739547612_a8b9c7d3&quot;,         &quot;nom&quot;: &quot;Sophie Martin&quot;,         &quot;email&quot;: &quot;sophie.martin@email.com&quot;,         &quot;telephone&quot;: &quot;0678451236&quot;,         &quot;vehicule&quot;: {             &quot;marque&quot;: &quot;BMW&quot;,             &quot;modele&quot;: &quot;Série 5&quot;,             &quot;budget&quot;: 45000,             &quot;annee_minimum&quot;: 2020,             &quot;kilometrage_max&quot;: 40000,             &quot;options&quot;: &quot;Volant à gauche obligatoire, Pack Luxury&quot;,             &quot;commentaires&quot;: &quot;Recherche spécifique marché allemand - diesel accepté&quot;         },         &quot;statut&quot;: &quot;nouveau&quot;,         &quot;rgpd_consent&quot;: true,         &quot;source&quot;: &quot;website&quot;,         &quot;metadata&quot;...[truncated]
+POST: Status=200 Length=53403
+POST Content Snippet: <h1>Test Auth System</h1><h2>Test 1: Fichier clients.json</h2>? Le fichier existe<br>Permissions: 0666<br>Contenu actuel:<br><pre>[     {         &quot;id&quot;: &quot;1739547612_a8b9c7d3&quot;,         &quot;nom&quot;: &quot;Sophie Martin&quot;,         &quot;email&quot;: &quot;sophie.martin@email.com&quot;,         &quot;telephone&quot;: &quot;0678451236&quot;,         &quot;vehicule&quot;: {             &quot;marque&quot;: &quot;BMW&quot;,             &quot;modele&quot;: &quot;Série 5&quot;,             &quot;budget&quot;: 45000,             &quot;annee_minimum&quot;: 2020,             &quot;kilometrage_max&quot;: 40000,             &quot;options&quot;: &quot;Volant à gauche obligatoire, Pack Luxury&quot;,             &quot;commentaires&quot;: &quot;Recherche spécifique marché allemand - diesel accepté&quot;         },         &quot;statut&quot;: &quot;nouveau&quot;,         &quot;rgpd_consent&quot;: true,         &quot;source&quot;: &quot;website&quot;,         &quot;metadata&quot;...[truncated]
+\n=== test-system.php ===
+URL: http://localhost:8000/api/test-system.php
+GET: Status=200 Length=652
+GET Content Snippet: {"success":true,"system":{"php_version":"8.5.1","server_software":"PHP\/8.5.1 (Development Server)","files":{"data\/accounts.json":{"exists":true,"writable":true,"size":17455,"perms":"0666"},"data\/devis.json":{"exists":true,"writable":true,"size":997,"perms":"0666"},"data\/clients.json":{"exists":true,"writable":true,"size":37761,"perms":"0666"},"data\/chat-messages.json":{"exists":true,"writable":true,"size":4229,"perms":"0666"}},"directories":{"data":{"exists":true,"writable":true},"api":{"exists":true,"writable":true},"assets":{"exists":true,"writable":true},"pages":{"exists":true,"writable":true},"images":{"exists":true,"writable":true}}}}
+POST: Status=200 Length=652
+POST Content Snippet: {"success":true,"system":{"php_version":"8.5.1","server_software":"PHP\/8.5.1 (Development Server)","files":{"data\/accounts.json":{"exists":true,"writable":true,"size":17455,"perms":"0666"},"data\/devis.json":{"exists":true,"writable":true,"size":997,"perms":"0666"},"data\/clients.json":{"exists":true,"writable":true,"size":37761,"perms":"0666"},"data\/chat-messages.json":{"exists":true,"writable":true,"size":4229,"perms":"0666"}},"directories":{"data":{"exists":true,"writable":true},"api":{"exists":true,"writable":true},"assets":{"exists":true,"writable":true},"pages":{"exists":true,"writable":true},"images":{"exists":true,"writable":true}}}}
+\n=== update_status.php ===
+URL: http://localhost:8000/api/update_status.php
+GET ERROR: Le serveur distant a retourné une erreur : (401) Non autorisé.
+POST ERROR: Le serveur distant a retourné une erreur : (401) Non autorisé.
+\nCompleted: 12/22/2025 01:02:56

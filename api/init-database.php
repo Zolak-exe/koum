@@ -1,5 +1,4 @@
-﻿<?php
-
+<?php
 /**
  * Script d'Initialisation - NEXT DRIVE IMPORT
  * Crée les fichiers JSON et un compte admin par défaut

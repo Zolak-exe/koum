@@ -1,5 +1,4 @@
-﻿<?php
-
+<?php
 /**
  * Gestionnaire de Devis - NEXT DRIVE IMPORT
  * Gestion des demandes de devis séparée des comptes

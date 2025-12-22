@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // init.php - INITIALISATION DU SITE
 header('Content-Type: text/html; charset=utf-8');
 

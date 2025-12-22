@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * NEXT DRIVE IMPORT - Update Status v2.1.0
  * Mise à jour du statut des demandes

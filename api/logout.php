@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * NEXT DRIVE IMPORT - Logout v2.1.0
  * Déconnexion sécurisée de l'admin

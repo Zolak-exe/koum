@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // auth.php - VERSION 100% FONCTIONNELLE
 session_start();
 header('Content-Type: application/json');
@@ -105,6 +105,13 @@ function handleRegistration($data)
     $_SESSION['client_logged_in'] = true;
     $_SESSION['client_data'] = $newAccount;
     $_SESSION['user_role'] = 'client';
+    // Compatibility session keys used by other endpoints
+    $_SESSION['logged_in'] = true;
+    $_SESSION['user_email'] = $newAccount['email'];
+    if (isset($newAccount['role']) && $newAccount['role'] === 'admin') {
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_username'] = $newAccount['username'] ?? $newAccount['email'];
+    }
 
     echo json_encode([
         'success' => true,
@@ -164,6 +171,13 @@ function handleLogin($data)
     $_SESSION['client_logged_in'] = true;
     $_SESSION['client_data'] = $foundAccount;
     $_SESSION['user_role'] = $foundAccount['role'] ?? 'client';
+    // Compatibility session keys used by other endpoints
+    $_SESSION['logged_in'] = true;
+    $_SESSION['user_email'] = $foundAccount['email'];
+    if (isset($foundAccount['role']) && $foundAccount['role'] === 'admin') {
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_username'] = $foundAccount['username'] ?? $foundAccount['email'];
+    }
 
     echo json_encode([
         'success' => true,
@@ -186,8 +200,13 @@ function checkSession()
 
 function handleLogout()
 {
+    // Clear all known session keys to ensure compatibility
     $_SESSION['client_logged_in'] = false;
     unset($_SESSION['client_data']);
+    $_SESSION['logged_in'] = false;
+    unset($_SESSION['user_email']);
+    $_SESSION['admin_logged_in'] = false;
+    unset($_SESSION['admin_username']);
     session_destroy();
     echo json_encode(['success' => true, 'message' => 'Déconnexion réussie']);
 }

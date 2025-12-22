@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // save_clients.php
 header('Content-Type: application/json');
 

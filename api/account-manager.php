@@ -1,5 +1,4 @@
-﻿<?php
-
+<?php
 /**
  * Gestionnaire de Comptes - NEXT DRIVE IMPORT
  * Gestion des comptes utilisateurs avec rôles (admin/client)
