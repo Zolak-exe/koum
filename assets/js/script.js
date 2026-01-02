@@ -327,102 +327,12 @@ function initFormHandler() {
     }
 
     // Form submission
+    // Note: Submission is now handled by devis-flow.js to support both logged-in and guest users
+    /*
     devisForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-
-        if (!isAuthenticated()) {
-            showNotification('❌ Veuillez vous connecter d\'abord', 'error');
-            return;
-        }
-
-        if (!clientData) {
-            clientData = hydrateClientDataFromSession();
-        }
-
-        if (!clientData) {
-            showNotification('❌ Erreur de session, veuillez vous reconnecter', 'error');
-            return;
-        }
-
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-
-        // Disable button and show loading
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="emoji">⏳</span> Envoi en cours...';
-
-        try {
-            const formData = new FormData(this);
-
-            // Construct vehicle data
-            const vehiculeData = {
-                marque: formData.get('marque'),
-                modele: formData.get('modele'),
-                budget: parseFloat(formData.get('budget')),
-                annee_minimum: formData.get('annee_minimum') ? parseInt(formData.get('annee_minimum')) : null,
-                kilometrage_max: formData.get('kilometrage_max') ? parseInt(formData.get('kilometrage_max')) : null,
-                options: formData.get('options') || '',
-                commentaires: formData.get('commentaires') || ''
-            };
-
-            // Prepare payload with client data
-            const payload = {
-                nom: clientData.nom,
-                email: clientData.email,
-                telephone: clientData.telephone || '',
-                user_id: clientData.id || null, // Explicitly send user_id
-                vehicule: vehiculeData,
-                rgpd_consent: formData.get('rgpd') === 'on',
-                source: 'website',
-                timestamp: new Date().toISOString()
-            };
-
-            // Send to backend
-            const response = await fetch(CONFIG.API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                // Track conversion
-                trackConversion('devis_submit', {
-                    marque: vehiculeData.marque,
-                    budget: vehiculeData.budget
-                });
-
-                // Show success message
-                showSuccessMessage();
-
-                // Reset form
-                this.reset();
-
-                showNotification('✅ Demande envoyée avec succès !');
-
-                // Scroll to success message
-                setTimeout(() => {
-                    const successMsg = document.getElementById('successMessage');
-                    if (successMsg) {
-                        successMsg.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                    }
-                }, 300);
-            } else {
-                throw new Error('Erreur serveur');
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-            showNotification('❌ Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter par email.', 'error');
-
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-        }
+        // ... (Legacy code removed to avoid conflict with devis-flow.js)
     });
+    */
 
     // Real-time validation
     const emailInput = devisForm.querySelector('#email');

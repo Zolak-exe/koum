@@ -120,6 +120,12 @@ function initDevisForm() {
                 devisForm.classList.add('hidden');
                 document.getElementById('successMessage').classList.remove('hidden');
 
+                // Si déjà connecté, masquer la proposition de création de compte
+                if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                    const proposal = document.getElementById('accountCreationProposal');
+                    if (proposal) proposal.style.display = 'none';
+                }
+
                 // Scroll vers le message de succès
                 setTimeout(() => {
                     document.getElementById('successMessage').scrollIntoView({
