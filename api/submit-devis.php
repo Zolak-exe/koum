@@ -81,10 +81,18 @@ if (!preg_match('/^(\+33|0)[1-9](\d{2}){4}$/', $telephone_clean)) {
 try {
     $pdo = getDB();
 
-    // Vérifier si l'utilisateur a un compte
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user_id = $stmt->fetchColumn();
+    // Vérifier si l'utilisateur est connecté ou a un compte
+    $user_id = null;
+
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+    } elseif (isset($_SESSION['client_data']['id'])) {
+        $user_id = $_SESSION['client_data']['id'];
+    } else {
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user_id = $stmt->fetchColumn();
+    }
 
     // Gestion de la création de compte optionnelle
     $create_account = isset($data['create_account']) ? (bool)$data['create_account'] : false;
