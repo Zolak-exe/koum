@@ -207,11 +207,11 @@ async function initializeJsonFile() {
 function updateStats() {
     const stats = {
         total: allClients.length,
-        nouveau: allClients.filter(c => c.statut === 'nouveau').length,
-        enCours: allClients.filter(c => c.statut === 'en_cours').length,
+        nouveau: allClients.filter(c => c.statut === 'nouveau' || c.statut === 'En attente').length,
+        enCours: allClients.filter(c => c.statut === 'en_cours' || c.statut === 'En cours').length,
         devisEnvoye: allClients.filter(c => c.statut === 'devis_envoye').length,
-        termine: allClients.filter(c => c.statut === 'termine').length,
-        annule: allClients.filter(c => c.statut === 'annule').length
+        termine: allClients.filter(c => c.statut === 'termine' || c.statut === 'Complété').length,
+        annule: allClients.filter(c => c.statut === 'annule' || c.statut === 'Annulé').length
     };
 
     // Mettre à jour l'affichage avec les bons IDs de votre HTML
@@ -263,8 +263,13 @@ function renderTable() {
         const modele = client.modele || client.vehicule?.modele || '';
         const budget = client.budget || client.vehicule?.budget || 0;
 
-        // Statut
-        const statut = client.statut || 'nouveau';
+        // Statut (Normalisation)
+        let statut = client.statut || 'nouveau';
+        if (statut === 'En attente') statut = 'nouveau';
+        if (statut === 'En cours') statut = 'en_cours';
+        if (statut === 'Complété') statut = 'termine';
+        if (statut === 'Annulé') statut = 'annule';
+
         const statusClass = statut === 'nouveau' ? 'badge-nouveau' :
             statut === 'en_cours' ? 'badge-en-cours' :
                 statut === 'devis_envoye' ? 'badge-devis-envoye' :
@@ -710,60 +715,70 @@ function printDevis(clientId) {
     const client = allClients.find(c => String(c.id) === String(clientId));
     if (!client) return;
 
+    // Extraire les données (supporte structure SQL et JSON legacy)
+    const nom = client.user_name || client.nom || 'Non renseigné';
+    const email = client.user_email || client.email || 'Non renseigné';
+    const telephone = client.telephone || 'Non renseigné';
+
+    const marque = client.marque || client.vehicule?.marque || 'Non renseigné';
+    const modele = client.modele || client.vehicule?.modele || 'Non renseigné';
+    const budget = client.budget || client.vehicule?.budget || 0;
+    const anneeMin = client.annee_minimum || client.vehicule?.annee_minimum || 'Non spécifié';
+    const kmMax = client.kilometrage_max || client.vehicule?.kilometrage_max || 'Non spécifié';
+    const options = client.options || client.vehicule?.options || 'Aucune option spécifiée';
+    const commentaires = client.commentaires || client.vehicule?.commentaires || 'Aucun commentaire';
+
     const printWindow = window.open('', '_blank');
     const printContent = `
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Devis - ${client.nom}</title>
+            <title>Devis #${String(client.id).slice(-6)} - NEXT DRIVE IMPORT</title>
             <style>
-                body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-                .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px; }
-                .section { margin-bottom: 25px; }
-                .section h3 { background: #f0f0f0; padding: 10px; margin: 0 0 10px 0; border-radius: 4px; }
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+                .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+                .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+                .section { margin-bottom: 30px; background: #f9fafb; padding: 20px; border-radius: 8px; }
+                h3 { color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; margin-top: 0; }
                 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-                .note { margin-top: 30px; font-style: italic; color: #666; border-top: 1px solid #ddd; padding-top: 15px; }
-                .info-item { margin-bottom: 8px; }
-                .info-label { font-weight: bold; color: #555; }
-                @media print {
-                    body { margin: 15px; }
-                    .no-print { display: none; }
-                }
+                .info-item { margin-bottom: 10px; }
+                .info-label { font-weight: bold; color: #4b5563; }
+                .note { font-size: 12px; color: #6b7280; text-align: center; margin-top: 50px; border-top: 1px solid #e5e7eb; padding-top: 20px; }
             </style>
         </head>
         <body>
             <div class="header">
-                <h1>NEXT DRIVE IMPORT - Devis Véhicule</h1>
-                <p>ID: #${String(client.id).slice(-6)} • Date: ${new Date(client.created_at || client.timestamp).toLocaleDateString('fr-FR')}</p>
+                <div class="logo">NEXT DRIVE IMPORT</div>
+                <h1>Fiche Devis Client</h1>
+                <p>Référence: #${String(client.id).slice(-6)}</p>
             </div>
 
             <div class="grid">
                 <div class="section">
                     <h3>Informations Client</h3>
-                    <div class="info-item"><span class="info-label">Nom:</span> ${client.nom || 'Non renseigné'}</div>
-                    <div class="info-item"><span class="info-label">Email:</span> ${client.email || 'Non renseigné'}</div>
-                    <div class="info-item"><span class="info-label">Téléphone:</span> ${client.telephone || 'Non renseigné'}</div>
-                    <div class="info-item"><span class="info-label">RGPD:</span> ${client.rgpd_consent ? 'Accepté' : 'Non accepté'}</div>
+                    <div class="info-item"><span class="info-label">Nom:</span> ${nom}</div>
+                    <div class="info-item"><span class="info-label">Email:</span> ${email}</div>
+                    <div class="info-item"><span class="info-label">Téléphone:</span> ${telephone}</div>
                 </div>
 
                 <div class="section">
                     <h3>Véhicule Recherché</h3>
-                    <div class="info-item"><span class="info-label">Marque/Modèle:</span> ${client.vehicule?.marque || 'Non renseigné'} ${client.vehicule?.modele || ''}</div>
-                    <div class="info-item"><span class="info-label">Budget:</span> ${Number(client.vehicule?.budget || 0).toLocaleString('fr-FR')}€</div>
-                    <div class="info-item"><span class="info-label">Année minimum:</span> ${client.vehicule?.annee_minimum || 'Non spécifié'}</div>
-                    <div class="info-item"><span class="info-label">Kilométrage max:</span> ${client.vehicule?.kilometrage_max || 'Non spécifié'} km</div>
+                    <div class="info-item"><span class="info-label">Marque/Modèle:</span> ${marque} ${modele}</div>
+                    <div class="info-item"><span class="info-label">Budget:</span> ${Number(budget).toLocaleString('fr-FR')}€</div>
+                    <div class="info-item"><span class="info-label">Année minimum:</span> ${anneeMin}</div>
+                    <div class="info-item"><span class="info-label">Kilométrage max:</span> ${kmMax} km</div>
                 </div>
             </div>
 
             <div class="grid">
                 <div class="section">
                     <h3>Options Demandées</h3>
-                    <p>${client.vehicule?.options || 'Aucune option spécifiée'}</p>
+                    <p>${options}</p>
                 </div>
                 
                 <div class="section">
                     <h3>Commentaires</h3>
-                    <p>${client.vehicule?.commentaires || 'Aucun commentaire'}</p>
+                    <p>${commentaires}</p>
                 </div>
             </div>
 
@@ -798,33 +813,8 @@ function printDevis(clientId) {
 
 // ========== FONCTIONS DE GESTION DES STATUTS ==========
 
-// Fonction pour mettre à jour le statut rapidement
-function updateStatusQuick(clientId, newStatus) {
-    const client = allClients.find(c => String(c.id) === String(clientId));
-    if (!client) {
-        showNotification('❌ Client non trouvé', 'error');
-        return;
-    }
-
-    // Mettre à jour localement
-    client.statut = newStatus;
-
-    // Sauvegarder dans localStorage
-    const clientsData = JSON.parse(localStorage.getItem('clients') || '[]');
-    const clientIndex = clientsData.findIndex(c => String(c.id) === String(clientId));
-
-    if (clientIndex !== -1) {
-        clientsData[clientIndex].statut = newStatus;
-        localStorage.setItem('clients', JSON.stringify(clientsData));
-
-        showNotification('✅ Statut mis à jour', 'success');
-
-        // Mettre à jour les filtres et le rendu
-        allClients = clientsData;
-        applyFilters();
-        updateStats();
-    }
-}
+// (L'ancienne fonction updateStatusQuick a été supprimée car elle utilisait localStorage)
+// La nouvelle version async est définie plus bas.
 
 // ========== FONCTIONS UTILITAIRES ==========
 
@@ -867,19 +857,32 @@ function exportToExcel() {
 
     // Créer le CSV
     const headers = ['ID', 'Date', 'Nom', 'Email', 'Téléphone', 'Marque', 'Modèle', 'Budget', 'Statut', 'Année min', 'Km max'];
-    const rows = allClients.map(client => [
-        client.id,
-        new Date(client.created_at || Date.now()).toLocaleDateString('fr-FR'),
-        client.nom || '',
-        client.email || '',
-        client.telephone || '',
-        client.vehicule?.marque || '',
-        client.vehicule?.modele || '',
-        client.vehicule?.budget || '',
-        client.statut || 'nouveau',
-        client.vehicule?.annee_minimum || '',
-        client.vehicule?.kilometrage_max || ''
-    ]);
+    const rows = allClients.map(client => {
+        // Extraire les données (supporte structure SQL et JSON legacy)
+        const nom = client.user_name || client.nom || '';
+        const email = client.user_email || client.email || '';
+        const telephone = client.telephone || '';
+
+        const marque = client.marque || client.vehicule?.marque || '';
+        const modele = client.modele || client.vehicule?.modele || '';
+        const budget = client.budget || client.vehicule?.budget || '';
+        const anneeMin = client.annee_minimum || client.vehicule?.annee_minimum || '';
+        const kmMax = client.kilometrage_max || client.vehicule?.kilometrage_max || '';
+
+        return [
+            client.id,
+            new Date(client.created_at || Date.now()).toLocaleDateString('fr-FR'),
+            nom,
+            email,
+            telephone,
+            marque,
+            modele,
+            budget,
+            client.statut || 'nouveau',
+            anneeMin,
+            kmMax
+        ];
+    });
 
     // Convertir en CSV
     const csvContent = [

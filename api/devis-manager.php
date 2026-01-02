@@ -57,7 +57,7 @@ try {
             $commentaires = trim($data['commentaires'] ?? '');
             
             $sql = "INSERT INTO devis (id, user_id, user_name, user_email, marque, modele, budget, annee_minimum, kilometrage_max, options, commentaires, statut, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'En attente', NOW(), NOW())";
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'nouveau', NOW(), NOW())";
             
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
@@ -81,7 +81,7 @@ try {
                     'id' => $id,
                     'marque' => $marque,
                     'modele' => $modele,
-                    'statut' => 'En attente'
+                    'statut' => 'nouveau'
                 ]
             ]);
             break;
@@ -308,10 +308,22 @@ try {
             $stmt = $pdo->query("SELECT statut, COUNT(*) as count FROM devis GROUP BY statut");
             while ($row = $stmt->fetch()) {
                 switch ($row['statut']) {
-                    case 'En attente': $stats['en_attente'] = $row['count']; break;
-                    case 'En cours': $stats['en_cours'] = $row['count']; break;
-                    case 'Complété': $stats['complete'] = $row['count']; break;
-                    case 'Annulé': $stats['annule'] = $row['count']; break;
+                    case 'nouveau': 
+                    case 'En attente': // Legacy
+                        $stats['en_attente'] += $row['count']; 
+                        break;
+                    case 'en_cours': 
+                    case 'En cours': // Legacy
+                        $stats['en_cours'] += $row['count']; 
+                        break;
+                    case 'termine': 
+                    case 'Complété': // Legacy
+                        $stats['complete'] += $row['count']; 
+                        break;
+                    case 'annule': 
+                    case 'Annulé': // Legacy
+                        $stats['annule'] += $row['count']; 
+                        break;
                 }
             }
 
