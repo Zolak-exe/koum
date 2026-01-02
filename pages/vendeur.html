@@ -32,22 +32,18 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="stat-card">
-                <div class="text-gray-400 text-sm font-semibold mb-2">Total Demandes</div>
+                <div class="text-gray-400 text-sm font-semibold mb-2">Total Visible</div>
                 <div class="text-4xl font-black gradient-text" id="totalRequests">0</div>
             </div>
             <div class="stat-card">
-                <div class="text-gray-400 text-sm font-semibold mb-2">Nouvelles</div>
-                <div class="text-4xl font-black text-blue-400" id="newRequests">0</div>
+                <div class="text-gray-400 text-sm font-semibold mb-2">Mes Dossiers</div>
+                <div class="text-4xl font-black text-green-400" id="claimedRequests">0</div>
             </div>
             <div class="stat-card">
-                <div class="text-gray-400 text-sm font-semibold mb-2">En Cours</div>
-                <div class="text-4xl font-black text-amber-400" id="inProgressRequests">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="text-gray-400 text-sm font-semibold mb-2">Terminées</div>
-                <div class="text-4xl font-black text-green-400" id="completedRequests">0</div>
+                <div class="text-gray-400 text-sm font-semibold mb-2">Disponibles</div>
+                <div class="text-4xl font-black text-blue-400" id="unclaimedRequests">0</div>
             </div>
         </div>
 
@@ -60,14 +56,6 @@
                 placeholder="Rechercher par nom, email, marque, modèle..."
                 oninput="filterTable()"
             >
-            <select id="statusFilter" class="search-input" style="width: 200px;" onchange="filterTable()">
-                <option value="">Tous les statuts</option>
-                <option value="nouveau">Nouveau</option>
-                <option value="en_cours">En cours</option>
-                <option value="devis_envoye">Devis envoyé</option>
-                <option value="termine">Terminé</option>
-                <option value="annule">Annulé</option>
-            </select>
         </div>
     </div>
 
@@ -80,7 +68,6 @@
                         <th>ID</th>
                         <th>Date</th>
                         <th>Client</th>
-                        <th>Contact</th>
                         <th>Véhicule</th>
                         <th>Budget</th>
                         <th>Statut</th>
@@ -109,6 +96,6 @@
         </div>
     </div>
 
-    <script src="../assets/js/admin-script.js"></script>
+    <script src="../assets/js/vendeur-script.js"></script>
 </body>
 </html>

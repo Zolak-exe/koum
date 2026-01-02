@@ -129,19 +129,73 @@ try {
             ]);
             break;
 
-        case 'update_status':
-            // Mettre à jour le statut d'un devis (admin uniquement)
-            if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+        case 'claim':
+            // Claim un devis (vendeur uniquement)
+            if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'vendeur') {
                 http_response_code(403);
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Accès refusé - Admin uniquement'
+                    'message' => 'Accès refusé - Vendeur uniquement'
+                ]);
+                exit;
+            }
+
+            $devisId = $data['devis_id'] ?? '';
+            $userId = $_SESSION['user_id'] ?? '';
+
+            if (empty($devisId)) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'ID devis requis'
+                ]);
+                exit;
+            }
+
+            // Vérifier si déjà claim
+            $checkStmt = $pdo->prepare("SELECT claimed_by FROM devis WHERE id = ?");
+            $checkStmt->execute([$devisId]);
+            $devis = $checkStmt->fetch();
+
+            if (!$devis) {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'Devis non trouvé']);
+                exit;
+            }
+
+            if (!empty($devis['claimed_by'])) {
+                http_response_code(409);
+                echo json_encode(['success' => false, 'message' => 'Ce devis est déjà pris en charge']);
+                exit;
+            }
+
+            // Claim le devis
+            $stmt = $pdo->prepare("UPDATE devis SET claimed_by = ?, claimed_at = NOW(), updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$userId, $devisId]);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Devis pris en charge avec succès'
+            ]);
+            break;
+
+        case 'update_status':
+            // Mettre à jour le statut d'un devis (admin ou vendeur)
+            $isVendeur = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'vendeur';
+            $isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+
+            if (!$isAdmin && !$isVendeur) {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Accès refusé'
                 ]);
                 exit;
             }
 
             $devisId = $data['devis_id'] ?? '';
             $newStatus = $data['statut'] ?? '';
+            $userId = $_SESSION['user_id'] ?? '';
 
             // Updated valid statuses to match frontend values
             $validStatuses = [
@@ -156,6 +210,20 @@ try {
                     'message' => 'Données invalides: statut non reconnu (' . $newStatus . ')'
                 ]);
                 exit;
+            }
+
+            // Si vendeur, vérifier qu'il a le droit (claim ou non claim ?)
+            // En général, un vendeur ne devrait modifier que SES devis claimés
+            if ($isVendeur) {
+                $checkStmt = $pdo->prepare("SELECT claimed_by FROM devis WHERE id = ?");
+                $checkStmt->execute([$devisId]);
+                $devis = $checkStmt->fetch();
+
+                if (!$devis || $devis['claimed_by'] !== $userId) {
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'Vous devez prendre en charge ce devis avant de le modifier']);
+                    exit;
+                }
             }
 
             $stmt = $pdo->prepare("UPDATE devis SET statut = ?, updated_at = NOW() WHERE id = ?");
