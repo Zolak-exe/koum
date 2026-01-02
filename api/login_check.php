@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // CONFIGURATION
 define('ADMIN_USERNAME', env('ADMIN_USERNAME', 'admin'));
-define('ADMIN_PASSWORD', env('ADMIN_PASSWORD', 'NextDrive2024!'));
+define('ADMIN_PASSWORD', env('ADMIN_PASSWORD', 'change_me_in_env'));
 
 // Lire les données JSON
 $json = file_get_contents('php://input');
