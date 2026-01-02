@@ -253,16 +253,15 @@ function renderTable() {
             client.timestamp ? new Date(client.timestamp).toLocaleDateString('fr-FR') :
                 'Date invalide';
 
-        // Extraire les informations selon votre structure JSON
-        const nom = client.nom || '';
-        const prenom = ''; // Votre JSON n'a pas de prénom séparé
-        const email = client.email || '';
+        // Extraire les informations (supporte structure SQL et JSON legacy)
+        const nom = client.user_name || client.nom || '';
+        const email = client.user_email || client.email || '';
         const telephone = client.telephone || '';
 
-        // Extraire les informations véhicule selon votre structure
-        const marque = client.vehicule?.marque || '';
-        const modele = client.vehicule?.modele || '';
-        const budget = client.vehicule?.budget || 0;
+        // Extraire les informations véhicule (supporte structure SQL et JSON legacy)
+        const marque = client.marque || client.vehicule?.marque || '';
+        const modele = client.modele || client.vehicule?.modele || '';
+        const budget = client.budget || client.vehicule?.budget || 0;
 
         // Statut
         const statut = client.statut || 'nouveau';
@@ -346,11 +345,11 @@ function applyFilters() {
 
         // Filtre par recherche
         if (searchTerm) {
-            const nom = (client.nom || '').toLowerCase();
-            const email = (client.email || '').toLowerCase();
+            const nom = (client.user_name || client.nom || '').toLowerCase();
+            const email = (client.user_email || client.email || '').toLowerCase();
             const telephone = (client.telephone || '').toLowerCase();
-            const marque = (client.vehicule?.marque || '').toLowerCase();
-            const modele = (client.vehicule?.modele || '').toLowerCase();
+            const marque = (client.marque || client.vehicule?.marque || '').toLowerCase();
+            const modele = (client.modele || client.vehicule?.modele || '').toLowerCase();
 
             return nom.includes(searchTerm) ||
                 email.includes(searchTerm) ||
@@ -395,12 +394,12 @@ function showClientDetails(clientId) {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
                             <label class="block text-gray-400 mb-2">Nom</label>
-                            <input type="text" name="nom" value="${client.nom || ''}" 
+                            <input type="text" name="nom" value="${client.user_name || client.nom || ''}" 
                                    class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                         </div>
                         <div>
                             <label class="block text-gray-400 mb-2">Email</label>
-                            <input type="email" name="email" value="${client.email || ''}" 
+                            <input type="email" name="email" value="${client.user_email || client.email || ''}" 
                                    class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                         </div>
                         <div>
@@ -410,37 +409,37 @@ function showClientDetails(clientId) {
                         </div>
                         <div>
                             <label class="block text-gray-400 mb-2">Marque</label>
-                            <input type="text" name="marque" value="${client.vehicule?.marque || ''}" 
+                            <input type="text" name="marque" value="${client.marque || client.vehicule?.marque || ''}" 
                                    class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                         </div>
                         <div>
                             <label class="block text-gray-400 mb-2">Modèle</label>
-                            <input type="text" name="modele" value="${client.vehicule?.modele || ''}" 
+                            <input type="text" name="modele" value="${client.modele || client.vehicule?.modele || ''}" 
                                    class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                         </div>
                         <div>
                             <label class="block text-gray-400 mb-2">Budget (€)</label>
-                            <input type="number" name="budget" value="${client.vehicule?.budget || 0}" 
+                            <input type="number" name="budget" value="${client.budget || client.vehicule?.budget || 0}" 
                                    class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                         </div>
                     </div>
                     
                     <div class="mb-6">
                         <label class="block text-gray-400 mb-2">Année minimum</label>
-                        <input type="number" name="annee_minimum" value="${client.vehicule?.annee_minimum || ''}" 
+                        <input type="number" name="annee_minimum" value="${client.annee_minimum || client.vehicule?.annee_minimum || ''}" 
                                class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                     </div>
                     
                     <div class="mb-6">
                         <label class="block text-gray-400 mb-2">Kilométrage maximum</label>
-                        <input type="number" name="kilometrage_max" value="${client.vehicule?.kilometrage_max || ''}" 
+                        <input type="number" name="kilometrage_max" value="${client.kilometrage_max || client.vehicule?.kilometrage_max || ''}" 
                                class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
                     </div>
                     
                     <div class="mb-6">
                         <label class="block text-gray-400 mb-2">Options & Commentaires</label>
                         <textarea name="commentaires" rows="3" 
-                                  class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">${client.vehicule?.commentaires || ''}</textarea>
+                                  class="w-full bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">${client.commentaires || client.vehicule?.commentaires || ''}</textarea>
                     </div>
                     
                     <div class="flex gap-2 justify-end">
@@ -524,18 +523,18 @@ function viewDevisFullscreen(clientId) {
         return;
     }
 
-    // Extraire toutes les données selon votre structure JSON
-    const nom = client.nom || 'Non renseigné';
-    const email = client.email || 'Non renseigné';
+    // Extraire toutes les données (supporte structure SQL et JSON legacy)
+    const nom = client.user_name || client.nom || 'Non renseigné';
+    const email = client.user_email || client.email || 'Non renseigné';
     const telephone = client.telephone || 'Non renseigné';
 
-    const marque = client.vehicule?.marque || 'Non renseigné';
-    const modele = client.vehicule?.modele || 'Non renseigné';
-    const budget = client.vehicule?.budget || 0;
-    const anneeMin = client.vehicule?.annee_minimum || 'Non spécifié';
-    const kmMax = client.vehicule?.kilometrage_max || 'Non spécifié';
-    const options = client.vehicule?.options || 'Aucune option spécifiée';
-    const commentaires = client.vehicule?.commentaires || 'Aucun commentaire';
+    const marque = client.marque || client.vehicule?.marque || 'Non renseigné';
+    const modele = client.modele || client.vehicule?.modele || 'Non renseigné';
+    const budget = client.budget || client.vehicule?.budget || 0;
+    const anneeMin = client.annee_minimum || client.vehicule?.annee_minimum || 'Non spécifié';
+    const kmMax = client.kilometrage_max || client.vehicule?.kilometrage_max || 'Non spécifié';
+    const options = client.options || client.vehicule?.options || 'Aucune option spécifiée';
+    const commentaires = client.commentaires || client.vehicule?.commentaires || 'Aucun commentaire';
 
     // Créer le modal plein écran
     const modal = document.createElement('div');

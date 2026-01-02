@@ -21,8 +21,13 @@ try {
     $pdo = getDB();
 
     if ($isAdmin) {
-        // Admin voit tout
-        $stmt = $pdo->query("SELECT * FROM devis ORDER BY created_at DESC");
+        // Admin voit tout avec les infos utilisateur (téléphone)
+        $stmt = $pdo->query("
+            SELECT d.*, u.telephone 
+            FROM devis d 
+            LEFT JOIN users u ON d.user_id = u.id 
+            ORDER BY d.created_at DESC
+        ");
         $clients = $stmt->fetchAll();
     } else {
         // Client voit uniquement ses demandes
