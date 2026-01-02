@@ -59,7 +59,16 @@ async function loadData() {
         console.log('Response headers:', response.headers);
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+            try {
+                const errorData = await response.json();
+                if (errorData.message) {
+                    errorMessage += ` - ${errorData.message}`;
+                }
+            } catch (e) {
+                // Ignore json parse error for error response
+            }
+            throw new Error(errorMessage);
         }
 
         const contentType = response.headers.get('content-type');
@@ -205,13 +214,19 @@ async function initializeJsonFile() {
 
 // Fonction pour mettre à jour les statistiques
 function updateStats() {
+    // Debug statuses
+    const statuses = [...new Set(allClients.map(c => c.statut))];
+    console.log('Statuts trouvés:', statuses);
+
+    const normalize = (s) => (s || '').trim().toLowerCase();
+
     const stats = {
         total: allClients.length,
-        nouveau: allClients.filter(c => c.statut === 'nouveau' || c.statut === 'En attente').length,
-        enCours: allClients.filter(c => c.statut === 'en_cours' || c.statut === 'En cours').length,
-        devisEnvoye: allClients.filter(c => c.statut === 'devis_envoye').length,
-        termine: allClients.filter(c => c.statut === 'termine' || c.statut === 'Complété').length,
-        annule: allClients.filter(c => c.statut === 'annule' || c.statut === 'Annulé').length
+        nouveau: allClients.filter(c => ['nouveau', 'en attente'].includes(normalize(c.statut))).length,
+        enCours: allClients.filter(c => ['en_cours', 'en cours'].includes(normalize(c.statut))).length,
+        devisEnvoye: allClients.filter(c => ['devis_envoye'].includes(normalize(c.statut))).length,
+        termine: allClients.filter(c => ['termine', 'complété', 'complete'].includes(normalize(c.statut))).length,
+        annule: allClients.filter(c => ['annule', 'annulé'].includes(normalize(c.statut))).length
     };
 
     // Mettre à jour l'affichage avec les bons IDs de votre HTML

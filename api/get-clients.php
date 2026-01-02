@@ -47,6 +47,6 @@ try {
     error_log($e->getMessage());
     echo json_encode([
         'error' => 'Erreur serveur',
-        'message' => 'Erreur interne'
+        'message' => 'Erreur interne: ' . $e->getMessage() // Exposed for debugging
     ]);
 }
