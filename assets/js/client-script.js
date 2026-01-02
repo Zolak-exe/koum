@@ -43,8 +43,14 @@ function showLogin() {
     const loginSection = document.getElementById('loginSection');
     const dashboardSection = document.getElementById('dashboardSection');
 
-    if (loginSection) loginSection.classList.remove('hidden');
-    if (dashboardSection) dashboardSection.classList.add('hidden');
+    if (loginSection) {
+        loginSection.classList.remove('hidden');
+        if (dashboardSection) dashboardSection.classList.add('hidden');
+    } else {
+        // If no login section exists (e.g. on client.html), redirect to login page
+        console.log('Session invalid on protected page - Redirecting to login');
+        window.location.href = 'login.html';
+    }
 }
 
 function showDashboard() {

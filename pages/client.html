@@ -107,9 +107,20 @@
         const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
         const userName = sessionStorage.getItem('userName');
         const userEmail = sessionStorage.getItem('userEmail');
+        const userId = sessionStorage.getItem('clientId');
 
         if (isLoggedIn && userName && userEmail) {
             console.log('✅ Session persistante détectée - Accès direct au dashboard');
+
+            // Hydrate global currentClient for client-script.js
+            if (typeof currentClient !== 'undefined') {
+                currentClient = {
+                    id: userId,
+                    nom: userName,
+                    email: userEmail,
+                    role: sessionStorage.getItem('userRole') || 'client'
+                };
+            }
 
             const clientNameEl = document.getElementById('clientName');
             if (clientNameEl) {
