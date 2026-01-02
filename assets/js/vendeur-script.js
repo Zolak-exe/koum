@@ -123,7 +123,8 @@ function renderTable() {
         } else if (isClaimedByMe) {
             actionButton = `
                 <span class="text-green-400 text-sm font-bold mr-2">✓ Mon dossier</span>
-                <button onclick="viewDevis('${id}')" class="text-gray-400 hover:text-white">👁️</button>
+                <button onclick="viewDevis('${id}')" class="text-gray-400 hover:text-white mr-2" title="Voir détails">👁️</button>
+                <button onclick="openChat('${id}')" class="text-blue-400 hover:text-blue-300" title="Ouvrir le chat">💬</button>
             `;
         }
 
@@ -218,6 +219,10 @@ async function updateStatus(devisId, newStatus) {
 function viewDevis(id) {
     // Reuse admin view logic or simple alert for now
     alert('Détails du devis ' + id);
+}
+
+function openChat(devisId) {
+    ChatComponent.init(devisId, 'vendeur', currentUserId);
 }
 
 function logout() {

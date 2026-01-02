@@ -181,10 +181,10 @@ function displayRequests(requests) {
                         📥 Télécharger le devis
                     </button>
                     ` : ''}
-                    <a href="mailto:nextdriveimport@gmail.com?subject=Demande ${request.id}" 
+                    <button onclick="openChat('${request.id}', '${escapeHtml(request.vehicule?.marque || 'Demande')}')" 
                        class="btn btn-secondary flex-1 text-center">
-                        📧 Nous contacter
-                    </a>
+                        💬 Chat
+                    </button>
                 </div>
             </div>
         `;
@@ -231,6 +231,22 @@ window.logout = async function () {
         sessionStorage.clear();
         window.location.href = '../index.html';
     }
+};
+
+// ========== CHAT ==========
+window.openChat = function(devisId, title) {
+    if (typeof ChatComponent === 'undefined') {
+        console.error('ChatComponent not loaded');
+        alert('Le système de chat est indisponible pour le moment.');
+        return;
+    }
+    const clientId = sessionStorage.getItem('clientId');
+    if (!clientId) {
+        console.error('Client ID not found in session');
+        alert('Erreur: Impossible d\'identifier l\'utilisateur.');
+        return;
+    }
+    ChatComponent.init(devisId, 'client', clientId);
 };
 
 // ========== DOWNLOAD QUOTE ==========

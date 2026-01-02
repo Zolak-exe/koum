@@ -335,6 +335,11 @@ function renderTable() {
                                 title="Voir le devis">
                             👁️ Voir
                         </button>
+                        <button onclick="openChat('${id}')" 
+                                class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded transition"
+                                title="Ouvrir le chat">
+                            💬 Chat
+                        </button>
                         <button onclick="showClientDetails('${id}')" 
                                 class="btn btn-sm bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded transition"
                                 title="Modifier le devis">
@@ -1103,4 +1108,9 @@ async function updateStatusQuick(clientId, newStatus) {
         client.statut = oldStatus;
         showNotification('❌ Erreur lors de la mise à jour: ' + error.message, 'error');
     }
+}
+
+function openChat(devisId) {
+    // Admin can see all chats
+    ChatComponent.init(devisId, 'admin', 'admin');
 }
