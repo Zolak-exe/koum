@@ -243,8 +243,8 @@
                     sessionStorage.setItem('clientId', result.client.id);
                     sessionStorage.setItem('userRole', result.client.role || 'client');
 
-                    // Succès - redirection selon le rôle
-                    window.location.href = 'client.html';
+                    // Succès - redirection vers l'accueil
+                    window.location.href = '../index.html';
                 } else {
                     throw new Error(result.message || 'Identifiant ou mot de passe incorrect');
                 }

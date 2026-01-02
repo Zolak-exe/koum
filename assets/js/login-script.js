@@ -83,16 +83,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             });
 
             setTimeout(() => {
-                if (result.account?.role === 'client') {
-                    window.location.href = 'client.html';
-                } else if (result.account?.role === 'vendeur') {
-                    window.location.href = 'vendeur.html';
-                } else if (result.account?.role === 'admin') {
-                    window.location.href = 'admin.html';
-                } else {
-                    // Fallback based on server suggestion or default
-                    window.location.href = result.redirect || 'client.html';
-                }
+                window.location.href = '../index.html';
             }, 800);
         }else {
             errorText.textContent = result.message || 'Identifiant ou mot de passe incorrect';
