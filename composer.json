@@ -1,0 +1,10 @@
+{
+    "name": "zolak/koum",
+    "description": "Next Drive Import - PHP Backend",
+    "require": {
+        "php": "^8.1",
+        "ext-pdo": "*",
+        "ext-pgsql": "*",
+        "ext-json": "*"
+    }
+}

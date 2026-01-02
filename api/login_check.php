@@ -31,7 +31,7 @@ $password = isset($data['password']) ? $data['password'] : '';
 
 // Rate limiting
 $ip = $_SERVER['REMOTE_ADDR'];
-$rate_limit_file = __DIR__ . '/rate_limit_admin_' . md5($ip) . '.txt';
+$rate_limit_file = __DIR__ . '/rate_limit_admin_' . hash('sha256', $ip) . '.txt';
 $max_attempts = 5;
 $lockout_time = 900; // 15 minutes
 

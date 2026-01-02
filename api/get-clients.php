@@ -1,6 +1,8 @@
 <?php
-// get-clients.php - VERSION 100% FONCTIONNELLE
+// get-clients.php - VERSION SQL (MIGRATED)
 session_start();
+require_once __DIR__ . '/db.php';
+
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 header('Access-Control-Allow-Origin: *');
@@ -15,41 +17,31 @@ if (!$isAdmin && !$isClient) {
     exit;
 }
 
-// Lire le fichier clients.json
-$clientsFile = __DIR__ . '/../data/clients.json';
+try {
+    $pdo = getDB();
 
-if (!file_exists($clientsFile)) {
-    // Créer le fichier s'il n'existe pas
-    file_put_contents($clientsFile, '[]');
-    echo '[]';
-    exit;
-}
+    if ($isAdmin) {
+        // Admin voit tout
+        $stmt = $pdo->query("SELECT * FROM devis ORDER BY created_at DESC");
+        $clients = $stmt->fetchAll();
+    } else {
+        // Client voit uniquement ses demandes
+        $userId = $_SESSION['user_id'] ?? '';
+        $userEmail = $_SESSION['user_email'] ?? '';
+        
+        $stmt = $pdo->prepare("SELECT * FROM devis WHERE user_id = ? OR user_email = ? ORDER BY created_at DESC");
+        $stmt->execute([$userId, $userEmail]);
+        $clients = $stmt->fetchAll();
+    }
 
-$content = file_get_contents($clientsFile);
+    // Retourner les clients
+    echo json_encode($clients, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-// Valider le JSON
-$clients = json_decode($content, true);
-
-if (json_last_error() !== JSON_ERROR_NONE) {
+} catch (Exception $e) {
     http_response_code(500);
+    error_log($e->getMessage());
     echo json_encode([
-        'error' => 'Fichier JSON corrompu',
-        'message' => json_last_error_msg()
+        'error' => 'Erreur serveur',
+        'message' => 'Erreur interne'
     ]);
-    exit;
 }
-
-if (!is_array($clients)) {
-    $clients = [];
-}
-
-// Si c'est un client, filtrer pour ne renvoyer que ses demandes
-if (!$isAdmin && $isClient) {
-    $userEmail = $_SESSION['user_email'] ?? '';
-    $clients = array_values(array_filter($clients, function ($client) use ($userEmail) {
-        return isset($client['email']) && strtolower($client['email']) === strtolower($userEmail);
-    }));
-}
-
-// Retourner les clients
-echo json_encode($clients, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

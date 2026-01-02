@@ -3,9 +3,12 @@
 /**
  * API Chat Instantané - NEXT DRIVE IMPORT
  * Gestion des messages de chat entre admin et clients
+ * VERSION SQL (MIGRATED)
  */
 
 session_start();
+require_once __DIR__ . '/db.php';
+
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 header('Access-Control-Allow-Origin: *');
@@ -17,34 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Fichier de données
-define('CHAT_FILE', __DIR__ . '/../data/chat-messages.json');
-
-// Fonction pour lire les messages
-function readMessages()
-{
-    if (!file_exists(CHAT_FILE)) {
-        file_put_contents(CHAT_FILE, json_encode([]));
-        @chmod(CHAT_FILE, 0644);
-    }
-    $content = file_get_contents(CHAT_FILE);
-    return json_decode($content, true) ?: [];
-}
-
-// Fonction pour sauvegarder les messages
-function saveMessages($messages)
-{
-    $json = json_encode($messages, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    file_put_contents(CHAT_FILE, $json, LOCK_EX);
-    @chmod(CHAT_FILE, 0644);
-}
-
 // Récupérer l'action demandée
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 $action = $data['action'] ?? '';
 
 try {
+    $pdo = getDB();
+
     switch ($action) {
         case 'send_message':
             // Envoyer un nouveau message
@@ -72,26 +55,37 @@ try {
                 exit;
             }
 
-            $messages = readMessages();
+            $id = 'msg_' . uniqid();
+            $timestamp = date('Y-m-d H:i:s');
+            $cleanMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
-            $newMessage = [
-                'id' => 'msg_' . uniqid(),
-                'user_id' => $userId,
-                'user_email' => $userEmail,
-                'user_name' => $userName,
-                'message' => htmlspecialchars($message, ENT_QUOTES, 'UTF-8'),
-                'is_admin' => $isAdmin,
-                'timestamp' => date('Y-m-d H:i:s'),
-                'read' => false
-            ];
-
-            $messages[] = $newMessage;
-            saveMessages($messages);
+            $sql = "INSERT INTO messages (id, user_id, user_email, user_name, message, is_admin, timestamp, read) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, false)";
+            
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                $id,
+                $userId,
+                $userEmail,
+                $userName,
+                $cleanMessage,
+                $isAdmin ? 1 : 0,
+                $timestamp
+            ]);
 
             echo json_encode([
                 'success' => true,
                 'message' => 'Message envoyé',
-                'data' => $newMessage
+                'data' => [
+                    'id' => $id,
+                    'user_id' => $userId,
+                    'user_email' => $userEmail,
+                    'user_name' => $userName,
+                    'message' => $cleanMessage,
+                    'is_admin' => $isAdmin,
+                    'timestamp' => $timestamp,
+                    'read' => false
+                ]
             ]);
             break;
 
@@ -101,25 +95,27 @@ try {
             $userEmail = $data['user_email'] ?? null;
             $isAdmin = $data['is_admin'] ?? false;
 
-            $messages = readMessages();
-
             if ($isAdmin) {
                 // Admin voit tous les messages
-                echo json_encode([
-                    'success' => true,
-                    'messages' => $messages
-                ]);
+                $stmt = $pdo->query("SELECT * FROM messages ORDER BY timestamp ASC");
+                $messages = $stmt->fetchAll();
             } else {
                 // Client voit uniquement ses messages
-                $userMessages = array_filter($messages, function ($msg) use ($userId, $userEmail) {
-                    return ($msg['user_id'] === $userId || $msg['user_email'] === $userEmail);
-                });
-
-                echo json_encode([
-                    'success' => true,
-                    'messages' => array_values($userMessages)
-                ]);
+                $stmt = $pdo->prepare("SELECT * FROM messages WHERE user_id = ? OR user_email = ? ORDER BY timestamp ASC");
+                $stmt->execute([$userId, $userEmail]);
+                $messages = $stmt->fetchAll();
             }
+
+            // Convert boolean fields
+            foreach ($messages as &$msg) {
+                $msg['is_admin'] = (bool)$msg['is_admin'];
+                $msg['read'] = (bool)$msg['read'];
+            }
+
+            echo json_encode([
+                'success' => true,
+                'messages' => $messages
+            ]);
             break;
 
         case 'mark_as_read':
@@ -135,15 +131,10 @@ try {
                 exit;
             }
 
-            $messages = readMessages();
-
-            foreach ($messages as &$msg) {
-                if (in_array($msg['id'], $messageIds)) {
-                    $msg['read'] = true;
-                }
-            }
-
-            saveMessages($messages);
+            // Create placeholders for IN clause
+            $placeholders = implode(',', array_fill(0, count($messageIds), '?'));
+            $stmt = $pdo->prepare("UPDATE messages SET read = true WHERE id IN ($placeholders)");
+            $stmt->execute($messageIds);
 
             echo json_encode([
                 'success' => true,
@@ -157,20 +148,15 @@ try {
             $userEmail = $data['user_email'] ?? null;
             $isAdmin = $data['is_admin'] ?? false;
 
-            $messages = readMessages();
-
             if ($isAdmin) {
-                // Compter les messages non lus des clients
-                $unreadCount = count(array_filter($messages, function ($msg) {
-                    return !$msg['is_admin'] && !$msg['read'];
-                }));
+                // Compter les messages non lus des clients (is_admin = false AND read = false)
+                $stmt = $pdo->query("SELECT COUNT(*) FROM messages WHERE is_admin = false AND read = false");
+                $unreadCount = $stmt->fetchColumn();
             } else {
                 // Compter les messages non lus de l'admin pour ce client
-                $unreadCount = count(array_filter($messages, function ($msg) use ($userId, $userEmail) {
-                    return $msg['is_admin'] &&
-                        ($msg['user_id'] === $userId || $msg['user_email'] === $userEmail) &&
-                        !$msg['read'];
-                }));
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM messages WHERE is_admin = true AND (user_id = ? OR user_email = ?) AND read = false");
+                $stmt->execute([$userId, $userEmail]);
+                $unreadCount = $stmt->fetchColumn();
             }
 
             echo json_encode([
@@ -181,11 +167,15 @@ try {
 
         case 'get_conversations':
             // Récupérer toutes les conversations (Admin uniquement)
-            $messages = readMessages();
+            $stmt = $pdo->query("SELECT * FROM messages ORDER BY timestamp ASC");
+            $messages = $stmt->fetchAll();
 
-            // Grouper par utilisateur
+            // Grouper par utilisateur (PHP logic preserved)
             $conversations = [];
             foreach ($messages as $msg) {
+                $msg['is_admin'] = (bool)$msg['is_admin'];
+                $msg['read'] = (bool)$msg['read'];
+
                 $key = $msg['user_email'] ?? $msg['user_id'] ?? 'unknown';
                 if (!isset($conversations[$key])) {
                     $conversations[$key] = [
@@ -219,8 +209,10 @@ try {
     }
 } catch (Exception $e) {
     http_response_code(500);
+    error_log($e->getMessage());
     echo json_encode([
         'success' => false,
-        'message' => 'Erreur serveur: ' . $e->getMessage()
+        'message' => 'Erreur serveur interne'
     ]);
 }
+

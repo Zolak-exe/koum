@@ -1009,7 +1009,7 @@ async function saveToJsonFile() {
     }
 }
 
-// Fonction pour mettre à jour le statut rapidement (MODIFIÉE)
+// Fonction pour mettre à jour le statut rapidement (MODIFIÉE - SQL VERSION)
 async function updateStatusQuick(clientId, newStatus) {
     const client = allClients.find(c => String(c.id) === String(clientId));
     if (!client) {
@@ -1019,43 +1019,45 @@ async function updateStatusQuick(clientId, newStatus) {
 
     const oldStatus = client.statut;
 
-    // Mettre à jour localement
-    client.statut = newStatus;
-    client.updated_at = new Date().toISOString().replace('T', ' ').substring(0, 19);
-
     try {
-        // Sauvegarder dans localStorage
-        const clientsData = JSON.parse(localStorage.getItem('clients') || '[]');
-        const clientIndex = clientsData.findIndex(c => String(c.id) === String(clientId));
+        // Appel API pour mise à jour SQL
+        const response = await fetch('../api/devis-manager.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'update_status',
+                devis_id: clientId,
+                statut: newStatus
+            })
+        });
 
-        if (clientIndex !== -1) {
-            clientsData[clientIndex].statut = newStatus;
-            clientsData[clientIndex].updated_at = client.updated_at;
-            localStorage.setItem('clients', JSON.stringify(clientsData));
-        }
+        const result = await response.json();
 
-        // Sauvegarder dans le fichier JSON
-        const saved = await saveToJsonFile();
-
-        if (saved) {
+        if (result.success) {
+            // Mettre à jour localement
+            client.statut = newStatus;
+            client.updated_at = new Date().toISOString().replace('T', ' ').substring(0, 19);
+            
             showNotification('✅ Statut mis à jour', 'success');
+
+            // Mettre à jour l'affichage
+            updateStats();
+
+            // Si un filtre de statut est actif, réappliquer les filtres
+            const currentStatusFilter = document.getElementById('statusFilter').value;
+            if (currentStatusFilter && currentStatusFilter !== 'all') {
+                applyFilters();
+            }
         } else {
-            showNotification('⚠️ Statut mis à jour (sauvegarde locale seulement)', 'info');
-        }
-
-        // Mettre à jour l'affichage
-        updateStats();
-
-        // Si un filtre de statut est actif, réappliquer les filtres
-        const currentStatusFilter = document.getElementById('statusFilter').value;
-        if (currentStatusFilter && currentStatusFilter !== 'all') {
-            applyFilters();
+            throw new Error(result.message || 'Erreur API');
         }
 
     } catch (error) {
         console.error('Erreur mise à jour statut:', error);
         // Revert en cas d'erreur
         client.statut = oldStatus;
-        showNotification('❌ Erreur lors de la mise à jour', 'error');
+        showNotification('❌ Erreur lors de la mise à jour: ' + error.message, 'error');
     }
 }

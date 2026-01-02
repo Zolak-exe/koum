@@ -2,33 +2,14 @@
 /**
  * Gestionnaire de Devis - NEXT DRIVE IMPORT
  * Gestion des demandes de devis séparée des comptes
+ * VERSION SQL (MIGRATED)
  */
 
 session_start();
+require_once __DIR__ . '/db.php';
+
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-
-// Fichier de données
-define('DEVIS_FILE', __DIR__ . '/../data/devis.json');
-
-// Fonction pour lire les devis
-function readDevis()
-{
-    if (!file_exists(DEVIS_FILE)) {
-        file_put_contents(DEVIS_FILE, json_encode([]));
-        @chmod(DEVIS_FILE, 0644);
-    }
-    $content = file_get_contents(DEVIS_FILE);
-    return json_decode($content, true) ?: [];
-}
-
-// Fonction pour sauvegarder les devis
-function saveDevis($devis)
-{
-    $json = json_encode($devis, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    file_put_contents(DEVIS_FILE, $json, LOCK_EX);
-    @chmod(DEVIS_FILE, 0644);
-}
 
 // Récupérer l'action demandée
 $input = file_get_contents('php://input');
@@ -36,6 +17,8 @@ $data = json_decode($input, true);
 $action = $data['action'] ?? '';
 
 try {
+    $pdo = getDB();
+
     switch ($action) {
         case 'create':
             // Créer un nouveau devis
@@ -64,33 +47,42 @@ try {
             }
 
             // Créer le devis
-            $newDevis = [
-                'id' => 'devis_' . uniqid(),
-                'user_id' => $userId,
-                'user_name' => $_SESSION['user_name'] ?? '',
-                'user_email' => $_SESSION['user_email'] ?? '',
-                'marque' => trim($data['marque']),
-                'modele' => trim($data['modele']),
-                'budget' => floatval($data['budget']),
-                'annee_minimum' => !empty($data['annee_minimum']) ? intval($data['annee_minimum']) : null,
-                'kilometrage_max' => !empty($data['kilometrage_max']) ? intval($data['kilometrage_max']) : null,
-                'options' => trim($data['options'] ?? ''),
-                'commentaires' => trim($data['commentaires'] ?? ''),
-                'statut' => 'En attente',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-                'response' => null,
-                'response_date' => null
-            ];
-
-            $allDevis = readDevis();
-            $allDevis[] = $newDevis;
-            saveDevis($allDevis);
+            $id = 'devis_' . uniqid();
+            $marque = trim($data['marque']);
+            $modele = trim($data['modele']);
+            $budget = floatval($data['budget']);
+            $annee_min = !empty($data['annee_minimum']) ? intval($data['annee_minimum']) : null;
+            $km_max = !empty($data['kilometrage_max']) ? intval($data['kilometrage_max']) : null;
+            $options = trim($data['options'] ?? '');
+            $commentaires = trim($data['commentaires'] ?? '');
+            
+            $sql = "INSERT INTO devis (id, user_id, user_name, user_email, marque, modele, budget, annee_minimum, kilometrage_max, options, commentaires, statut, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'En attente', NOW(), NOW())";
+            
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                $id,
+                $userId,
+                $_SESSION['user_name'] ?? '',
+                $_SESSION['user_email'] ?? '',
+                $marque,
+                $modele,
+                $budget,
+                $annee_min,
+                $km_max,
+                $options,
+                $commentaires
+            ]);
 
             echo json_encode([
                 'success' => true,
                 'message' => 'Demande de devis enregistrée',
-                'devis' => $newDevis
+                'devis' => [
+                    'id' => $id,
+                    'marque' => $marque,
+                    'modele' => $modele,
+                    'statut' => 'En attente'
+                ]
             ]);
             break;
 
@@ -107,14 +99,13 @@ try {
                 exit;
             }
 
-            $allDevis = readDevis();
-            $myDevis = array_filter($allDevis, function ($devis) use ($userId) {
-                return $devis['user_id'] === $userId;
-            });
+            $stmt = $pdo->prepare("SELECT * FROM devis WHERE user_id = ? ORDER BY created_at DESC");
+            $stmt->execute([$userId]);
+            $myDevis = $stmt->fetchAll();
 
             echo json_encode([
                 'success' => true,
-                'devis' => array_values($myDevis)
+                'devis' => $myDevis
             ]);
             break;
 
@@ -129,7 +120,8 @@ try {
                 exit;
             }
 
-            $allDevis = readDevis();
+            $stmt = $pdo->query("SELECT * FROM devis ORDER BY created_at DESC");
+            $allDevis = $stmt->fetchAll();
 
             echo json_encode([
                 'success' => true,
@@ -161,20 +153,10 @@ try {
                 exit;
             }
 
-            $allDevis = readDevis();
-            $updated = false;
+            $stmt = $pdo->prepare("UPDATE devis SET statut = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$newStatus, $devisId]);
 
-            foreach ($allDevis as &$devis) {
-                if ($devis['id'] === $devisId) {
-                    $devis['statut'] = $newStatus;
-                    $devis['updated_at'] = date('Y-m-d H:i:s');
-                    $updated = true;
-                    break;
-                }
-            }
-
-            if ($updated) {
-                saveDevis($allDevis);
+            if ($stmt->rowCount() > 0) {
                 echo json_encode([
                     'success' => true,
                     'message' => 'Statut mis à jour'
@@ -211,21 +193,10 @@ try {
                 exit;
             }
 
-            $allDevis = readDevis();
-            $updated = false;
+            $stmt = $pdo->prepare("UPDATE devis SET response = ?, response_date = NOW(), updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$response, $devisId]);
 
-            foreach ($allDevis as &$devis) {
-                if ($devis['id'] === $devisId) {
-                    $devis['response'] = $response;
-                    $devis['response_date'] = date('Y-m-d H:i:s');
-                    $devis['updated_at'] = date('Y-m-d H:i:s');
-                    $updated = true;
-                    break;
-                }
-            }
-
-            if ($updated) {
-                saveDevis($allDevis);
+            if ($stmt->rowCount() > 0) {
                 echo json_encode([
                     'success' => true,
                     'message' => 'Réponse ajoutée'
@@ -261,13 +232,10 @@ try {
                 exit;
             }
 
-            $allDevis = readDevis();
-            $filteredDevis = array_filter($allDevis, function ($devis) use ($devisId) {
-                return $devis['id'] !== $devisId;
-            });
+            $stmt = $pdo->prepare("DELETE FROM devis WHERE id = ?");
+            $stmt->execute([$devisId]);
 
-            if (count($filteredDevis) < count($allDevis)) {
-                saveDevis(array_values($filteredDevis));
+            if ($stmt->rowCount() > 0) {
                 echo json_encode([
                     'success' => true,
                     'message' => 'Devis supprimé'
@@ -292,10 +260,8 @@ try {
                 exit;
             }
 
-            $allDevis = readDevis();
-
             $stats = [
-                'total' => count($allDevis),
+                'total' => 0,
                 'en_attente' => 0,
                 'en_cours' => 0,
                 'complete' => 0,
@@ -303,30 +269,22 @@ try {
                 'derniers_7_jours' => 0
             ];
 
-            $now = time();
-            $sevenDaysAgo = $now - (7 * 24 * 60 * 60);
+            // Total
+            $stats['total'] = $pdo->query("SELECT COUNT(*) FROM devis")->fetchColumn();
 
-            foreach ($allDevis as $devis) {
-                switch ($devis['statut']) {
-                    case 'En attente':
-                        $stats['en_attente']++;
-                        break;
-                    case 'En cours':
-                        $stats['en_cours']++;
-                        break;
-                    case 'Complété':
-                        $stats['complete']++;
-                        break;
-                    case 'Annulé':
-                        $stats['annule']++;
-                        break;
-                }
-
-                $createdTimestamp = strtotime($devis['created_at']);
-                if ($createdTimestamp >= $sevenDaysAgo) {
-                    $stats['derniers_7_jours']++;
+            // Par statut
+            $stmt = $pdo->query("SELECT statut, COUNT(*) as count FROM devis GROUP BY statut");
+            while ($row = $stmt->fetch()) {
+                switch ($row['statut']) {
+                    case 'En attente': $stats['en_attente'] = $row['count']; break;
+                    case 'En cours': $stats['en_cours'] = $row['count']; break;
+                    case 'Complété': $stats['complete'] = $row['count']; break;
+                    case 'Annulé': $stats['annule'] = $row['count']; break;
                 }
             }
+
+            // Derniers 7 jours
+            $stats['derniers_7_jours'] = $pdo->query("SELECT COUNT(*) FROM devis WHERE created_at >= NOW() - INTERVAL '7 days'")->fetchColumn();
 
             echo json_encode([
                 'success' => true,
@@ -343,8 +301,9 @@ try {
     }
 } catch (Exception $e) {
     http_response_code(500);
+    error_log($e->getMessage());
     echo json_encode([
         'success' => false,
-        'message' => 'Erreur serveur: ' . $e->getMessage()
+        'message' => 'Erreur serveur interne'
     ]);
 }

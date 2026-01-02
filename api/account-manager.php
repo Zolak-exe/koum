@@ -2,9 +2,12 @@
 /**
  * Gestionnaire de Comptes - NEXT DRIVE IMPORT
  * Gestion des comptes utilisateurs avec rôles (admin/client)
+ * VERSION SQL (MIGRATED)
  */
 
 session_start();
+require_once __DIR__ . '/db.php';
+
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 header('Access-Control-Allow-Origin: *');
@@ -14,48 +17,6 @@ header('Access-Control-Allow-Headers: Content-Type');
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
-}
-
-// Fichiers de données
-define('ACCOUNTS_FILE', __DIR__ . '/../data/accounts.json');
-define('DEVIS_FILE', __DIR__ . '/../data/devis.json');
-
-// Fonction pour lire les comptes
-function readAccounts()
-{
-    if (!file_exists(ACCOUNTS_FILE)) {
-        file_put_contents(ACCOUNTS_FILE, json_encode([]));
-        @chmod(ACCOUNTS_FILE, 0644);
-    }
-    $content = file_get_contents(ACCOUNTS_FILE);
-    return json_decode($content, true) ?: [];
-}
-
-// Fonction pour sauvegarder les comptes
-function saveAccounts($accounts)
-{
-    $json = json_encode($accounts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    file_put_contents(ACCOUNTS_FILE, $json, LOCK_EX);
-    @chmod(ACCOUNTS_FILE, 0644);
-}
-
-// Fonction pour lire les devis
-function readDevis()
-{
-    if (!file_exists(DEVIS_FILE)) {
-        file_put_contents(DEVIS_FILE, json_encode([]));
-        @chmod(DEVIS_FILE, 0644);
-    }
-    $content = file_get_contents(DEVIS_FILE);
-    return json_decode($content, true) ?: [];
-}
-
-// Fonction pour sauvegarder les devis
-function saveDevis($devis)
-{
-    $json = json_encode($devis, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    file_put_contents(DEVIS_FILE, $json, LOCK_EX);
-    @chmod(DEVIS_FILE, 0644);
 }
 
 // Récupérer l'action demandée
@@ -74,6 +35,8 @@ if (!$data && json_last_error() !== JSON_ERROR_NONE) {
 $action = $data['action'] ?? '';
 
 try {
+    $pdo = getDB();
+
     switch ($action) {
         case 'logout':
             // Déconnexion
@@ -87,13 +50,13 @@ try {
         case 'register':
             // Inscription d'un nouveau client
             $nom = trim($data['nom'] ?? '');
-            $username = trim($data['username'] ?? '');
+            // Username ignored in SQL schema
             $email = trim($data['email'] ?? '');
             $telephone = trim($data['telephone'] ?? '');
             $password = $data['password'] ?? ''; // Optionnel pour clients
             $role = 'client'; // Par défaut
 
-            if (empty($nom) || empty($username) || empty($email) || empty($telephone)) {
+            if (empty($nom) || empty($email) || empty($telephone)) {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
@@ -112,60 +75,41 @@ try {
                 exit;
             }
 
-            $accounts = readAccounts();
-
-            // Vérifier si l'email ou le username existe déjà
-            foreach ($accounts as $account) {
-                if ($account['email'] === $email) {
-                    http_response_code(409);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => 'Un compte existe déjà avec cet email'
-                    ]);
-                    exit;
-                }
-                if (isset($account['username']) && $account['username'] === $username) {
-                    http_response_code(409);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => 'Ce username est déjà utilisé'
-                    ]);
-                    exit;
-                }
+            // Vérifier si l'email existe déjà
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            if ($stmt->fetchColumn() > 0) {
+                http_response_code(409);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Un compte existe déjà avec cet email'
+                ]);
+                exit;
             }
 
             // Créer le nouveau compte
-            $newAccount = [
-                'id' => 'acc_' . uniqid(),
-                'nom' => $nom,
-                'username' => $username,
-                'email' => $email,
-                'telephone' => $telephone,
-                'password' => !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : null,
-                'role' => $role,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-                'active' => true
-            ];
-
-            $accounts[] = $newAccount;
-            saveAccounts($accounts);
+            $id = 'acc_' . uniqid();
+            $hashedPassword = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : null;
+            
+            $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), true)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id, $nom, $email, $telephone, $hashedPassword, $role]);
 
             // Créer la session
-            $_SESSION['user_id'] = $newAccount['id'];
-            $_SESSION['user_email'] = $newAccount['email'];
-            $_SESSION['user_name'] = $newAccount['nom'];
-            $_SESSION['user_role'] = $newAccount['role'];
+            $_SESSION['user_id'] = $id;
+            $_SESSION['user_email'] = $email;
+            $_SESSION['user_name'] = $nom;
+            $_SESSION['user_role'] = $role;
             $_SESSION['logged_in'] = true;
 
             echo json_encode([
                 'success' => true,
                 'message' => 'Compte créé avec succès',
                 'account' => [
-                    'id' => $newAccount['id'],
-                    'nom' => $newAccount['nom'],
-                    'email' => $newAccount['email'],
-                    'role' => $newAccount['role']
+                    'id' => $id,
+                    'nom' => $nom,
+                    'email' => $email,
+                    'role' => $role
                 ]
             ]);
             break;
@@ -184,24 +128,12 @@ try {
                 exit;
             }
 
-            $accounts = readAccounts();
-            $foundAccount = null;
+            // Chercher l'utilisateur par email
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+            $stmt->execute([$identifier]);
+            $foundAccount = $stmt->fetch();
 
-            foreach ($accounts as $account) {
-                // Vérifier si l'identifiant correspond à l'email OU au username
-                $matchesEmail = $account['email'] === $identifier;
-                $matchesUsername = isset($account['username']) && $account['username'] === $identifier;
-
-                if ($matchesEmail || $matchesUsername) {
-                    // Vérifier le mot de passe
-                    if (!empty($account['password']) && password_verify($password, $account['password'])) {
-                        $foundAccount = $account;
-                        break;
-                    }
-                }
-            }
-
-            if (!$foundAccount) {
+            if (!$foundAccount || !password_verify($password, $foundAccount['password'])) {
                 http_response_code(401);
                 echo json_encode([
                     'success' => false,
@@ -269,17 +201,12 @@ try {
                 exit;
             }
 
-            $accounts = readAccounts();
-
-            // Retirer les mots de passe pour la sécurité
-            $accountsClean = array_map(function ($acc) {
-                unset($acc['password']);
-                return $acc;
-            }, $accounts);
+            $stmt = $pdo->query("SELECT id, nom, email, telephone, role, created_at, updated_at, active FROM users ORDER BY created_at DESC");
+            $accounts = $stmt->fetchAll();
 
             echo json_encode([
                 'success' => true,
-                'accounts' => $accountsClean
+                'accounts' => $accounts
             ]);
             break;
 
@@ -306,20 +233,10 @@ try {
                 exit;
             }
 
-            $accounts = readAccounts();
-            $updated = false;
+            $stmt = $pdo->prepare("UPDATE users SET role = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$newRole, $accountId]);
 
-            foreach ($accounts as &$account) {
-                if ($account['id'] === $accountId) {
-                    $account['role'] = $newRole;
-                    $account['updated_at'] = date('Y-m-d H:i:s');
-                    $updated = true;
-                    break;
-                }
-            }
-
-            if ($updated) {
-                saveAccounts($accounts);
+            if ($stmt->rowCount() > 0) {
                 echo json_encode([
                     'success' => true,
                     'message' => 'Rôle mis à jour'
@@ -355,31 +272,29 @@ try {
                 exit;
             }
 
-            $accounts = readAccounts();
-            $updated = false;
+            // Toggle status logic in SQL is tricky without reading first or using a CASE statement
+            // Let's read first to be safe and simple
+            $stmt = $pdo->prepare("SELECT active FROM users WHERE id = ?");
+            $stmt->execute([$accountId]);
+            $current = $stmt->fetchColumn();
 
-            foreach ($accounts as &$account) {
-                if ($account['id'] === $accountId) {
-                    $account['active'] = !($account['active'] ?? true);
-                    $account['updated_at'] = date('Y-m-d H:i:s');
-                    $updated = true;
-                    break;
-                }
-            }
-
-            if ($updated) {
-                saveAccounts($accounts);
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Statut mis à jour'
-                ]);
-            } else {
+            if ($current === false) {
                 http_response_code(404);
                 echo json_encode([
                     'success' => false,
                     'message' => 'Compte non trouvé'
                 ]);
+                exit;
             }
+
+            $newStatus = !$current;
+            $stmt = $pdo->prepare("UPDATE users SET active = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$newStatus ? 1 : 0, $accountId]);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Statut mis à jour'
+            ]);
             break;
 
         default:
@@ -391,8 +306,10 @@ try {
     }
 } catch (Exception $e) {
     http_response_code(500);
+    error_log($e->getMessage());
     echo json_encode([
         'success' => false,
-        'message' => 'Erreur serveur: ' . $e->getMessage()
+        'message' => 'Erreur serveur interne'
     ]);
 }
+

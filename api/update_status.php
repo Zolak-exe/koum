@@ -2,9 +2,11 @@
 /**
  * NEXT DRIVE IMPORT - Update Status v2.1.0
  * Mise à jour du statut des demandes
+ * VERSION SQL (MIGRATED)
  */
 
 session_start();
+require_once __DIR__ . '/db.php';
 
 // ========== VÉRIFICATION AUTHENTIFICATION ==========
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -12,10 +14,6 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     echo json_encode(['error' => 'Non autorisé']);
     exit;
 }
-
-// ========== CONFIGURATION ==========
-define('DATA_DIR', __DIR__);  // ← RACINE
-define('CLIENTS_FILE', DATA_DIR . '/clients.json');
 
 // ========== HEADERS ==========
 header('Content-Type: application/json; charset=UTF-8');
@@ -41,60 +39,71 @@ $client_id = $data['id'];
 $new_status = $data['statut'];
 
 // Validation du statut
-$valid_statuses = ['nouveau', 'en_cours', 'devis_envoye', 'termine', 'annule'];
-if (!in_array($new_status, $valid_statuses)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Statut invalide']);
-    exit;
-}
+// Note: The DB might have different constraints or case sensitivity.
+// The previous file had: 'nouveau', 'en_cours', 'devis_envoye', 'termine', 'annule'
+// devis-manager.php uses: 'En attente', 'En cours', 'Complété', 'Annulé'
+// I should probably map them or allow both sets if possible.
+// But since I migrated data, I should check what's in the DB.
+// The migration script mapped 'nouveau' -> 'En attente', etc.
+// So I should map the input status to the DB status.
 
-// ========== CHARGEMENT DES CLIENTS ==========
-if (!file_exists(CLIENTS_FILE)) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Fichier clients introuvable']);
-    exit;
-}
+$statusMap = [
+    'nouveau' => 'En attente',
+    'en_cours' => 'En cours',
+    'devis_envoye' => 'En cours', // Mapping approximation
+    'termine' => 'Complété',
+    'annule' => 'Annulé'
+];
 
-$json_content = file_get_contents(CLIENTS_FILE);
-$clients = json_decode($json_content, true);
+$dbStatus = $statusMap[$new_status] ?? $new_status;
 
-if ($clients === null) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Erreur de lecture']);
-    exit;
-}
-
-// ========== MISE À JOUR DU STATUT ==========
-$found = false;
-foreach ($clients as &$client) {
-    if ($client['id'] === $client_id) {
-        $client['statut'] = $new_status;
-        $client['updated_at'] = date('Y-m-d H:i:s');
-        $found = true;
-        break;
+// Also allow direct DB status values
+$valid_db_statuses = ['En attente', 'En cours', 'Complété', 'Annulé'];
+if (!in_array($dbStatus, $valid_db_statuses)) {
+    // If not in map and not in valid DB statuses, maybe it's invalid.
+    // But let's be lenient or strict?
+    // The previous code was strict on the lowercase ones.
+    // I'll stick to the map if it matches, otherwise check if it's a valid DB status.
+    if (!in_array($new_status, $valid_db_statuses)) {
+         http_response_code(400);
+         echo json_encode(['error' => 'Statut invalide']);
+         exit;
     }
+    $dbStatus = $new_status;
 }
 
-if (!$found) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Client introuvable']);
-    exit;
-}
+try {
+    $pdo = getDB();
+    
+    $stmt = $pdo->prepare("UPDATE devis SET statut = ?, updated_at = NOW() WHERE id = ?");
+    $stmt->execute([$dbStatus, $client_id]);
 
-// ========== SAUVEGARDE ==========
-$json_data = json_encode($clients, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Statut mis à jour'
+        ]);
+    } else {
+        // Check if ID exists
+        $check = $pdo->prepare("SELECT id FROM devis WHERE id = ?");
+        $check->execute([$client_id]);
+        if ($check->fetch()) {
+             // Exists but no change (same status)
+             echo json_encode([
+                'success' => true,
+                'message' => 'Statut mis à jour (inchangé)'
+            ]);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Client introuvable']);
+        }
+    }
 
-if (file_put_contents(CLIENTS_FILE, $json_data, LOCK_EX) === false) {
+} catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Erreur lors de la sauvegarde']);
-    exit;
+    error_log($e->getMessage());
+    echo json_encode(['error' => 'Erreur serveur interne']);
 }
-
-// ========== RÉPONSE SUCCÈS ==========
-echo json_encode([
-    'success' => true,
-    'message' => 'Statut mis à jour'
-]);
 ?>
 ```
 
