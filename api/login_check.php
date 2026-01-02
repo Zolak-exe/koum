@@ -1,6 +1,8 @@
 <?php
 // login_check.php - VERSION 100% FONCTIONNELLE
 session_start();
+require_once __DIR__ . '/env.php';
+
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 header('Access-Control-Allow-Origin: *');
@@ -12,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// CONFIGURATION - CHANGEZ CES VALEURS IMMÉDIATEMENT
-define('ADMIN_USERNAME', 'admin');
-define('ADMIN_PASSWORD', 'NextDrive2024!'); // CHANGEZ EN PRODUCTION
+// CONFIGURATION
+define('ADMIN_USERNAME', env('ADMIN_USERNAME', 'admin'));
+define('ADMIN_PASSWORD', env('ADMIN_PASSWORD', 'NextDrive2024!'));
 
 // Lire les données JSON
 $json = file_get_contents('php://input');

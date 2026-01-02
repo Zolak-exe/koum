@@ -1,7 +1,7 @@
 <?php
 // submit-devis.php - VERSION SQL (MIGRATED)
 session_start();
-require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/db.php'; // Inclut env.php via db.php
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Configuration
-define('ADMIN_EMAIL', 'nextdriveimport@gmail.com');
-define('SITE_URL', 'https://nextdriveimport.fr');
+define('ADMIN_EMAIL', env('ADMIN_EMAIL', 'nextdriveimport@gmail.com'));
+define('SITE_URL', env('SITE_URL', 'https://nextdriveimport.fr'));
 
 // Lire les données JSON
 $json = file_get_contents('php://input');

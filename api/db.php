@@ -1,20 +1,20 @@
 <?php
 /**
  * Configuration de la Base de Données (PostgreSQL / Neon)
- * 
- * Remplissez les variables ci-dessous avec les informations fournies par Neon.
  */
 
+require_once __DIR__ . '/env.php';
+
 function getDB() {
-    // -------------------------------------------------------------------------
-    // CONFIGURATION À REMPLIR
-    // -------------------------------------------------------------------------
-    $host = 'ep-raspy-pine-abbdh2ut-pooler.eu-west-2.aws.neon.tech';
-    $db   = 'neondb';
-    $user = 'neondb_owner';
-    $pass = 'npg_SxUnXsjIKq80';
-    $port = "5432";
-    // -------------------------------------------------------------------------
+    $host = env('DB_HOST');
+    $db   = env('DB_NAME');
+    $user = env('DB_USER');
+    $pass = env('DB_PASS');
+    $port = env('DB_PORT', '5432');
+
+    if (!$host || !$db || !$user || !$pass) {
+        die("Erreur de configuration DB: Variables d'environnement manquantes.");
+    }
 
     $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
     
