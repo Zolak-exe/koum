@@ -83,10 +83,9 @@ async function loadClientRequests() {
             throw new Error('La réponse du serveur n\'est pas une liste valide');
         }
 
-        // Filter requests for current client
-        const clientRequests = clients.filter(client =>
-            client.email === currentClient.email
-        );
+        // L'API filtre déjà les résultats pour l'utilisateur connecté
+        // On utilise directement les données reçues
+        const clientRequests = clients;
 
         displayRequests(clientRequests);
         updateStats(clientRequests);
