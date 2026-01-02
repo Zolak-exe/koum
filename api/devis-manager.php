@@ -143,12 +143,17 @@ try {
             $devisId = $data['devis_id'] ?? '';
             $newStatus = $data['statut'] ?? '';
 
-            $validStatuses = ['En attente', 'En cours', 'Complété', 'Annulé'];
+            // Updated valid statuses to match frontend values
+            $validStatuses = [
+                'nouveau', 'en_cours', 'devis_envoye', 'termine', 'annule',
+                'En attente', 'En cours', 'Complété', 'Annulé' // Legacy support
+            ];
+            
             if (empty($devisId) || !in_array($newStatus, $validStatuses)) {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Données invalides'
+                    'message' => 'Données invalides: statut non reconnu (' . $newStatus . ')'
                 ]);
                 exit;
             }

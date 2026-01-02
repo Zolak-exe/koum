@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXT DRIVE IMPORT - Dashboard Vendeur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/admin-style.css">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+<body>
+    
+    <!-- Header -->
+    <div class="max-w-7xl mx-auto mb-8 p-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-black gradient-text mb-2 logo">NEXT DRIVE IMPORT</h1>
+                <p class="text-gray-400">Dashboard Vendeur</p>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="refreshData()" class="btn btn-secondary">
+                    Actualiser
+                </button>
+                <button onclick="exportToExcel()" class="btn btn-primary">
+                    Exporter Excel
+                </button>
+                <button onclick="logout()" class="btn btn-secondary">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm font-semibold mb-2">Total Demandes</div>
+                <div class="text-4xl font-black gradient-text" id="totalRequests">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm font-semibold mb-2">Nouvelles</div>
+                <div class="text-4xl font-black text-blue-400" id="newRequests">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm font-semibold mb-2">En Cours</div>
+                <div class="text-4xl font-black text-amber-400" id="inProgressRequests">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm font-semibold mb-2">Terminées</div>
+                <div class="text-4xl font-black text-green-400" id="completedRequests">0</div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="mb-6 flex gap-4">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input flex-1" 
+                placeholder="Rechercher par nom, email, marque, modèle..."
+                oninput="filterTable()"
+            >
+            <select id="statusFilter" class="search-input" style="width: 200px;" onchange="filterTable()">
+                <option value="">Tous les statuts</option>
+                <option value="nouveau">Nouveau</option>
+                <option value="en_cours">En cours</option>
+                <option value="devis_envoye">Devis envoyé</option>
+                <option value="termine">Terminé</option>
+                <option value="annule">Annulé</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="max-w-7xl mx-auto px-8">
+        <div class="table-container">
+            <table id="clientsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Contact</th>
+                        <th>Véhicule</th>
+                        <th>Budget</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="8" class="text-center text-gray-500 py-8">
+                            Chargement des données...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Détails -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black text-white">Détails de la demande</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white text-3xl leading-none">&times;</button>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="../assets/js/admin-script.js"></script>
+</body>
+</html>
