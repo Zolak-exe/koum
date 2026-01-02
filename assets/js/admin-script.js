@@ -1,5 +1,6 @@
 ﻿let allClients = [];
 let filteredClients = [];
+let currentUserId = null;
 
 // Vérifier l'authentification au chargement
 window.addEventListener('load', async function () {
@@ -18,7 +19,8 @@ window.addEventListener('load', async function () {
                     window.location.href = '../pages/login.html';
                     return;
                 }
-                console.log('Session OK');
+                currentUserId = result.user_id;
+                console.log('Session OK, User ID:', currentUserId);
             }
         } catch (error) {
             console.warn('Pas de vérification PHP, mode développement');
@@ -1112,5 +1114,6 @@ async function updateStatusQuick(clientId, newStatus) {
 
 function openChat(devisId) {
     // Admin can see all chats
-    ChatComponent.init(devisId, 'admin', 'admin');
+    // Use stored currentUserId or fallback to 'admin' if not set
+    ChatComponent.init(devisId, 'admin', currentUserId || 'admin');
 }
