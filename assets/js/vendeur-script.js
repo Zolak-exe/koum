@@ -124,7 +124,8 @@ function renderTable() {
             actionButton = `
                 <span class="text-green-400 text-sm font-bold mr-2">✓ Mon dossier</span>
                 <button onclick="viewDevis('${id}')" class="text-gray-400 hover:text-white mr-2" title="Voir détails">👁️</button>
-                <button onclick="openChat('${id}')" class="text-blue-400 hover:text-blue-300" title="Ouvrir le chat">💬</button>
+                <button onclick="openChat('${id}')" class="text-blue-400 hover:text-blue-300 mr-2" title="Ouvrir le chat">💬</button>
+                <button onclick="unclaimDevis('${id}')" class="text-red-400 hover:text-red-300" title="Libérer le dossier">❌</button>
             `;
         }
 
@@ -187,6 +188,37 @@ async function claimDevis(devisId) {
     } catch (error) {
         console.error('Erreur claim:', error);
         alert('Erreur lors de la prise en charge');
+    }
+}
+
+async function unclaimDevis(devisId) {
+    if (!confirm('Voulez-vous vraiment libérer ce dossier ? Il sera de nouveau disponible pour tous les vendeurs.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch('../api/devis-manager.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'unclaim', devis_id: devisId })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            // Update local data
+            const client = allClients.find(c => c.id === devisId);
+            if (client) {
+                client.claimed_by = null;
+                updateStats();
+                renderTable();
+            }
+            alert('Dossier libéré avec succès !');
+        } else {
+            alert('Erreur: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Erreur unclaim:', error);
+        alert('Erreur lors de la libération du dossier');
     }
 }
 

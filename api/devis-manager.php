@@ -179,6 +179,56 @@ try {
             ]);
             break;
 
+        case 'unclaim':
+            // Libérer un devis (vendeur uniquement)
+            if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'vendeur') {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Accès refusé - Vendeur uniquement'
+                ]);
+                exit;
+            }
+
+            $devisId = $data['devis_id'] ?? '';
+            $userId = $_SESSION['user_id'] ?? '';
+
+            if (empty($devisId)) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'ID devis requis'
+                ]);
+                exit;
+            }
+
+            // Vérifier si c'est bien mon devis
+            $checkStmt = $pdo->prepare("SELECT claimed_by FROM devis WHERE id = ?");
+            $checkStmt->execute([$devisId]);
+            $devis = $checkStmt->fetch();
+
+            if (!$devis) {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'Devis non trouvé']);
+                exit;
+            }
+
+            if ($devis['claimed_by'] !== $userId) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Vous ne pouvez pas libérer un devis qui ne vous appartient pas']);
+                exit;
+            }
+
+            // Unclaim le devis
+            $stmt = $pdo->prepare("UPDATE devis SET claimed_by = NULL, claimed_at = NULL, updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$devisId]);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Devis libéré avec succès'
+            ]);
+            break;
+
         case 'update_status':
             // Mettre à jour le statut d'un devis (admin ou vendeur)
             $isVendeur = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'vendeur';
