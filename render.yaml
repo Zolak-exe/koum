@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: koum-backend
+    env: php
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: vendor/bin/heroku-php-apache2
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: DB_PORT
+        value: 5432
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: SITE_URL
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
