@@ -166,9 +166,10 @@
                         class="auth-only-logged-out text-white hover:text-primary transition font-medium">Inscription</a>
 
                     <!-- Liens visibles uniquement si connecté -->
-                    <a href="pages/client.html" id="clientSpaceLink"
-                        class="auth-only-logged-in hidden text-white hover:text-primary transition font-medium">Espace
-                        Client</a>
+                    <a href="pages/admin.html" class="auth-role-admin hidden text-white hover:text-primary transition font-medium">Administration</a>
+                    <a href="pages/client.html" class="auth-role-client hidden text-white hover:text-primary transition font-medium">Espace Client</a>
+                    <a href="pages/vendeur.html" class="auth-role-vendeur hidden text-white hover:text-primary transition font-medium">Espace Vendeur</a>
+
                     <button onclick="logout()" id="logoutBtn"
                         class="auth-only-logged-in hidden text-white hover:text-primary transition font-medium">Déconnexion</button>
 
@@ -205,9 +206,10 @@
                     class="auth-only-logged-out block text-white hover:text-primary transition py-2">Inscription</a>
 
                 <!-- Liens visibles uniquement si connecté -->
-                <a href="pages/client.html"
-                    class="auth-only-logged-in hidden block text-white hover:text-primary transition py-2">Espace
-                    Client</a>
+                <a href="pages/admin.html" class="auth-role-admin hidden block text-white hover:text-primary transition py-2">Administration</a>
+                <a href="pages/client.html" class="auth-role-client hidden block text-white hover:text-primary transition py-2">Espace Client</a>
+                <a href="pages/vendeur.html" class="auth-role-vendeur hidden block text-white hover:text-primary transition py-2">Espace Vendeur</a>
+
                 <button onclick="logout()"
                     class="auth-only-logged-in hidden block text-white hover:text-primary transition py-2 w-full text-left">Déconnexion</button>
 

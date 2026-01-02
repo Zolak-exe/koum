@@ -7,10 +7,30 @@
 function checkAuthStatus() {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     const userName = sessionStorage.getItem('userName');
+    const userRole = sessionStorage.getItem('userRole');
 
     // Éléments à afficher/masquer
     const loggedOutElements = document.querySelectorAll('.auth-only-logged-out');
     const loggedInElements = document.querySelectorAll('.auth-only-logged-in');
+    
+    // Éléments spécifiques aux rôles
+    const adminElements = document.querySelectorAll('.auth-role-admin');
+    const clientElements = document.querySelectorAll('.auth-role-client');
+    const vendeurElements = document.querySelectorAll('.auth-role-vendeur');
+
+    // Masquer tous les éléments spécifiques aux rôles par défaut
+    adminElements.forEach(el => {
+        el.classList.add('hidden');
+        if (el.style) el.style.display = 'none';
+    });
+    clientElements.forEach(el => {
+        el.classList.add('hidden');
+        if (el.style) el.style.display = 'none';
+    });
+    vendeurElements.forEach(el => {
+        el.classList.add('hidden');
+        if (el.style) el.style.display = 'none';
+    });
 
     if (isLoggedIn) {
         // Masquer les liens de connexion/inscription
@@ -18,13 +38,31 @@ function checkAuthStatus() {
             el.style.display = 'none';
         });
 
-        // Afficher les liens espace client/déconnexion
+        // Afficher les liens espace client/déconnexion génériques
         loggedInElements.forEach(el => {
             el.classList.remove('hidden');
             if (el.style) el.style.display = '';
         });
 
-        console.log('✅ Utilisateur connecté:', userName);
+        // Afficher les éléments spécifiques au rôle
+        if (userRole === 'admin') {
+            adminElements.forEach(el => {
+                el.classList.remove('hidden');
+                if (el.style) el.style.display = '';
+            });
+        } else if (userRole === 'client') {
+            clientElements.forEach(el => {
+                el.classList.remove('hidden');
+                if (el.style) el.style.display = '';
+            });
+        } else if (userRole === 'vendeur') {
+            vendeurElements.forEach(el => {
+                el.classList.remove('hidden');
+                if (el.style) el.style.display = '';
+            });
+        }
+
+        console.log('✅ Utilisateur connecté:', userName, 'Rôle:', userRole);
     } else {
         // Afficher les liens de connexion/inscription
         loggedOutElements.forEach(el => {
