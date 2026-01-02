@@ -85,8 +85,13 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             setTimeout(() => {
                 if (result.account?.role === 'client') {
                     window.location.href = 'client.html';
-                } else {
+                } else if (result.account?.role === 'vendeur') {
+                    window.location.href = 'vendeur.html';
+                } else if (result.account?.role === 'admin') {
                     window.location.href = 'admin.html';
+                } else {
+                    // Fallback based on server suggestion or default
+                    window.location.href = result.redirect || 'client.html';
                 }
             }, 800);
         }else {

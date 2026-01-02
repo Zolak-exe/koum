@@ -159,6 +159,13 @@ try {
             $_SESSION['user_role'] = $foundAccount['role'];
             $_SESSION['logged_in'] = true;
 
+            $redirect = 'client.html';
+            if ($foundAccount['role'] === 'admin') {
+                $redirect = 'admin.html';
+            } elseif ($foundAccount['role'] === 'vendeur') {
+                $redirect = 'vendeur.html';
+            }
+
             echo json_encode([
                 'success' => true,
                 'message' => 'Connexion réussie',
@@ -169,7 +176,7 @@ try {
                     'telephone' => $foundAccount['telephone'],
                     'role' => $foundAccount['role']
                 ],
-                'redirect' => $foundAccount['role'] === 'admin' ? 'admin.html' : 'client.html'
+                'redirect' => $redirect
             ]);
             break;
 

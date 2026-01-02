@@ -19,6 +19,15 @@ window.addEventListener('load', async function () {
                     window.location.href = '../pages/login.html';
                     return;
                 }
+                
+                // Verify role
+                if (result.role !== 'admin') {
+                    console.log('Accès non autorisé (Rôle: ' + result.role + '), redirection...');
+                    if (result.role === 'vendeur') window.location.href = '../pages/vendeur.html';
+                    else window.location.href = '../pages/client.html';
+                    return;
+                }
+
                 currentUserId = result.user_id;
                 console.log('Session OK, User ID:', currentUserId);
             }
