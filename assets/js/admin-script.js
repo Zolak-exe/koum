@@ -614,7 +614,7 @@ function viewDevisFullscreen(clientId) {
                     <textarea id="adminNotes" 
                               class="w-full bg-gray-600 text-white p-3 rounded border border-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                               rows="4"
-                              placeholder="Ajoutez des notes ou commentaires sur ce devis...">${client.adminNotes || ''}</textarea>
+                              placeholder="Ajoutez des notes ou commentaires sur ce devis...">${client.admin_notes || client.adminNotes || ''}</textarea>
                     <button onclick="saveAdminNotes('${clientId}')" 
                             class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition">
                         💾 Sauvegarder les notes
@@ -653,29 +653,55 @@ function closeDevisModal() {
 }
 
 // Fonction pour sauvegarder les notes administrateur
-function saveAdminNotes(clientId) {
+async function saveAdminNotes(clientId) {
     const client = allClients.find(c => String(c.id) === String(clientId));
     if (!client) return;
 
     const notesTextarea = document.getElementById('adminNotes');
     const notes = notesTextarea.value;
+    const btn = notesTextarea.nextElementSibling;
+    
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sauvegarde...';
 
-    // Mettre à jour localement
-    client.adminNotes = notes;
+    try {
+        const response = await fetch('../api/devis-manager.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'update_notes',
+                devis_id: clientId,
+                notes: notes
+            })
+        });
 
-    // Sauvegarder dans localStorage
-    const clientsData = JSON.parse(localStorage.getItem('clients') || '[]');
-    const clientIndex = clientsData.findIndex(c => String(c.id) === String(clientId));
+        const result = await response.json();
 
-    if (clientIndex !== -1) {
-        clientsData[clientIndex].adminNotes = notes;
-        localStorage.setItem('clients', JSON.stringify(clientsData));
+        if (result.success) {
+            // Mettre à jour localement
+            client.admin_notes = notes;
+            client.adminNotes = notes; // Compatibilité
 
-        showNotification('✅ Notes sauvegardées avec succès', 'success');
-
-        // Mettre à jour allClients
-        allClients = clientsData;
-        filteredClients = [...allClients];
+            showNotification('✅ Notes sauvegardées sur le serveur', 'success');
+        } else {
+            throw new Error(result.message || 'Erreur serveur');
+        }
+    } catch (error) {
+        console.error('Erreur sauvegarde notes:', error);
+        showNotification('❌ Erreur: ' + error.message, 'error');
+        
+        // Fallback localStorage
+        client.adminNotes = notes;
+        const clientsData = JSON.parse(localStorage.getItem('clients') || '[]');
+        const clientIndex = clientsData.findIndex(c => String(c.id) === String(clientId));
+        if (clientIndex !== -1) {
+            clientsData[clientIndex].adminNotes = notes;
+            localStorage.setItem('clients', JSON.stringify(clientsData));
+        }
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
     }
 }
 
@@ -741,10 +767,10 @@ function printDevis(clientId) {
                 </div>
             </div>
 
-            ${client.adminNotes ? `
+            ${client.admin_notes || client.adminNotes ? `
             <div class="section">
                 <h3>Notes Administrateur</h3>
-                <p>${client.adminNotes}</p>
+                <p>${client.admin_notes || client.adminNotes}</p>
             </div>
             ` : ''}
 

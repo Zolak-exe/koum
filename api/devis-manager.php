@@ -210,6 +210,38 @@ try {
             }
             break;
 
+        case 'update_notes':
+            // Mettre à jour les notes admin (admin uniquement)
+            if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Accès refusé - Admin uniquement'
+                ]);
+                exit;
+            }
+
+            $devisId = $data['devis_id'] ?? '';
+            $notes = trim($data['notes'] ?? '');
+
+            if (empty($devisId)) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'ID devis requis'
+                ]);
+                exit;
+            }
+
+            $stmt = $pdo->prepare("UPDATE devis SET admin_notes = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$notes, $devisId]);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Notes mises à jour'
+            ]);
+            break;
+
         case 'delete':
             // Supprimer un devis (admin uniquement)
             if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
