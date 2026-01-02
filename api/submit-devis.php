@@ -84,14 +84,29 @@ try {
     // Vérifier si l'utilisateur est connecté ou a un compte
     $user_id = null;
 
+    // 1. Check PHP Session
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
-    } elseif (isset($_SESSION['client_data']['id'])) {
+    } 
+    // 2. Check Client Data in Session (Legacy)
+    elseif (isset($_SESSION['client_data']['id'])) {
         $user_id = $_SESSION['client_data']['id'];
-    } else {
+    } 
+    // 3. Check if email exists in DB (Auto-link)
+    else {
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $user_id = $stmt->fetchColumn();
+    }
+
+    // 4. Check if user_id was passed in payload (Trusted client-side session)
+    if (!$user_id && isset($data['user_id']) && !empty($data['user_id'])) {
+        // Verify this ID actually exists to prevent spoofing non-existent IDs
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE id = ?");
+        $stmt->execute([$data['user_id']]);
+        if ($stmt->fetchColumn()) {
+            $user_id = $data['user_id'];
+        }
     }
 
     // Gestion de la création de compte optionnelle

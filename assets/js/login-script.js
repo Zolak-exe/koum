@@ -1,6 +1,7 @@
 ﻿// Create particles
 function createParticles() {
     const container = document.getElementById('particles');
+    if (!container) return;
     for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -12,19 +13,35 @@ function createParticles() {
 }
 createParticles();
 
+// Check if already logged in
+if (sessionStorage.getItem('isLoggedIn') === 'true') {
+    const role = sessionStorage.getItem('userRole');
+    if (role === 'client') window.location.href = 'client.html';
+    else if (role === 'admin') window.location.href = 'admin.html';
+    else if (role === 'vendeur') window.location.href = 'vendeur.html';
+}
+
 // Login Form Handler
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const username = document.getElementById('username').value;
+    // Support both ID names for compatibility
+    const usernameInput = document.getElementById('username') || document.getElementById('identifier');
+    const username = usernameInput ? usernameInput.value : '';
     const password = document.getElementById('password').value;
-    const errorMessage = document.getElementById('errorMessage');
+    
+    const errorMessage = document.getElementById('errorMessage') || document.getElementById('errorAlert');
     const errorText = document.getElementById('errorText');
-    const loginBtn = document.getElementById('loginBtn');
+    const loginBtn = document.getElementById('loginBtn') || document.querySelector('button[type="submit"]');
+
+    if (!username) {
+        console.error('Username input not found');
+        return;
+    }
 
     loginBtn.disabled = true;
     loginBtn.innerHTML = '<span class="relative z-10">🔄 Vérification...</span>';
-    errorMessage.classList.add('hidden');
+    if (errorMessage) errorMessage.classList.add('hidden');
 
     try {
         const response = await fetch('../api/account-manager.php', {

@@ -119,6 +119,15 @@ async function checkClientSession() {
 
         if (result.authenticated) {
             clientData = result.client;
+            // Update sessionStorage if needed
+            if (!sessionStorage.getItem('isLoggedIn')) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('userName', clientData.nom || clientData.email);
+                sessionStorage.setItem('userEmail', clientData.email);
+                sessionStorage.setItem('userPhone', clientData.telephone || '');
+                sessionStorage.setItem('userRole', clientData.role || 'client');
+                if (clientData.id) sessionStorage.setItem('clientId', clientData.id);
+            }
             showDevisForm();
         }
     } catch (error) {
@@ -130,6 +139,7 @@ async function checkClientSession() {
 function checkDevisAccess() {
     const devisBlurOverlay = document.getElementById('devisBlurOverlay');
     const devisContent = document.getElementById('devisContent');
+    const devisForm = document.getElementById('devisForm');
 
     if (!devisBlurOverlay || !devisContent) return;
 
@@ -142,6 +152,17 @@ function checkDevisAccess() {
         devisBlurOverlay.classList.add('hidden');
         devisContent.style.filter = 'none';
         devisContent.style.pointerEvents = 'auto';
+        
+        // Pre-fill form if clientData is available
+        if (clientData && devisForm) {
+            const nomInput = devisForm.querySelector('#nom');
+            const emailInput = devisForm.querySelector('#email');
+            const phoneInput = devisForm.querySelector('#telephone');
+            
+            if (nomInput) nomInput.value = clientData.nom || '';
+            if (emailInput) emailInput.value = clientData.email || '';
+            if (phoneInput) phoneInput.value = clientData.telephone || '';
+        }
     } else {
         devisBlurOverlay.classList.remove('hidden');
         devisContent.style.filter = 'blur(8px)';
@@ -349,6 +370,7 @@ function initFormHandler() {
                 nom: clientData.nom,
                 email: clientData.email,
                 telephone: clientData.telephone || '',
+                user_id: clientData.id || null, // Explicitly send user_id
                 vehicule: vehiculeData,
                 rgpd_consent: formData.get('rgpd') === 'on',
                 source: 'website',
