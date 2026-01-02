@@ -5,8 +5,11 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Activation du module Apache mod_rewrite (utile pour le routing si besoin)
-RUN a2enmod rewrite
+# Activation du module Apache mod_rewrite et autres modules utiles
+RUN a2enmod rewrite headers expires
+
+# Copie de la configuration Apache personnalisée
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 # Copie des fichiers de l'application
 COPY . /var/www/html/

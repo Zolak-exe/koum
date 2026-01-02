@@ -6,14 +6,12 @@ php_flag log_errors On
 
 # Bloquer l'accès aux fichiers sensibles
 <FilesMatch "\.(log|txt|sql|md|bak|backup)$">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Protéger les fichiers JSON de données
 <FilesMatch "^(clients|accounts|devis)\.json$">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Bloquer l'accès direct au dossier data/
