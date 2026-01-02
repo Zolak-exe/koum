@@ -39,6 +39,17 @@ function initDevisForm() {
     const devisForm = document.getElementById('devisForm');
     if (!devisForm) return;
 
+    // Pré-remplir si connecté
+    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+        const nomInput = document.getElementById('nom');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('telephone');
+
+        if (nomInput) nomInput.value = sessionStorage.getItem('userName') || '';
+        if (emailInput) emailInput.value = sessionStorage.getItem('userEmail') || '';
+        if (phoneInput) phoneInput.value = sessionStorage.getItem('userPhone') || '';
+    }
+
     devisForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 

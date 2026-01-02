@@ -50,6 +50,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             sessionStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('userName', result.account?.nom || result.account?.email || username);
             sessionStorage.setItem('userEmail', result.account?.email || username);
+            sessionStorage.setItem('userPhone', result.account?.telephone || '');
             sessionStorage.setItem('userRole', result.account?.role || 'admin');
             if (result.account?.id) {
                 sessionStorage.setItem('clientId', result.account.id);
@@ -59,6 +60,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
                 isLoggedIn: sessionStorage.getItem('isLoggedIn'),
                 userName: sessionStorage.getItem('userName'),
                 userEmail: sessionStorage.getItem('userEmail'),
+                userPhone: sessionStorage.getItem('userPhone'),
                 userRole: sessionStorage.getItem('userRole'),
                 clientId: sessionStorage.getItem('clientId')
             });

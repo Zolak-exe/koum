@@ -155,6 +155,7 @@ try {
             $_SESSION['user_id'] = $foundAccount['id'];
             $_SESSION['user_email'] = $foundAccount['email'];
             $_SESSION['user_name'] = $foundAccount['nom'];
+            $_SESSION['user_telephone'] = $foundAccount['telephone'];
             $_SESSION['user_role'] = $foundAccount['role'];
             $_SESSION['logged_in'] = true;
 
@@ -165,6 +166,7 @@ try {
                     'id' => $foundAccount['id'],
                     'nom' => $foundAccount['nom'],
                     'email' => $foundAccount['email'],
+                    'telephone' => $foundAccount['telephone'],
                     'role' => $foundAccount['role']
                 ],
                 'redirect' => $foundAccount['role'] === 'admin' ? 'admin.html' : 'client.html'
@@ -180,6 +182,7 @@ try {
                         'id' => $_SESSION['user_id'] ?? null,
                         'nom' => $_SESSION['user_name'] ?? '',
                         'email' => $_SESSION['user_email'] ?? '',
+                        'telephone' => $_SESSION['user_telephone'] ?? '', // Added telephone
                         'role' => $_SESSION['user_role'] ?? 'client'
                     ]
                 ]);
