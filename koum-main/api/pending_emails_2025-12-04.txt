@@ -1,0 +1,60 @@
+
+==================================================
+2025-12-04 21:33:14 - NOUVELLE DEMANDE
+==================================================
+
+Nouvelle demande de devis reçue:
+
+Client: Test User 1764883992607
+Email: test1764883992607@example.com
+Téléphone: 0612345678
+
+Véhicule souhaité:
+- Marque: BMW
+- Modèle: M3
+- Budget: 35 000 €
+
+Année minimum: Non spécifié
+Kilométrage maximum: Non spécifié km
+
+Options: Aucune
+
+Commentaires: Aucun
+
+---
+ID Demande: devis_6931fe189f77e9.04613123
+Date: 2025-12-04 21:33:12
+IP: ::1
+
+Lien admin: https://nextdriveimport.fr/admin.html
+
+
+==================================================
+2025-12-04 21:33:19 - NOUVELLE DEMANDE
+==================================================
+
+Nouvelle demande de devis reçue:
+
+Client: Integrity Test
+Email: integrity_test_1764883997250@example.com
+Téléphone: 0698765432
+
+Véhicule souhaité:
+- Marque: Audi
+- Modèle: RS6
+- Budget: 45 000 €
+
+Année minimum: Non spécifié
+Kilométrage maximum: Non spécifié km
+
+Options: Aucune
+
+Commentaires: Aucun
+
+---
+ID Demande: devis_6931fe1d3e86c4.01266889
+Date: 2025-12-04 21:33:17
+IP: ::1
+
+Lien admin: https://nextdriveimport.fr/admin.html
+

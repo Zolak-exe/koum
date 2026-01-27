@@ -2,12 +2,13 @@
 // auth.php - VERSION SQL (MIGRATED)
 session_start();
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/security.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
 
 // Lire les données JSON
 $json = file_get_contents('php://input');
@@ -63,7 +64,7 @@ function handleRegistration($data)
 
     try {
         $pdo = getDB();
-        
+
         // Vérifier si l'email existe déjà
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -77,7 +78,7 @@ function handleRegistration($data)
         $id = uniqid('acc_', true);
         $hashedPassword = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : null;
         $role = 'client';
-        
+
         $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), true)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id, $nom, $email, $telephone_clean, $hashedPassword, $role]);
@@ -122,7 +123,7 @@ function handleLogin($data)
 
     try {
         $pdo = getDB();
-        
+
         // Chercher l'utilisateur par email
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$identifier]);
@@ -142,7 +143,7 @@ function handleLogin($data)
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['logged_in'] = true;
         $_SESSION['user_email'] = $user['email'];
-        
+
         if ($user['role'] === 'admin') {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_username'] = $user['nom']; // Using nom as username for session

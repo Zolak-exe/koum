@@ -1,0 +1,934 @@
+[
+    {
+        "id": "1739547612_a8b9c7d3",
+        "nom": "Sophie Martin",
+        "email": "sophie.martin@email.com",
+        "telephone": "0678451236",
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "Série 5",
+            "budget": 45000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 40000,
+            "options": "Volant à gauche obligatoire, Pack Luxury",
+            "commentaires": "Recherche spécifique marché allemand - diesel accepté"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "78.245.167.89",
+            "user_agent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-10-12 14:20:12",
+        "updated_at": "2025-10-12 14:20:12"
+    },
+    {
+        "id": "1739123456_f4e3d2c1",
+        "nom": "Thomas Dubois",
+        "email": "thomas.dubois@proton.me",
+        "telephone": "0789562347",
+        "vehicule": {
+            "marque": "Tesla",
+            "modele": "Model Y",
+            "budget": 55000,
+            "annee_minimum": 2022,
+            "kilometrage_max": 30000,
+            "options": "Version US acceptable, Autopilot complet",
+            "commentaires": "Import depuis USA accepté si volant gauche - recherche Long Range"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "92.154.86.123",
+            "user_agent": "Mozilla\/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/17.0 Mobile\/15E148 Safari\/604.1"
+        },
+        "created_at": "2025-10-08 09:15:36",
+        "updated_at": "2025-10-15 11:23:45"
+    },
+    {
+        "id": "1738765432_b5c6d7e8",
+        "nom": "Marie Lambert",
+        "email": "marie.lambert34@gmail.com",
+        "telephone": "0645789632",
+        "vehicule": {
+            "marque": "Mercedes",
+            "modele": "Classe C",
+            "budget": 38000,
+            "annee_minimum": 2021,
+            "kilometrage_max": 35000,
+            "options": "Certificat de conformité européen, Pack AMG",
+            "commentaires": "Doit être conforme normes UE - préférence version break"
+        },
+        "statut": "termine",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "85.169.45.78",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko\/20100101 Firefox\/118.0"
+        },
+        "created_at": "2025-10-04 16:45:32",
+        "updated_at": "2025-10-18 10:30:15"
+    },
+    {
+        "id": "1738345678_c9d8e7f6",
+        "nom": "Pierre Moreau",
+        "email": "p.moreau@entreprise.fr",
+        "telephone": "0798654321",
+        "vehicule": {
+            "marque": "Porsche",
+            "modele": "Cayenne",
+            "budget": 65000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 45000,
+            "options": "Véhicule nord-américain accepté, Toit panoramique",
+            "commentaires": "Recherche spécifique modèle hybride - import Canada possible"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "91.168.234.56",
+            "user_agent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/119.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-09-30 11:20:18",
+        "updated_at": "2025-09-30 11:20:18"
+    },
+    {
+        "id": "1737987654_d2e3f4g5",
+        "nom": "Laura Petit",
+        "email": "laura.petit@outlook.com",
+        "telephone": "0632457896",
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "Q5",
+            "budget": 42000,
+            "annee_minimum": 2019,
+            "kilometrage_max": 50000,
+            "options": "Volant à gauche, Siège chauffant",
+            "commentaires": "Import depuis le marché suisse - recherche diesel 3.0 TDI"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "77.145.89.234",
+            "user_agent": "Mozilla\/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/17.0 Mobile\/15E148 Safari\/604.1"
+        },
+        "created_at": "2025-09-26 08:45:54",
+        "updated_at": "2025-10-14 15:40:22"
+    },
+    {
+        "id": "1737567890_e6f7g8h9",
+        "nom": "Antoine Rousseau",
+        "email": "antoine.r@proton.me",
+        "telephone": "0789456123",
+        "vehicule": {
+            "marque": "Land Rover",
+            "modele": "Range Rover Evoque",
+            "budget": 48000,
+            "annee_minimum": 2021,
+            "kilometrage_max": 35000,
+            "options": "Version US acceptable, Toit ouvrant",
+            "commentaires": "Accepte véhicule droit si prix intéressant - recherche spécifique UK"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "82.67.123.45",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/120.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-09-22 13:15:30",
+        "updated_at": "2025-09-22 13:15:30"
+    },
+    {
+        "id": "1737212345_f8g9h0i1",
+        "nom": "Camille Leroy",
+        "email": "camille.leroy@email.com",
+        "telephone": "0698745632",
+        "vehicule": {
+            "marque": "Toyota",
+            "modele": "Land Cruiser",
+            "budget": 52000,
+            "annee_minimum": 2018,
+            "kilometrage_max": 60000,
+            "options": "Import depuis le Japon, 4x4 diesel",
+            "commentaires": "Préférence véhicule japonais - recherche version V8 diesel"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "89.234.167.89",
+            "user_agent": "Mozilla\/5.0 (Linux; Android 13; SM-G998B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Mobile Safari\/537.36"
+        },
+        "created_at": "2025-09-18 17:30:45",
+        "updated_at": "2025-10-12 09:45:18"
+    },
+    {
+        "id": "1736856789_g0h1i2j3",
+        "nom": "Nicolas Blanc",
+        "email": "nicolas.blanc@entreprise.fr",
+        "telephone": "0745896321",
+        "vehicule": {
+            "marque": "Volvo",
+            "modele": "XC60",
+            "budget": 35000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 40000,
+            "options": "Certificat de conformité européen, Recharge hybride",
+            "commentaires": "Recherche spécifique marché belge - version T8 hybride"
+        },
+        "statut": "termine",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "94.156.78.234",
+            "user_agent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/119.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-09-14 10:45:29",
+        "updated_at": "2025-10-05 14:20:33"
+    },
+    {
+        "id": "1736490123_h2i3j4k5",
+        "nom": "Élodie Garnier",
+        "email": "elodie.garnier@proton.me",
+        "telephone": "0654789632",
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "X5",
+            "budget": 60000,
+            "annee_minimum": 2021,
+            "kilometrage_max": 35000,
+            "options": "Volant à gauche obligatoire, Pack M",
+            "commentaires": "Recherche spécifique marché allemand - xDrive40i recherché"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "83.145.234.67",
+            "user_agent": "Mozilla\/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/17.0 Mobile\/15E148 Safari\/604.1"
+        },
+        "created_at": "2025-09-10 15:20:23",
+        "updated_at": "2025-09-10 15:20:23"
+    },
+    {
+        "id": "1736123456_i4j5k6l7",
+        "nom": "David Fontaine",
+        "email": "david.fontaine@gmail.com",
+        "telephone": "0796321458",
+        "vehicule": {
+            "marque": "Mercedes",
+            "modele": "GLC",
+            "budget": 47000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 45000,
+            "options": "Recherche spécifique marché allemand, Pack Night",
+            "commentaires": "Doit être conforme normes UE - recherche GLC 300 4MATIC"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "88.167.45.189",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-09-06 08:30:56",
+        "updated_at": "2025-10-10 16:45:12"
+    },
+    {
+        "id": "1735767890_j6k7l8m9",
+        "nom": "Sarah Meyer",
+        "email": "sarah.meyer@outlook.com",
+        "telephone": "0687452396",
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "A6",
+            "budget": 42000,
+            "annee_minimum": 2019,
+            "kilometrage_max": 50000,
+            "options": "Véhicule nord-américain accepté, Intérieur cuir",
+            "commentaires": "Import depuis USA accepté si volant gauche - recherche A6 Allroad"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "79.234.156.78",
+            "user_agent": "Mozilla\/5.0 (Linux; Android 14; Pixel 7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/119.0.0.0 Mobile Safari\/537.36"
+        },
+        "created_at": "2025-09-02 12:15:40",
+        "updated_at": "2025-09-02 12:15:40"
+    },
+    {
+        "id": "1735412345_k8l9m0n1",
+        "nom": "Julien Schmitt",
+        "email": "julien.schmitt@proton.me",
+        "telephone": "0741238965",
+        "vehicule": {
+            "marque": "Porsche",
+            "modele": "Macan",
+            "budget": 58000,
+            "annee_minimum": 2021,
+            "kilometrage_max": 30000,
+            "options": "Certificat de conformité européen, Sport Chrono",
+            "commentaires": "Recherche spécifique modèle non disponible en France - Macan GTS"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "86.189.234.167",
+            "user_agent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-08-29 16:40:25",
+        "updated_at": "2025-10-08 11:30:44"
+    },
+    {
+        "id": "1735056789_l1m2n3o4",
+        "nom": "Céline Weber",
+        "email": "celine.weber@email.com",
+        "telephone": "0697854321",
+        "vehicule": {
+            "marque": "Tesla",
+            "modele": "Model 3",
+            "budget": 40000,
+            "annee_minimum": 2022,
+            "kilometrage_max": 25000,
+            "options": "Version US acceptable, Autopilot",
+            "commentaires": "Import depuis USA - recherche Performance ou Long Range"
+        },
+        "statut": "termine",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "91.145.78.234",
+            "user_agent": "Mozilla\/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/17.0 Mobile\/15E148 Safari\/604.1"
+        },
+        "created_at": "2025-08-25 09:55:19",
+        "updated_at": "2025-09-28 13:15:27"
+    },
+    {
+        "id": "1734701234_m3n4o5p6",
+        "nom": "Marc Fischer",
+        "email": "marc.fischer@entreprise.fr",
+        "telephone": "0789632541",
+        "vehicule": {
+            "marque": "Jaguar",
+            "modele": "F-Pace",
+            "budget": 52000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 40000,
+            "options": "Volant à gauche, Intérieur premium",
+            "commentaires": "Recherche spécifique marché UK - version SVR intéressante"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "84.167.89.123",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko\/20100101 Firefox\/119.0"
+        },
+        "created_at": "2025-08-21 14:30:34",
+        "updated_at": "2025-08-21 14:30:34"
+    },
+    {
+        "id": "1734345678_n5o6p7q8",
+        "nom": "Anaïs Klein",
+        "email": "anais.klein@gmail.com",
+        "telephone": "0632547896",
+        "vehicule": {
+            "marque": "Volkswagen",
+            "modele": "Touareg",
+            "budget": 45000,
+            "annee_minimum": 2019,
+            "kilometrage_max": 55000,
+            "options": "Import depuis le Japon, Toit panoramique",
+            "commentaires": "Accepte véhicule droit si prix intéressant - recherche V6 TDI"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "87.234.145.89",
+            "user_agent": "Mozilla\/5.0 (Linux; Android 13; SM-S908B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/119.0.0.0 Mobile Safari\/537.36"
+        },
+        "created_at": "2025-08-17 11:45:18",
+        "updated_at": "2025-10-06 14:20:39"
+    },
+    {
+        "id": "1733990123_o7p8q9r0",
+        "nom": "Alexandre Muller",
+        "email": "alex.muller@proton.me",
+        "telephone": "0745963214",
+        "vehicule": {
+            "marque": "Honda",
+            "modele": "CR-V",
+            "budget": 32000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 40000,
+            "options": "Import depuis le Japon, Hybride",
+            "commentaires": "Préférence véhicule japonais - recherche version hybride"
+        },
+        "statut": "termine",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "89.156.234.167",
+            "user_agent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/120.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-08-13 17:20:43",
+        "updated_at": "2025-09-25 10:35:21"
+    },
+    {
+        "id": "1733634567_p9q0r1s2",
+        "nom": "Claire Hoffmann",
+        "email": "claire.hoffmann@outlook.com",
+        "telephone": "0696321478",
+        "vehicule": {
+            "marque": "Ford",
+            "modele": "Mustang",
+            "budget": 48000,
+            "annee_minimum": 2020,
+            "kilometrage_max": 35000,
+            "options": "Véhicule nord-américain accepté, Pack Performance",
+            "commentaires": "Import depuis USA - recherche GT version manuelle"
+        },
+        "statut": "nouveau",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "82.145.189.234",
+            "user_agent": "Mozilla\/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/17.0 Mobile\/15E148 Safari\/604.1"
+        },
+        "created_at": "2025-08-09 13:10:27",
+        "updated_at": "2025-08-09 13:10:27"
+    },
+    {
+        "id": "1733278901_q1r2s3t4",
+        "nom": "Patrick Schneider",
+        "email": "patrick.schneider@entreprise.fr",
+        "telephone": "0787412596",
+        "vehicule": {
+            "marque": "Chevrolet",
+            "modele": "Camaro",
+            "budget": 52000,
+            "annee_minimum": 2019,
+            "kilometrage_max": 30000,
+            "options": "Version US acceptable, Pack SS",
+            "commentaires": "Recherche spécifique modèle non disponible en France - import USA"
+        },
+        "statut": "en-cours",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "85.234.167.189",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/119.0.0.0 Safari\/537.36"
+        },
+        "created_at": "2025-08-05 10:35:41",
+        "updated_at": "2025-10-03 15:50:18"
+    },
+    {
+        "id": "1732923456_r3s4t5u6",
+        "nom": "Isabelle Wagner",
+        "email": "isabelle.wagner@email.com",
+        "telephone": "0647852396",
+        "vehicule": {
+            "marque": "Nissan",
+            "modele": "GT-R",
+            "budget": 75000,
+            "annee_minimum": 2018,
+            "kilometrage_max": 25000,
+            "options": "Import depuis le Japon, Édition spéciale",
+            "commentaires": "Recherche véhicule marché japonais - GT-R Nismo idéal"
+        },
+        "statut": "termine",
+        "rgpd_consent": true,
+        "source": "website",
+        "metadata": {
+            "ip_address": "88.189.234.145",
+            "user_agent": "Mozilla\/5.0 (Linux; Android 14; SM-S918B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/118.0.0.0 Mobile Safari\/537.36"
+        },
+        "created_at": "2025-08-01 15:25:56",
+        "updated_at": "2025-09-20 12:40:33"
+    },
+    {
+        "id": "devis_692799c9164cb7.40113784",
+        "user_id": "acc_69154a10e0d78",
+        "timestamp": "2025-11-27 00:22:33",
+        "created_at": "2025-11-27 00:22:33",
+        "updated_at": "2025-11-27 00:22:33",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": true,
+        "nom": "test",
+        "email": "test@test.fr",
+        "telephone": "0645234875",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "ff",
+            "budget": 25000,
+            "annee_minimum": 2000,
+            "kilometrage_max": 150000,
+            "options": "ts",
+            "commentaires": "tes"
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Code\/1.106.2 Chrome\/138.0.7204.251 Electron\/37.7.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/index.html"
+        }
+    },
+    {
+        "id": "devis_69279aced2e8a0.18042672",
+        "user_id": "acc_69154a10e0d78",
+        "timestamp": "2025-11-27 00:26:54",
+        "created_at": "2025-11-27 00:26:54",
+        "updated_at": "2025-11-27 00:26:54",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": true,
+        "nom": "test",
+        "email": "test@test.fr",
+        "telephone": "0540404040",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "r",
+            "budget": 21000,
+            "annee_minimum": 2000,
+            "kilometrage_max": 1500000,
+            "options": "t",
+            "commentaires": "t"
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Code\/1.106.2 Chrome\/138.0.7204.251 Electron\/37.7.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/index.html?id=01fd44bd-0292-4e05-bbc5-4eaae30c0381&vscodeBrowserReqId=1764203179545"
+        }
+    },
+    {
+        "id": "devis_69279bbb04c564.96686368",
+        "user_id": "acc_69154a10e0d78",
+        "timestamp": "2025-11-27 00:30:51",
+        "created_at": "2025-11-27 00:30:51",
+        "updated_at": "2025-11-27 00:30:51",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": true,
+        "nom": "t",
+        "email": "test@test.fr",
+        "telephone": "0606060606",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "t",
+            "budget": 20000,
+            "annee_minimum": 2000,
+            "kilometrage_max": 150000,
+            "options": "t",
+            "commentaires": "t"
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Code\/1.106.2 Chrome\/138.0.7204.251 Electron\/37.7.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/index.html?id=8f221a98-7be6-4eec-a296-bbcd1082e9f5&vscodeBrowserReqId=1764203294015"
+        }
+    },
+    {
+        "id": "devis_69279d3c7776e4.29300304",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:37:16",
+        "created_at": "2025-11-27 00:37:16",
+        "updated_at": "2025-11-27 00:37:16",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User",
+        "email": "test@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 50000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Unknown",
+            "referer": null
+        }
+    },
+    {
+        "id": "devis_69279e984011a6.20310146",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:43:04",
+        "created_at": "2025-11-27 00:43:04",
+        "updated_at": "2025-11-27 00:43:04",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User 1764204184258",
+        "email": "test1764204184258@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 35000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f05322486.40070306",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:44:53",
+        "created_at": "2025-11-27 00:44:53",
+        "updated_at": "2025-11-27 00:44:53",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User 1764204293200",
+        "email": "test1764204293200@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 35000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f09ba2e44.05377958",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:44:57",
+        "created_at": "2025-11-27 00:44:57",
+        "updated_at": "2025-11-27 00:44:57",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Integrity Test",
+        "email": "integrity_test_1764204297758@example.com",
+        "telephone": "0698765432",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "RS6",
+            "budget": 45000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f2c5eb850.31368890",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:45:32",
+        "created_at": "2025-11-27 00:45:32",
+        "updated_at": "2025-11-27 00:45:32",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User 1764204332382",
+        "email": "test1764204332382@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 35000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f30e6a267.99016055",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:45:36",
+        "created_at": "2025-11-27 00:45:36",
+        "updated_at": "2025-11-27 00:45:36",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Integrity Test",
+        "email": "integrity_test_1764204336940@example.com",
+        "telephone": "0698765432",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "RS6",
+            "budget": 45000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f4119d3e4.87317026",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:45:53",
+        "created_at": "2025-11-27 00:45:53",
+        "updated_at": "2025-11-27 00:45:53",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User 1764204353101",
+        "email": "test1764204353101@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 35000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f45a25c19.12037499",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:45:57",
+        "created_at": "2025-11-27 00:45:57",
+        "updated_at": "2025-11-27 00:45:57",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Integrity Test",
+        "email": "integrity_test_1764204357660@example.com",
+        "telephone": "0698765432",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "RS6",
+            "budget": 45000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f67a0ebe8.29773551",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:46:31",
+        "created_at": "2025-11-27 00:46:31",
+        "updated_at": "2025-11-27 00:46:31",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User 1764204391654",
+        "email": "test1764204391654@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 35000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279f6c3924b5.97937201",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:46:36",
+        "created_at": "2025-11-27 00:46:36",
+        "updated_at": "2025-11-27 00:46:36",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Integrity Test",
+        "email": "integrity_test_1764204396228@example.com",
+        "telephone": "0698765432",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "RS6",
+            "budget": 45000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_69279fa3251058.83171716",
+        "user_id": "acc_69154a10e0d78",
+        "timestamp": "2025-11-27 00:47:31",
+        "created_at": "2025-11-27 00:47:31",
+        "updated_at": "2025-11-27 00:47:31",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": true,
+        "nom": "test",
+        "email": "test@test.fr",
+        "telephone": "0606060606",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "serie 3",
+            "budget": 200000,
+            "annee_minimum": 2000,
+            "kilometrage_max": 2000000,
+            "options": "t",
+            "commentaires": "t"
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/index.html"
+        }
+    },
+    {
+        "id": "devis_69279fdf4567a5.07241763",
+        "user_id": null,
+        "timestamp": "2025-11-27 00:48:31",
+        "created_at": "2025-11-27 00:48:31",
+        "updated_at": "2025-11-27 00:48:31",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "tsets",
+        "email": "test10@test.fr",
+        "telephone": "0606060606",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "serie 3",
+            "budget": 25000,
+            "annee_minimum": 2000,
+            "kilometrage_max": 1000000,
+            "options": "t",
+            "commentaires": "t"
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/index.html"
+        }
+    },
+    {
+        "id": "devis_6931fe189f77e9.04613123",
+        "user_id": null,
+        "timestamp": "2025-12-04 21:33:12",
+        "created_at": "2025-12-04 21:33:12",
+        "updated_at": "2025-12-04 21:33:12",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Test User 1764883992607",
+        "email": "test1764883992607@example.com",
+        "telephone": "0612345678",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "BMW",
+            "modele": "M3",
+            "budget": 35000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    },
+    {
+        "id": "devis_6931fe1d3e86c4.01266889",
+        "user_id": null,
+        "timestamp": "2025-12-04 21:33:17",
+        "created_at": "2025-12-04 21:33:17",
+        "updated_at": "2025-12-04 21:33:17",
+        "source": "website",
+        "statut": "nouveau",
+        "has_account": false,
+        "nom": "Integrity Test",
+        "email": "integrity_test_1764883997250@example.com",
+        "telephone": "0698765432",
+        "rgpd_consent": true,
+        "vehicule": {
+            "marque": "Audi",
+            "modele": "RS6",
+            "budget": 45000,
+            "annee_minimum": null,
+            "kilometrage_max": null,
+            "options": "",
+            "commentaires": ""
+        },
+        "metadata": {
+            "ip_address": "::1",
+            "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/142.0.0.0 Safari\/537.36",
+            "referer": "http:\/\/localhost:8000\/test-new-workflow.html"
+        }
+    }
+]

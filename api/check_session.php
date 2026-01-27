@@ -1,11 +1,7 @@
 <?php
-// check_session.php - VERSION 100% FONCTIONNELLE
-session_start();
-header('Content-Type: application/json');
-header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once __DIR__ . '/security.php';
+
+setSecureCORS();
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -14,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $response = [
     'logged_in' => false,
-    'session_data' => null
+    'session_data' => null,
+    'csrf_token' => generateCSRFToken()
 ];
 
 // Check for new session structure (account-manager.php)
@@ -27,7 +24,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         'email' => $_SESSION['user_email'] ?? '',
         'role' => $_SESSION['user_role'] ?? 'client'
     ];
-} 
+}
 // Fallback for legacy admin session
 elseif (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     $response['logged_in'] = true;

@@ -7,6 +7,10 @@
 
 session_start();
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/security.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
@@ -55,10 +59,10 @@ try {
             $km_max = !empty($data['kilometrage_max']) ? intval($data['kilometrage_max']) : null;
             $options = trim($data['options'] ?? '');
             $commentaires = trim($data['commentaires'] ?? '');
-            
+
             $sql = "INSERT INTO devis (id, user_id, user_name, user_email, marque, modele, budget, annee_minimum, kilometrage_max, options, commentaires, statut, created_at, updated_at) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'nouveau', NOW(), NOW())";
-            
+
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 $id,
@@ -249,10 +253,17 @@ try {
 
             // Updated valid statuses to match frontend values
             $validStatuses = [
-                'nouveau', 'en_cours', 'devis_envoye', 'termine', 'annule',
-                'En attente', 'En cours', 'Complété', 'Annulé' // Legacy support
+                'nouveau',
+                'en_cours',
+                'devis_envoye',
+                'termine',
+                'annule',
+                'En attente',
+                'En cours',
+                'Complété',
+                'Annulé' // Legacy support
             ];
-            
+
             if (empty($devisId) || !in_array($newStatus, $validStatuses)) {
                 http_response_code(400);
                 echo json_encode([
@@ -431,21 +442,21 @@ try {
             $stmt = $pdo->query("SELECT statut, COUNT(*) as count FROM devis GROUP BY statut");
             while ($row = $stmt->fetch()) {
                 switch ($row['statut']) {
-                    case 'nouveau': 
+                    case 'nouveau':
                     case 'En attente': // Legacy
-                        $stats['en_attente'] += $row['count']; 
+                        $stats['en_attente'] += $row['count'];
                         break;
-                    case 'en_cours': 
+                    case 'en_cours':
                     case 'En cours': // Legacy
-                        $stats['en_cours'] += $row['count']; 
+                        $stats['en_cours'] += $row['count'];
                         break;
-                    case 'termine': 
+                    case 'termine':
                     case 'Complété': // Legacy
-                        $stats['complete'] += $row['count']; 
+                        $stats['complete'] += $row['count'];
                         break;
-                    case 'annule': 
+                    case 'annule':
                     case 'Annulé': // Legacy
-                        $stats['annule'] += $row['count']; 
+                        $stats['annule'] += $row['count'];
                         break;
                 }
             }

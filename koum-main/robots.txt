@@ -1,0 +1,69 @@
+# robots.txt pour NEXT DRIVE IMPORT
+# Version 2.0 - Optimisé SEO
+
+User-agent: *
+Allow: /
+
+# Bloquer les pages admin et sensibles
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /login.html
+Disallow: /admin-style.css
+Disallow: /admin-script.js
+Disallow: /submit-devis.php
+Disallow: /get-clients.php
+Disallow: /update-status.php
+Disallow: /logout.php
+
+# Bloquer les fichiers techniques
+Disallow: /*.php$
+Disallow: /*.log$
+Disallow: /*.sql$
+Disallow: /cgi-bin/
+
+# Autoriser les pages légales (mais pas d'indexation via meta robots)
+Allow: /mentions-legales.html
+Allow: /politique-confidentialite.html
+Allow: /cgv.html
+Allow: /cgu.html
+Allow: /cookies.html
+
+# Autoriser les ressources importantes
+Allow: /style.css
+Allow: /script.js
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.avif$
+Allow: /favicon.ico
+
+# Sitemap
+Sitemap: https://nextdriveimport.fr/sitemap.xml
+
+# Crawl-delay (optionnel, pour éviter surcharge serveur)
+Crawl-delay: 1
+
+# Règles spécifiques Google
+User-agent: Googlebot
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+
+# Règles spécifiques Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+
+# Bloquer les mauvais bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

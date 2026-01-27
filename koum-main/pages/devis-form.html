@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de Devis - NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 2px solid #3a3a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-color: #FF6B35;
+            color: white;
+        }
+
+        .step.completed {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background: #3a3a3a;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-dark">
+
+    <!-- Background Animé -->
+    <div class="bg-animated"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header Simple -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-dark/95 backdrop-blur-xl border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-black logo gradient-text">
+                    NEXT DRIVE IMPORT
+                </a>
+                <div class="text-gray-400">
+                    <span id="userName" class="font-semibold"></span>
+                    <button onclick="logout()" class="ml-4 text-primary hover:text-secondary">Déconnexion</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex items-center justify-center px-6 pt-24 pb-12">
+        <div class="max-w-3xl w-full relative z-10">
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step completed">1</div>
+                <div class="step active">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <!-- Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-black mb-4">
+                    Votre <span class="gradient-text">Véhicule Idéal</span>
+                </h1>
+                <p class="text-gray-400 text-lg">
+                    Décrivez-nous le véhicule de vos rêves • Réponse sous 24h
+                </p>
+            </div>
+
+            <!-- Devis Form -->
+            <div class="bg-gray-custom/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-800 shadow-2xl">
+
+                <!-- Success Message (hidden) -->
+                <div id="successMessage"
+                    class="hidden bg-green-900/30 border-2 border-green-500 rounded-xl p-8 text-center mb-8">
+                    <div class="text-6xl mb-4">✅</div>
+                    <h3 class="text-2xl font-bold mb-3">Demande envoyée avec succès !</h3>
+                    <p class="text-gray-300 mb-4">Nous reviendrons vers vous sous 24h maximum.</p>
+                    <div class="flex gap-4 justify-center">
+                        <a href="client.html" class="btn btn-primary">Voir mon espace client</a>
+                        <a href="../index.html" class="btn btn-secondary">Retour à l'accueil</a>
+                    </div>
+                </div>
+
+                <!-- Error Alert (hidden) -->
+                <div id="errorAlert" class="hidden bg-red-900/30 border-2 border-red-500 rounded-xl p-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span id="errorText" class="text-red-200"></span>
+                    </div>
+                </div>
+
+                <form id="devisForm">
+
+                    <!-- Marque & Modèle -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="marque" class="block text-white font-semibold mb-2">
+                                Marque <span class="text-red-500">*</span>
+                            </label>
+                            <select id="marque" name="marque" required
+                                class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition">
+                                <option value="">Sélectionner</option>
+                                <option value="Audi">Audi</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes-Benz</option>
+                                <option value="Porsche">Porsche</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="modele" class="block text-white font-semibold mb-2">
+                                Modèle <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="modele" name="modele" required
+                                class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                                placeholder="Ex: M3, C63 AMG, 350Z">
+                        </div>
+                    </div>
+
+                    <!-- Budget -->
+                    <div class="mb-6">
+                        <label for="budget" class="block text-white font-semibold mb-2">
+                            Budget maximum (€) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" id="budget" name="budget" required min="5000" step="1000"
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="25000">
+                        <p class="text-gray-500 text-sm mt-1">
+                            💡 Prix final incluant TVA, transport et immatriculation
+                        </p>
+                    </div>
+
+                    <!-- Année & Kilométrage -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="annee_minimum" class="block text-white font-semibold mb-2">
+                                Année minimum
+                            </label>
+                            <input type="number" id="annee_minimum" name="annee_minimum" min="2000" max="2025"
+                                class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                                placeholder="2018">
+                        </div>
+
+                        <div>
+                            <label for="kilometrage_max" class="block text-white font-semibold mb-2">
+                                Kilométrage maximum
+                            </label>
+                            <input type="number" id="kilometrage_max" name="kilometrage_max" step="1000"
+                                class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                                placeholder="100000">
+                        </div>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="mb-6">
+                        <label for="options" class="block text-white font-semibold mb-2">
+                            Options souhaitées
+                        </label>
+                        <textarea id="options" name="options" rows="3"
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none transition resize-none"
+                            placeholder="Ex: Toit panoramique, sièges sport, pack M..."></textarea>
+                    </div>
+
+                    <!-- Commentaires -->
+                    <div class="mb-8">
+                        <label for="commentaires" class="block text-white font-semibold mb-2">
+                            Commentaires ou précisions
+                        </label>
+                        <textarea id="commentaires" name="commentaires" rows="4"
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none transition resize-none"
+                            placeholder="Précisez vos attentes, contraintes de délai, préférences..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn"
+                        class="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 rounded-lg text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="btnText">🚀 Envoyer ma demande de devis</span>
+                        <span id="btnLoading" class="hidden">
+                            <svg class="animate-spin inline-block w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Envoi en cours...
+                        </span>
+                    </button>
+
+                    <p class="text-center text-xs text-gray-500 mt-4">
+                        Réponse garantie sous 24h • Sans engagement • Gratuit
+                    </p>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+    <script>
+        // Créer les particules
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Vérifier la session
+        async function checkSession() {
+            try {
+                const response = await fetch('../api/account-manager.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'check_session' })
+                });
+
+                const result = await response.json();
+
+                if (!result.authenticated) {
+                    window.location.href = 'register.html';
+                    return;
+                }
+
+                // Afficher le nom de l'utilisateur
+                document.getElementById('userName').textContent = result.client.nom;
+
+            } catch (error) {
+                console.error('Erreur session:', error);
+                window.location.href = 'register.html';
+            }
+        }
+
+        checkSession();
+
+        // Gestion du formulaire
+        document.getElementById('devisForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const errorAlert = document.getElementById('errorAlert');
+            const errorText = document.getElementById('errorText');
+            const successMessage = document.getElementById('successMessage');
+
+            // Désactiver le bouton
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            errorAlert.classList.add('hidden');
+
+            try {
+                // Récupérer les données de session
+                const sessionResponse = await fetch('../api/account-manager.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'check_session' })
+                });
+
+                const sessionData = await sessionResponse.json();
+
+                if (!sessionData.authenticated) {
+                    throw new Error('Session expirée. Veuillez vous reconnecter.');
+                }
+
+                const formData = {
+                    nom: sessionData.client.nom,
+                    email: sessionData.client.email,
+                    telephone: sessionData.client.telephone,
+                    vehicule: {
+                        marque: document.getElementById('marque').value,
+                        modele: document.getElementById('modele').value,
+                        budget: parseInt(document.getElementById('budget').value),
+                        annee_minimum: document.getElementById('annee_minimum').value || null,
+                        kilometrage_max: document.getElementById('kilometrage_max').value || null,
+                        options: document.getElementById('options').value || '',
+                        commentaires: document.getElementById('commentaires').value || ''
+                    },
+                    rgpd_consent: true,
+                    source: 'website',
+                    timestamp: new Date().toISOString()
+                };
+
+                const response = await fetch('../api/submit-devis.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Marquer l'étape 3 comme complétée
+                    document.querySelector('.step.active').classList.add('completed');
+                    document.querySelector('.step.active').classList.remove('active');
+                    document.querySelectorAll('.step')[2].classList.add('active');
+
+                    // Afficher le message de succès
+                    successMessage.classList.remove('hidden');
+                    document.getElementById('devisForm').style.display = 'none';
+
+                } else {
+                    throw new Error(result.message || 'Erreur lors de l\'envoi');
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                errorText.textContent = error.message;
+                errorAlert.classList.remove('hidden');
+
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        });
+
+        // Fonction de déconnexion
+        async function logout() {
+            try {
+                await fetch('../api/account-manager.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'logout' })
+                });
+
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Erreur déconnexion:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

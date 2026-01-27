@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Client - NEXT DRIVE IMPORT</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap">
+
+    <!-- CSS Personnalisé -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#F7931E',
+                        dark: '#0a0a0a',
+                        'gray-custom': '#1a1a1a'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="antialiased bg-dark">
+
+    <!-- Background Animé -->
+    <div class="bg-animated"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-dark/95 backdrop-blur-xl border-b border-gray-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html"
+                    class="text-2xl md:text-3xl font-black logo gradient-text hover:scale-105 transition-transform">
+                    NEXT DRIVE IMPORT
+                </a>
+                <div class="flex items-center gap-4">
+                    <span id="clientName" class="text-white font-semibold hidden"></span>
+                    <button onclick="logout()"
+                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Redirection en cours -->
+    <div id="redirectSection" class="hidden min-h-screen flex items-center justify-center px-6 pt-24">
+        <div class="text-center">
+            <div class="text-6xl mb-4">🔄</div>
+            <p class="text-gray-400 text-lg">Redirection vers la page de connexion...</p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardSection" class="hidden min-h-screen px-6 pt-24 pb-12">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-black mb-8">
+                Bonjour <span class="gradient-text" id="dashboardName"></span>
+            </h1>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="stat-card">
+                    <div class="text-gray-400 mb-2">Demandes en cours</div>
+                    <div class="text-4xl font-black gradient-text" id="statsActive">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-gray-400 mb-2">Devis reçus</div>
+                    <div class="text-4xl font-black gradient-text" id="statsQuotes">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-gray-400 mb-2">Véhicules importés</div>
+                    <div class="text-4xl font-black gradient-text" id="statsCompleted">0</div>
+                </div>
+            </div>
+
+            <!-- Requests List -->
+            <div class="bg-gray-custom/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-800">
+                <h2 class="text-2xl font-bold mb-6">Mes Demandes</h2>
+                <div id="requestsList" class="space-y-4">
+                    <!-- Requests will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/auth-manager.js"></script>
+    <script src="../assets/js/client-script.js"></script>
+    <script src="../assets/js/chat-client.js"></script>
+    <script>
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+        const userName = sessionStorage.getItem('userName');
+        const userEmail = sessionStorage.getItem('userEmail');
+
+        if (isLoggedIn && userName && userEmail) {
+            console.log('✅ Session persistante détectée - Accès direct au dashboard');
+
+            const clientNameEl = document.getElementById('clientName');
+            if (clientNameEl) {
+                clientNameEl.textContent = userName;
+                clientNameEl.classList.remove('hidden');
+            }
+
+            document.getElementById('dashboardSection').classList.remove('hidden');
+
+            if (typeof loadClientRequests === 'function') {
+                loadClientRequests();
+            }
+        } else {
+            console.log('❌ Aucune session - Redirection vers login.html');
+            document.getElementById('redirectSection').classList.remove('hidden');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

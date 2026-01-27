@@ -1,0 +1,444 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 2px solid #3a3a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-color: #FF6B35;
+            color: white;
+        }
+
+        .step.completed {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background: #3a3a3a;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-dark">
+
+    <!-- Background Animé -->
+    <div class="bg-animated"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header Simple -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-dark/95 backdrop-blur-xl border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-black logo gradient-text">
+                    NEXT DRIVE IMPORT
+                </a>
+                <a href="login.html" class="text-gray-400 hover:text-primary transition">
+                    Déjà inscrit ? <span class="text-primary font-bold">Connexion</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex items-center justify-center px-6 pt-24 pb-12">
+        <div class="max-w-2xl w-full relative z-10">
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1">1</div>
+                <div class="step" id="step2">2</div>
+                <div class="step" id="step3">3</div>
+            </div>
+
+            <!-- Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-black mb-4">
+                    Commencez votre <span class="gradient-text">Importation</span>
+                </h1>
+                <p class="text-gray-400 text-lg">
+                    Créez votre compte en 30 secondes • 3 étapes seulement
+                </p>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="bg-gray-custom/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-800 shadow-2xl">
+
+                <!-- Success Alert (hidden) -->
+                <div id="successAlert"
+                    class="hidden bg-green-900/30 border-2 border-green-500 rounded-xl p-6 mb-6 text-center">
+                    <div class="text-5xl mb-3">✅</div>
+                    <h3 class="text-xl font-bold mb-2">Inscription réussie !</h3>
+                    <p class="text-gray-300 mb-4">Redirection vers le formulaire de devis...</p>
+                    <div
+                        class="animate-spin inline-block w-6 h-6 border-4 border-green-500 border-t-transparent rounded-full">
+                    </div>
+                </div>
+
+                <!-- Error Alert (hidden) -->
+                <div id="errorAlert" class="hidden bg-red-900/30 border-2 border-red-500 rounded-xl p-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span id="errorText" class="text-red-200"></span>
+                    </div>
+                </div>
+
+                <form id="registerForm">
+
+                    <!-- Nom Complet -->
+                    <div class="mb-6">
+                        <label for="nom" class="block text-white font-semibold mb-2">
+                            Nom complet <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="nom" name="nom" required
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="Jean Dupont" autocomplete="name">
+                        <p class="text-gray-500 text-sm mt-1">Utilisé pour personnaliser votre expérience</p>
+                    </div>
+
+                    <!-- Username/Pseudo -->
+                    <div class="mb-6">
+                        <label for="username" class="block text-white font-semibold mb-2">
+                            Username ou Pseudo <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="username" name="username" required
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="jean_dupont" autocomplete="username" pattern="[a-zA-Z0-9_-]{3,20}"
+                            title="3-20 caractères, lettres, chiffres, tirets et underscores uniquement">
+                        <p class="text-gray-500 text-sm mt-1">Pour vous connecter facilement (3-20 caractères)</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-6">
+                        <label for="email" class="block text-white font-semibold mb-2">
+                            Adresse email <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="jean.dupont@email.com" autocomplete="email">
+                        <p class="text-gray-500 text-sm mt-1">Pour recevoir votre devis et les mises à jour</p>
+                    </div>
+
+                    <!-- Téléphone -->
+                    <div class="mb-6">
+                        <label for="telephone" class="block text-white font-semibold mb-2">
+                            Numéro de téléphone <span class="text-red-500">*</span>
+                        </label>
+                        <input type="tel" id="telephone" name="telephone" required
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="06 12 34 56 78" autocomplete="tel">
+                        <p class="text-gray-500 text-sm mt-1">Pour un suivi personnalisé de votre dossier</p>
+                    </div>
+
+                    <!-- Mot de passe -->
+                    <div class="mb-6">
+                        <label for="password" class="block text-white font-semibold mb-2">
+                            Mot de passe <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" id="password" name="password" required
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="••••••••" autocomplete="new-password" minlength="8">
+                        <p class="text-gray-500 text-sm mt-1">Minimum 8 caractères, incluant lettres, chiffres et
+                            symboles</p>
+                    </div>
+
+                    <!-- Confirmation mot de passe -->
+                    <div class="mb-6">
+                        <label for="confirmPassword" class="block text-white font-semibold mb-2">
+                            Confirmer le mot de passe <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                            class="w-full bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:border-primary focus:outline-none transition"
+                            placeholder="••••••••" autocomplete="new-password" minlength="8">
+                        <p class="text-gray-500 text-sm mt-1">Doit correspondre au mot de passe ci-dessus</p>
+                    </div>
+
+                    <!-- RGPD -->
+                    <div class="mb-8">
+                        <label class="flex items-start cursor-pointer">
+                            <input type="checkbox" id="rgpd" name="rgpd" required class="mt-1 mr-3 w-5 h-5">
+                            <span class="text-sm text-gray-300">
+                                J'accepte que mes données soient utilisées pour traiter ma demande.
+                                <a href="pdc.html" target="_blank" class="text-primary underline hover:text-secondary">
+                                    Politique de confidentialité
+                                </a>
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn"
+                        class="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 rounded-lg text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="btnText">🚀 Continuer vers le devis</span>
+                        <span id="btnLoading" class="hidden">
+                            <svg class="animate-spin inline-block w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Inscription en cours...
+                        </span>
+                    </button>
+
+                    <!-- Benefits -->
+                    <div class="mt-8 p-6 bg-dark/50 rounded-xl border border-gray-700">
+                        <h4 class="font-bold text-white mb-3">✨ Avantages de l'inscription :</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Suivi en temps réel de votre demande
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Accès à votre espace client personnel
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Réponse sous 24h maximum
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Historique de toutes vos demandes
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+
+                <!-- Login Link -->
+                <div class="mt-6 text-center">
+                    <p class="text-gray-400">
+                        Vous avez déjà un compte ?
+                        <a href="login.html" class="text-primary hover:text-secondary font-semibold transition">
+                            Connectez-vous
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-8 flex justify-center gap-6 text-xs text-gray-500">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                        </path>
+                    </svg>
+                    Données sécurisées
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Conforme RGPD
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    Réponse rapide
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+    <script>
+        // Créer les particules
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Gestion du formulaire
+        document.getElementById('registerForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const errorAlert = document.getElementById('errorAlert');
+            const errorText = document.getElementById('errorText');
+            const successAlert = document.getElementById('successAlert');
+
+            // Désactiver le bouton
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            errorAlert.classList.add('hidden');
+
+            try {
+                const nom = document.getElementById('nom').value.trim();
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const telephone = document.getElementById('telephone').value.trim().replace(/\s+/g, '');
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // Validation du mot de passe
+                if (password.length < 8) {
+                    throw new Error('Le mot de passe doit contenir au moins 8 caractères');
+                }
+
+                if (!/[A-Z]/.test(password)) {
+                    throw new Error('Le mot de passe doit contenir au moins une majuscule');
+                }
+
+                if (!/[a-z]/.test(password)) {
+                    throw new Error('Le mot de passe doit contenir au moins une minuscule');
+                }
+
+                if (!/[0-9]/.test(password)) {
+                    throw new Error('Le mot de passe doit contenir au moins un chiffre');
+                }
+
+                if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                    throw new Error('Le mot de passe doit contenir au moins un symbole (!@#$%^&*...)');
+                }
+
+                if (password !== confirmPassword) {
+                    throw new Error('Les mots de passe ne correspondent pas');
+                }
+
+                const formData = {
+                    action: 'register',
+                    nom: nom,
+                    username: username,
+                    email: email,
+                    telephone: telephone,
+                    password: password
+                };
+
+                const response = await fetch('../api/account-manager.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Succès - marquer les étapes
+                    document.getElementById('step1').classList.add('completed');
+                    document.getElementById('step1').classList.remove('active');
+                    document.getElementById('step2').classList.add('active');
+
+                    // Enregistrer la session dans sessionStorage
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userName', result.account.nom);
+                    sessionStorage.setItem('userEmail', result.account.email);
+                    sessionStorage.setItem('clientId', result.account.id);
+                    sessionStorage.setItem('userRole', result.account.role);
+
+                    // Afficher le message de succès
+                    successAlert.classList.remove('hidden');
+
+                    // Rediriger après 2 secondes
+                    setTimeout(() => {
+                        window.location.href = 'devis-form.html';
+                    }, 2000);
+                } else {
+                    throw new Error(result.message || 'Erreur lors de l\'inscription');
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                errorText.textContent = error.message;
+                errorAlert.classList.remove('hidden');
+
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        });
+
+        // Validation en temps réel du téléphone
+        document.getElementById('telephone').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+
+            if (value.startsWith('33')) {
+                value = '0' + value.substring(2);
+            }
+
+            if (value.length > 0) {
+                const formatted = value.match(/.{1,2}/g).join(' ');
+                e.target.value = formatted.substring(0, 14);
+            }
+        });
+    </script>
+</body>
+
+</html>

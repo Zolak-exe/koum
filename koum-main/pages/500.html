@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Erreur serveur | NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .error-bg {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .error-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.15) 0%, transparent 70%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #DC143C 0%, #FFD700 50%, #C0C0C0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-number {
+            font-size: 12rem;
+            font-weight: 900;
+            line-height: 1;
+            animation: pulse-error 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-error {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(220, 20, 60, 0.8),
+                    0 0 40px rgba(220, 20, 60, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(220, 20, 60, 1),
+                    0 0 80px rgba(220, 20, 60, 0.8);
+            }
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #DC143C 0%, #FFD700 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(220, 20, 60, 0.5);
+        }
+
+        .wrench-icon {
+            font-size: 8rem;
+            animation: shake 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(220, 20, 60, 0.4));
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(-15deg);
+            }
+            75% {
+                transform: rotate(15deg);
+            }
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-bar::before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, #DC143C, #FFD700);
+            animation: loading 2s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -30%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-bg flex items-center justify-center relative">
+        <!-- Content -->
+        <div class="relative z-10 text-center px-6 max-w-4xl">
+            <!-- Wrench Icon -->
+            <div class="wrench-icon mb-8">🔧</div>
+
+            <!-- Error Number -->
+            <h1 class="error-number gradient-text logo mb-6">500</h1>
+
+            <!-- Error Message -->
+            <h2 class="text-5xl md:text-6xl font-black text-white mb-6 logo">
+                Moteur en Panne
+            </h2>
+
+            <p class="text-xl md:text-2xl text-gray-400 mb-4">
+                Nos serveurs ont besoin d'une révision technique !
+            </p>
+
+            <p class="text-lg text-gray-500 mb-8">
+                Une erreur technique s'est produite. Nos équipes travaillent pour réparer cela.
+            </p>
+
+            <!-- Loading Bar -->
+            <div class="max-w-md mx-auto mb-12">
+                <div class="loading-bar"></div>
+                <p class="text-sm text-gray-600 mt-2">Réparation en cours...</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                <button onclick="location.reload()" class="btn-gradient text-white px-10 py-5 rounded-full font-bold text-lg inline-block">
+                    🔄 Réessayer
+                </button>
+                <a href="../index.html" class="bg-gray-800 border-2 border-gray-700 hover:border-yellow-500 text-white px-10 py-5 rounded-full font-bold text-lg inline-block transition">
+                    🏠 Retour à l'accueil
+                </a>
+            </div>
+
+            <!-- Support Info -->
+            <div class="bg-red-900/10 border border-red-900/30 rounded-2xl p-6 max-w-2xl mx-auto">
+                <h3 class="text-white font-bold text-lg mb-4">Le problème persiste ?</h3>
+                <p class="text-gray-400 mb-4">
+                    Si l'erreur continue, n'hésitez pas à nous contacter directement :
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center text-sm">
+                    <a href="mailto:contact@nextdriveimport.com" class="text-yellow-500 hover:text-yellow-400 transition">
+                        📧 contact@nextdriveimport.com
+                    </a>
+                    <span class="text-gray-700 hidden sm:block">•</span>
+                    <a href="tel:+33123456789" class="text-yellow-500 hover:text-yellow-400 transition">
+                        📞 +33 1 23 45 67 89
+                    </a>
+                </div>
+            </div>
+
+            <!-- Error Details (for developers) -->
+            <div class="mt-12 text-left max-w-2xl mx-auto">
+                <details class="cursor-pointer">
+                    <summary class="text-gray-500 text-sm mb-2">Détails techniques (pour les développeurs)</summary>
+                    <div class="bg-black/50 rounded-lg p-4 font-mono text-xs text-gray-400 overflow-auto">
+                        <div class="mb-2"><span class="text-red-400">Error Code:</span> 500</div>
+                        <div class="mb-2"><span class="text-red-400">Error Type:</span> Internal Server Error</div>
+                        <div class="mb-2"><span class="text-red-400">Timestamp:</span> <span id="timestamp"></span></div>
+                        <div class="mb-2"><span class="text-red-400">Request URL:</span> <span id="url"></span></div>
+                        <div><span class="text-red-400">User Agent:</span> <span id="userAgent"></span></div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Error Code -->
+            <div class="mt-8 text-gray-600 text-xs font-mono">
+                ERROR_CODE: 500_INTERNAL_SERVER_ERROR
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fill technical details
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+        document.getElementById('url').textContent = window.location.href;
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+
+        // Auto-reload after 10 seconds (optional)
+        let countdown = 10;
+        const autoReload = setTimeout(() => {
+            location.reload();
+        }, 10000);
+
+        // Clear auto-reload if user interacts
+        document.addEventListener('click', () => {
+            clearTimeout(autoReload);
+        });
+    </script>
+</body>
+</html>

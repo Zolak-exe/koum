@@ -16,7 +16,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 }
 
 // ========== HEADERS ==========
-header('Content-Type: application/json; charset=UTF-8');
+setSecureCORS();
+enforceCSRF();
+
+header('Content-Type: application/json');
+header('X-Content-Type-Options: nosniff');
 
 // Accepter uniquement POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -65,16 +69,16 @@ if (!in_array($dbStatus, $valid_db_statuses)) {
     // The previous code was strict on the lowercase ones.
     // I'll stick to the map if it matches, otherwise check if it's a valid DB status.
     if (!in_array($new_status, $valid_db_statuses)) {
-         http_response_code(400);
-         echo json_encode(['error' => 'Statut invalide']);
-         exit;
+        http_response_code(400);
+        echo json_encode(['error' => 'Statut invalide']);
+        exit;
     }
     $dbStatus = $new_status;
 }
 
 try {
     $pdo = getDB();
-    
+
     $stmt = $pdo->prepare("UPDATE devis SET statut = ?, updated_at = NOW() WHERE id = ?");
     $stmt->execute([$dbStatus, $client_id]);
 
@@ -88,8 +92,8 @@ try {
         $check = $pdo->prepare("SELECT id FROM devis WHERE id = ?");
         $check->execute([$client_id]);
         if ($check->fetch()) {
-             // Exists but no change (same status)
-             echo json_encode([
+            // Exists but no change (same status)
+            echo json_encode([
                 'success' => true,
                 'message' => 'Statut mis à jour (inchangé)'
             ]);
@@ -105,24 +109,3 @@ try {
     echo json_encode(['error' => 'Erreur serveur interne']);
 }
 ?>
-```
-
----
-
-## 🧪 **TEST COMPLET : Vérifier l'admin**
-
-### **Étape 1 : Vérifier la structure des fichiers**
-```
-/htdocs/
-├── admin.html ✅
-├── admin-script.js ✅
-├── get-clients.php ✅ (modifié)
-├── update-status.php ✅ (modifié)
-├── clients.json ✅ (doit contenir au moins [])
-```
-
-### **Étape 2 : Vérifier les permissions**
-```
-clients.json → 666 ou 644
-get-clients.php → 644
-update-status.php → 644

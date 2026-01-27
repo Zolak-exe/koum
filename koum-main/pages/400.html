@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>400 - Requête incorrecte | NEXT DRIVE IMPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .error-bg {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .error-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.15) 0%, transparent 70%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #DC143C 0%, #FFD700 50%, #C0C0C0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .error-number {
+            font-size: 12rem;
+            font-weight: 900;
+            line-height: 1;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(220, 20, 60, 0.5),
+                    0 0 40px rgba(255, 215, 0, 0.3);
+            }
+            25% {
+                text-shadow: -2px 0 rgba(220, 20, 60, 0.8),
+                    2px 2px rgba(255, 215, 0, 0.8);
+            }
+            50% {
+                text-shadow: 2px -2px rgba(220, 20, 60, 0.8),
+                    -2px 2px rgba(255, 215, 0, 0.8);
+            }
+            75% {
+                text-shadow: -2px -2px rgba(220, 20, 60, 0.8),
+                    2px 0 rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #DC143C 0%, #FFD700 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(220, 20, 60, 0.5);
+        }
+
+        .btn-secondary {
+            background: #2a2a2a;
+            border: 2px solid #3a3a3a;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #3a3a3a;
+            border-color: #FFD700;
+            transform: translateY(-2px);
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(135deg, #DC143C, #FFD700);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: rise 15s linear infinite;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -10px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+            }
+        }
+
+        .error-icon {
+            font-size: 8rem;
+            animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(220, 20, 60, 0.5));
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .error-badge {
+            background: rgba(220, 20, 60, 0.2);
+            border: 2px solid rgba(220, 20, 60, 0.5);
+            backdrop-filter: blur(10px);
+            animation: badge-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(220, 20, 60, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(220, 20, 60, 0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-bg flex items-center justify-center relative">
+        <!-- Particles -->
+        <div id="particles" class="absolute inset-0"></div>
+
+        <!-- Content -->
+        <div class="relative z-10 text-center px-6 max-w-4xl">
+            <!-- Error Icon -->
+            <div class="error-icon mb-8">❌</div>
+
+            <!-- Error Number -->
+            <h1 class="error-number gradient-text logo mb-6">400</h1>
+
+            <!-- Error Message -->
+            <h2 class="text-5xl md:text-6xl font-black text-white mb-6 logo">
+                Requête Incorrecte
+            </h2>
+
+            <div class="error-badge inline-block px-6 py-3 rounded-full mb-8">
+                <p class="text-red-400 font-bold">⚠️ Bad Request</p>
+            </div>
+
+            <p class="text-xl md:text-2xl text-gray-400 mb-4">
+                Oups ! Votre demande n'a pas pu être comprise.
+            </p>
+
+            <p class="text-lg text-gray-500 mb-12">
+                La requête envoyée au serveur contient des données invalides ou mal formatées.<br>
+                Veuillez vérifier les informations saisies et réessayer.
+            </p>
+
+            <!-- Common Issues -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 text-left">
+                <div class="bg-gray-900/50 backdrop-blur border border-gray-800 rounded-xl p-6">
+                    <div class="text-3xl mb-3">📝</div>
+                    <h3 class="text-white font-bold mb-2">Données invalides</h3>
+                    <p class="text-gray-500 text-sm">Vérifiez le format de vos données</p>
+                </div>
+                <div class="bg-gray-900/50 backdrop-blur border border-gray-800 rounded-xl p-6">
+                    <div class="text-3xl mb-3">🔗</div>
+                    <h3 class="text-white font-bold mb-2">URL incorrecte</h3>
+                    <p class="text-gray-500 text-sm">Le lien peut contenir une erreur</p>
+                </div>
+                <div class="bg-gray-900/50 backdrop-blur border border-gray-800 rounded-xl p-6">
+                    <div class="text-3xl mb-3">⚡</div>
+                    <h3 class="text-white font-bold mb-2">Paramètres manquants</h3>
+                    <p class="text-gray-500 text-sm">Des informations requises sont absentes</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                <a href="../index.html" class="btn-gradient text-white px-10 py-5 rounded-full font-bold text-lg inline-block">
+                    🏠 Retour à l'accueil
+                </a>
+                <button onclick="history.back()" class="btn-secondary text-white px-10 py-5 rounded-full font-bold text-lg">
+                    ← Page précédente
+                </button>
+            </div>
+
+            <!-- Help Section -->
+            <div class="bg-gray-900/30 backdrop-blur border border-gray-800 rounded-2xl p-8 mb-8">
+                <h3 class="text-2xl font-bold text-white mb-4">Besoin d'aide ?</h3>
+                <p class="text-gray-400 mb-6">
+                    Notre équipe est là pour vous assister
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="mailto:contact@nextdriveimport.com" class="text-yellow-500 hover:text-yellow-400 transition font-semibold">
+                        📧 contact@nextdriveimport.com
+                    </a>
+                    <span class="hidden sm:inline text-gray-700">•</span>
+                    <a href="tel:+33123456789" class="text-yellow-500 hover:text-yellow-400 transition font-semibold">
+                        📞 +33 1 23 45 67 89
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="pt-8 border-t border-gray-800">
+                <p class="text-gray-500 mb-6">Liens rapides :</p>
+                <div class="flex flex-wrap gap-4 justify-center text-sm">
+                    <a href="../index.html#vehicules" class="text-gray-400 hover:text-yellow-500 transition">
+                        Nos véhicules
+                    </a>
+                    <span class="text-gray-700">•</span>
+                    <a href="../index.html#processus" class="text-gray-400 hover:text-yellow-500 transition">
+                        Notre processus
+                    </a>
+                    <span class="text-gray-700">•</span>
+                    <a href="../index.html#devis" class="text-gray-400 hover:text-yellow-500 transition">
+                        Devis gratuit
+                    </a>
+                    <span class="text-gray-700">•</span>
+                    <a href="mailto:contact@nextdriveimport.com" class="text-gray-400 hover:text-yellow-500 transition">
+                        Contact
+                    </a>
+                </div>
+            </div>
+
+            <!-- Error Code -->
+            <div class="mt-12 text-gray-600 text-xs font-mono">
+                ERROR_CODE: 400_BAD_REQUEST
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+    </script>
+</body>
+</html>

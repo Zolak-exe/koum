@@ -93,7 +93,7 @@ function logout() {
 
         // Faire une requête au serveur pour détruire la session PHP
         const apiPath = window.location.pathname.includes('/pages/') ? '../api/account-manager.php' : 'api/account-manager.php';
-        fetch(apiPath, {
+        secureFetch(apiPath, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'logout' })

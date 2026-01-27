@@ -2,12 +2,13 @@
 // submit-devis.php - VERSION SQL (MIGRATED)
 session_start();
 require_once __DIR__ . '/db.php'; // Inclut env.php via db.php
+require_once __DIR__ . '/security.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -47,10 +48,10 @@ if (file_exists($rate_limit_file)) {
 $nom = isset($data['nom']) ? htmlspecialchars(trim($data['nom']), ENT_QUOTES, 'UTF-8') : '';
 $email = isset($data['email']) ? filter_var(trim($data['email']), FILTER_VALIDATE_EMAIL) : false;
 $telephone = isset($data['telephone']) ? htmlspecialchars(trim($data['telephone']), ENT_QUOTES, 'UTF-8') : '';
-$budget = isset($data['vehicule']['budget']) ? (int)$data['vehicule']['budget'] : 0;
+$budget = isset($data['vehicule']['budget']) ? (int) $data['vehicule']['budget'] : 0;
 $marque = isset($data['vehicule']['marque']) ? htmlspecialchars(trim($data['vehicule']['marque']), ENT_QUOTES, 'UTF-8') : '';
 $modele = isset($data['vehicule']['modele']) ? htmlspecialchars(trim($data['vehicule']['modele']), ENT_QUOTES, 'UTF-8') : '';
-$rgpd_consent = isset($data['rgpd_consent']) ? (bool)$data['rgpd_consent'] : false;
+$rgpd_consent = isset($data['rgpd_consent']) ? (bool) $data['rgpd_consent'] : false;
 
 if (!$nom || !$email || !$telephone || !$budget || !$marque || !$modele || !$rgpd_consent) {
     http_response_code(400);
@@ -87,11 +88,11 @@ try {
     // 1. Check PHP Session
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
-    } 
+    }
     // 2. Check Client Data in Session (Legacy)
     elseif (isset($_SESSION['client_data']['id'])) {
         $user_id = $_SESSION['client_data']['id'];
-    } 
+    }
     // 3. Check if email exists in DB (Auto-link)
     else {
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
@@ -110,7 +111,7 @@ try {
     }
 
     // Gestion de la création de compte optionnelle
-    $create_account = isset($data['create_account']) ? (bool)$data['create_account'] : false;
+    $create_account = isset($data['create_account']) ? (bool) $data['create_account'] : false;
     $password = isset($data['password']) ? $data['password'] : '';
 
     if ($create_account && !$user_id) {
@@ -129,18 +130,18 @@ try {
         $stmt->execute([$user_id, $nom, $email, $telephone_clean, $hashedPassword, $role]);
     }
 
-    $has_account = (bool)$user_id;
+    $has_account = (bool) $user_id;
 
     // Préparer les données devis
     $devis_id = 'devis_' . uniqid();
-    $annee_min = isset($data['vehicule']['annee_minimum']) ? (int)$data['vehicule']['annee_minimum'] : null;
-    $km_max = isset($data['vehicule']['kilometrage_max']) ? (int)$data['vehicule']['kilometrage_max'] : null;
+    $annee_min = isset($data['vehicule']['annee_minimum']) ? (int) $data['vehicule']['annee_minimum'] : null;
+    $km_max = isset($data['vehicule']['kilometrage_max']) ? (int) $data['vehicule']['kilometrage_max'] : null;
     $options = isset($data['vehicule']['options']) ? htmlspecialchars($data['vehicule']['options'], ENT_QUOTES, 'UTF-8') : '';
     $commentaires = isset($data['vehicule']['commentaires']) ? htmlspecialchars($data['vehicule']['commentaires'], ENT_QUOTES, 'UTF-8') : '';
 
     $sql = "INSERT INTO devis (id, user_id, user_name, user_email, marque, modele, budget, annee_minimum, kilometrage_max, options, commentaires, statut, created_at, updated_at) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'En attente', NOW(), NOW())";
-    
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         $devis_id,
@@ -195,7 +196,7 @@ try {
     if (function_exists('mail')) {
         // Sanitize email to prevent header injection
         $cleanEmail = str_replace(["\r", "\n"], '', $email);
-        
+
         $headers = "From: noreply@nextdriveimport.fr\r\n";
         $headers .= "Reply-To: $cleanEmail\r\n";
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";

@@ -2,12 +2,13 @@
 // login_check.php - VERSION 100% FONCTIONNELLE
 session_start();
 require_once __DIR__ . '/env.php';
+require_once __DIR__ . '/security.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);

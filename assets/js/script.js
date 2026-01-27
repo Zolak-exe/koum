@@ -11,13 +11,47 @@ async function safeParseJson(response) {
     if (!response.ok) {
         let body = '';
         try { body = await response.text(); } catch (_) { body = ''; }
-        throw new Error('Server error: ' + response.status + (body ? ' - ' + body : ''));
+        const status = response.status;
+        if (status === 403) {
+            console.error('Security Error (CSRF):', body);
+            // Optional: trigger re-auth or refresh token
+        }
+        throw new Error('Server error: ' + status + (body ? ' - ' + body : ''));
     }
     let text = '';
     try { text = await response.text(); } catch (_) { throw new Error('Unable to read response'); }
     if (!text || !text.trim()) throw new Error('Empty response body');
     try { return JSON.parse(text); } catch (err) { throw new Error('Invalid JSON: ' + err.message); }
 }
+
+// Helper: secure fetch with CSRF token
+async function secureFetch(url, options = {}) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    options.headers = options.headers || {};
+    if (csrfToken && options.method && options.method.toUpperCase() !== 'GET') {
+        options.headers['X-CSRF-Token'] = csrfToken;
+    }
+    
+    // Ensure credentials (cookies) are sent
+    options.credentials = 'include';
+    
+    return fetch(url, options);
+}
+
+// Helper: Sync CSRF token from check_session
+function updateCSRFToken(token) {
+    if (!token) return;
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    if (meta) {
+        meta.setAttribute('content', token);
+    }
+}
+
+// Expose helpers globally
+window.secureFetch = secureFetch;
+window.safeParseJson = safeParseJson;
+window.updateCSRFToken = updateCSRFToken;
 
 // ========== CONFIGURATION ==========
 const CONFIG = {
@@ -93,45 +127,48 @@ function hydrateClientDataFromSession() {
 }
 
 async function checkClientSession() {
-    const sessionData = hydrateClientDataFromSession();
-    if (sessionData) {
-        console.log('✅ Session found in sessionStorage, hydrating clientData');
-        clientData = sessionData;
-        showDevisForm();
-        return;
-    }
-
-    // Fallback: check PHP session (legacy auth flow)
+    // We always want to check the server for CSRF token even if session is in storage
+    const sessionApiUrl = window.location.pathname.includes('/pages/') ? '../api/check_session.php' : 'api/check_session.php';
+    
     try {
-        const response = await fetch(CONFIG.ACCOUNT_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'check_session' })
+        const response = await fetch(sessionApiUrl, {
+            method: 'GET', // GET doesn't need CSRF, but returns one
+            credentials: 'include'
         });
 
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            console.warn('Response is not JSON, skipping session check');
-            return;
+        const result = await safeParseJson(response);
+        
+        // Update global CSRF token for future POST requests
+        if (result.csrf_token) {
+            updateCSRFToken(result.csrf_token);
         }
 
-        const result = await safeParseJson(response);
-
-        if (result.authenticated) {
-            clientData = result.client;
-            // Update sessionStorage if needed
-            if (!sessionStorage.getItem('isLoggedIn')) {
-                sessionStorage.setItem('isLoggedIn', 'true');
-                sessionStorage.setItem('userName', clientData.nom || clientData.email);
-                sessionStorage.setItem('userEmail', clientData.email);
-                sessionStorage.setItem('userPhone', clientData.telephone || '');
-                sessionStorage.setItem('userRole', clientData.role || 'client');
-                if (clientData.id) sessionStorage.setItem('clientId', clientData.id);
-            }
+        if (result.logged_in) {
+            clientData = {
+                id: result.user_id,
+                nom: result.session_data.username,
+                email: result.session_data.email,
+                role: result.session_data.role,
+                telephone: result.session_data.telephone || ''
+            };
+            
+            // Sync with sessionStorage
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('userName', clientData.nom);
+            sessionStorage.setItem('userEmail', clientData.email);
+            sessionStorage.setItem('userRole', clientData.role);
+            if (clientData.id) sessionStorage.setItem('clientId', clientData.id);
+            
             showDevisForm();
+        } else {
+            // Clear if server says we are logged out
+            if (sessionStorage.getItem('isLoggedIn')) {
+                sessionStorage.clear();
+                updateEspaceClientLink();
+            }
         }
     } catch (error) {
-        console.debug('Session check: user not authenticated');
+        console.warn('Session check failed:', error);
     }
 }
 
@@ -220,7 +257,7 @@ function initAuthHandler() {
                 email: formData.get('email'),
                 telephone: formData.get('telephone')
             };
-            const response = await fetch(CONFIG.ACCOUNT_API_URL, {
+            const response = await secureFetch(CONFIG.ACCOUNT_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -245,7 +282,7 @@ function initAuthHandler() {
                         telephone: payload.telephone
                     };
 
-                    const loginResponse = await fetch(CONFIG.ACCOUNT_API_URL, {
+                    const loginResponse = await secureFetch(CONFIG.ACCOUNT_API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(loginPayload)
@@ -291,7 +328,7 @@ function showDevisForm() {
 
 window.logoutClient = async function () {
     try {
-        await fetch(CONFIG.ACCOUNT_API_URL, {
+        await secureFetch(CONFIG.ACCOUNT_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'logout' })

@@ -7,12 +7,13 @@
 
 session_start();
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/security.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -90,7 +91,7 @@ try {
             // Créer le nouveau compte
             $id = 'acc_' . uniqid();
             $hashedPassword = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : null;
-            
+
             $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), true)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$id, $nom, $email, $telephone, $hashedPassword, $role]);

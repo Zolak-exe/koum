@@ -5,20 +5,21 @@ php_flag display_errors Off
 php_flag log_errors On
 
 # Bloquer l'accès aux fichiers sensibles
-<FilesMatch "\.(log|txt|sql|md|bak|backup)$">
+<FilesMatch "^\.(env|git|antigravityignore|htaccess|editorconfig|gitignore|gitattributes|dockerignore)$">
     Require all denied
 </FilesMatch>
 
-# Protéger les fichiers JSON de données
-<FilesMatch "^(clients|accounts|devis)\.json$">
+<FilesMatch "\.(log|txt|sql|md|bak|backup|json|yaml|yml|json|lock)$">
     Require all denied
 </FilesMatch>
 
-# Bloquer l'accès direct au dossier data/
-#<DirectoryMatch "^.*/data/?$">
-#    Order Allow,Deny
-#    Deny from all
-#</DirectoryMatch>
+# Exception pour les fichiers JSON publics si nécessaire (ex: manifest), mais ici on bloque tout par précaution
+<Files "robots.txt">
+    Allow from all
+</Files>
+<Files "sitemap.xml">
+    Allow from all
+</Files>
 
 # Headers de sécurité (sans Permissions-Policy qui cause des warnings)
 <IfModule mod_headers.c>

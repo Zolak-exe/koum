@@ -83,30 +83,14 @@ function initDevisForm() {
 
             // Envoyer à l'API
             const apiPath = window.location.pathname.includes('/pages/') ? '../api/submit-devis.php' : 'api/submit-devis.php';
-            const response = await fetch(apiPath, {
+            const response = await secureFetch(apiPath, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(devisData)
             });
 
-            if (!response.ok) {
-                // Try to read body for diagnostics
-                let bodyText = '';
-                try { bodyText = await response.text(); } catch (_) { bodyText = ''; }
-                throw new Error('Erreur serveur: ' + response.status + (bodyText ? ' - ' + bodyText : ''));
-            }
+            const result = await safeParseJson(response);
 
-            // Defensive parse: ensure response body is not empty and contains valid JSON
-            let result = null;
-            try {
-                const text = await response.text();
-                if (!text || !text.trim()) {
-                    throw new Error('Empty response body');
-                }
-                result = JSON.parse(text);
-            } catch (err) {
-                throw new Error('Réponse API invalide ou vide: ' + err.message);
-            }
 
             if (result.success) {
                 // Stocker les données pour la création de compte
@@ -169,7 +153,7 @@ function initAccountCreationForm() {
             const email = document.getElementById('account_email').value;
             const username = email.split('@')[0] + '_' + Math.floor(Math.random() * 1000);
 
-            const response = await fetch(apiPath, {
+            const response = await secureFetch(apiPath, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -181,23 +165,7 @@ function initAccountCreationForm() {
                 })
             });
 
-            // Defensive parse for account-manager response
-            let result = null;
-            try {
-                if (!response.ok) {
-                    let bodyText = '';
-                    try { bodyText = await response.text(); } catch (_) { bodyText = ''; }
-                    throw new Error('Erreur serveur: ' + response.status + (bodyText ? ' - ' + bodyText : ''));
-                }
-
-                const text = await response.text();
-                if (!text || !text.trim()) {
-                    throw new Error('Empty response body');
-                }
-                result = JSON.parse(text);
-            } catch (err) {
-                throw new Error('Réponse API invalide ou vide: ' + err.message);
-            }
+            const result = await safeParseJson(response);
 
             if (result && result.success) {
                 // Enregistrer la session
