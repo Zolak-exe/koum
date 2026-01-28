@@ -187,6 +187,7 @@
         </div>
     </div>
 
+    <script src="../assets/js/script.js"></script>
     <script>
         // Créer les particules
         function createParticles() {
@@ -221,15 +222,17 @@
             try {
                 const identifier = document.getElementById('identifier').value.trim();
                 const password = document.getElementById('password').value;
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-                const response = await fetch('../api/auth.php', {
+                // Sync CSRF token first (important if session expired or new tab)
+                if (typeof checkClientSession === 'function') {
+                    await checkClientSession();
+                }
+
+                const response = await window.secureFetch('../api/auth.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
+                        'Content-Type': 'application/json'
                     },
-                    credentials: 'include',
                     body: JSON.stringify({
                         action: 'login',
                         identifier: identifier,
@@ -237,7 +240,7 @@
                     })
                 });
 
-                const result = await response.json();
+                const result = await window.safeParseJson(response);
 
                 if (result.success && result.client) {
                     // Enregistrer la session dans sessionStorage

@@ -1,19 +1,8 @@
 <?php
-/**
- * NEXT DRIVE IMPORT - Logout v2.1.0
- * Déconnexion sécurisée de l'admin
- */
-
-// Démarrer la session
-session_start();
+require_once __DIR__ . '/security.php';
 
 // Détruire toutes les variables de session
 $_SESSION = array();
-
-// Supprimer le cookie de session si existant
-if (isset($_COOKIE[session_name()])) {
-    setcookie(session_name(), '', time()-3600, '/');
-}
 
 // Détruire la session
 session_destroy();

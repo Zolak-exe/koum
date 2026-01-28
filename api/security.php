@@ -1,15 +1,17 @@
 <?php
-/**
- * Security Utilities - NEXT DRIVE IMPORT
- * Implements CSRF protection and CORS management
- */
+require_once __DIR__ . '/env.php';
 
 if (session_status() === PHP_SESSION_NONE) {
+    // Déterminer si on doit forcer le HTTPS (Activé en prod ou si détecté via proxy Render/Heroku)
+    $is_secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+        || env('APP_ENV') === 'production';
+
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
         'domain' => '',
-        'secure' => true,
+        'secure' => $is_secure,
         'httponly' => true,
         'samesite' => 'Lax'
     ]);

@@ -1,8 +1,6 @@
 <?php
-// login_check.php - VERSION 100% FONCTIONNELLE
-session_start();
-require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/env.php';
 
 setSecureCORS();
 enforceCSRF();
@@ -43,11 +41,12 @@ if (file_exists($rate_limit_file)) {
     if ($attempts['count'] >= $max_attempts && time() - $attempts['last_attempt'] < $lockout_time) {
         http_response_code(429);
         $remaining = ceil(($lockout_time - (time() - $attempts['last_attempt'])) / 60);
-        echo json_encode([
-            'success' => false,
-            'message' => "Trop de tentatives. Réessayez dans $remaining minutes.",
-            'locked_until' => $attempts['last_attempt'] + $lockout_time
-        ]);
+        echo
+            json_encode([
+                'success' => false,
+                'message' => "Trop de tentatives. Réessayez dans $remaining minutes.",
+                'locked_until' => $attempts['last_attempt'] + $lockout_time
+            ]);
         exit;
     }
 }
@@ -91,7 +90,10 @@ if ($username === ADMIN_USERNAME && $password === ADMIN_PASSWORD) {
 
 function log_attempt($rate_limit_file)
 {
-    $attempts = file_exists($rate_limit_file) ? json_decode(file_get_contents($rate_limit_file), true) : ['count' => 0, 'last_attempt' => 0];
+    $attempts = file_exists($rate_limit_file) ? json_decode(file_get_contents($rate_limit_file), true) : [
+        'count' => 0,
+        'last_attempt' => 0
+    ];
     $attempts['count']++;
     $attempts['last_attempt'] = time();
     file_put_contents($rate_limit_file, json_encode($attempts));

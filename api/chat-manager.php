@@ -1,10 +1,9 @@
 <?php
-/**
- * Gestionnaire de Chat - NEXT DRIVE IMPORT
- */
-
-session_start();
+require_once __DIR__ . '/security.php';
 require_once __DIR__ . '/db.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
@@ -91,23 +90,28 @@ try {
     echo json_encode(['success' => false, 'message' => 'Erreur serveur']);
 }
 
-function canAccessChat($pdo, $devisId, $userId, $userRole) {
-    if ($userRole === 'admin') return true;
+function canAccessChat($pdo, $devisId, $userId, $userRole)
+{
+    if ($userRole === 'admin')
+        return true;
 
     $stmt = $pdo->prepare("SELECT user_id, user_email, claimed_by FROM devis WHERE id = ?");
     $stmt->execute([$devisId]);
     $devis = $stmt->fetch();
 
-    if (!$devis) return false;
+    if (!$devis)
+        return false;
 
     if ($userRole === 'client') {
         // Check ID match
-        if ($devis['user_id'] === $userId) return true;
-        
+        if ($devis['user_id'] === $userId)
+            return true;
+
         // Fallback: check email if available in session
         $sessionEmail = $_SESSION['user_email'] ?? '';
-        if (!empty($sessionEmail) && $devis['user_email'] === $sessionEmail) return true;
-        
+        if (!empty($sessionEmail) && $devis['user_email'] === $sessionEmail)
+            return true;
+
         return false;
     }
 

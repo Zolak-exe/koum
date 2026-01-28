@@ -383,19 +383,20 @@
                     password: password
                 };
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                // Sync CSRF token
+                if (typeof checkClientSession === 'function') {
+                    await checkClientSession();
+                }
 
-                const response = await fetch('../api/account-manager.php', {
+                const response = await window.secureFetch('../api/account-manager.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
+                        'Content-Type': 'application/json'
                     },
-                    credentials: 'include',
                     body: JSON.stringify(formData)
                 });
 
-                const result = await response.json();
+                const result = await window.safeParseJson(response);
 
                 if (response.ok && result.success) {
                     // Succès - marquer les étapes

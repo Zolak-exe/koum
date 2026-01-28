@@ -1,13 +1,6 @@
 <?php
-/**
- * Gestionnaire de Comptes - NEXT DRIVE IMPORT
- * Gestion des comptes utilisateurs avec rôles (admin/client)
- * VERSION SQL (MIGRATED)
- */
-
-session_start();
-require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/db.php';
 
 setSecureCORS();
 enforceCSRF();
@@ -92,7 +85,8 @@ try {
             $id = 'acc_' . uniqid();
             $hashedPassword = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : null;
 
-            $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), true)";
+            $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?,
+?, ?, ?, NOW(), NOW(), true)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$id, $nom, $email, $telephone, $hashedPassword, $role]);
 
@@ -212,7 +206,8 @@ try {
                 exit;
             }
 
-            $stmt = $pdo->query("SELECT id, nom, email, telephone, role, created_at, updated_at, active FROM users ORDER BY created_at DESC");
+            $stmt = $pdo->query("SELECT id, nom, email, telephone, role, created_at, updated_at, active FROM users ORDER BY
+created_at DESC");
             $accounts = $stmt->fetchAll();
 
             echo json_encode([
@@ -284,7 +279,7 @@ try {
             }
 
             // Toggle status logic in SQL is tricky without reading first or using a CASE statement
-            // Let's read first to be safe and simple
+// Let's read first to be safe and simple
             $stmt = $pdo->prepare("SELECT active FROM users WHERE id = ?");
             $stmt->execute([$accountId]);
             $current = $stmt->fetchColumn();
@@ -323,4 +318,3 @@ try {
         'message' => 'Erreur serveur interne'
     ]);
 }
-

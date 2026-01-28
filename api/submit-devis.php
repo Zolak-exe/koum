@@ -1,8 +1,6 @@
 <?php
-// submit-devis.php - VERSION SQL (MIGRATED)
-session_start();
-require_once __DIR__ . '/db.php'; // Inclut env.php via db.php
 require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);

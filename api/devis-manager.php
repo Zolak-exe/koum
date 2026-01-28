@@ -1,13 +1,6 @@
 <?php
-/**
- * Gestionnaire de Devis - NEXT DRIVE IMPORT
- * Gestion des demandes de devis séparée des comptes
- * VERSION SQL (MIGRATED)
- */
-
-session_start();
-require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/db.php';
 
 setSecureCORS();
 enforceCSRF();

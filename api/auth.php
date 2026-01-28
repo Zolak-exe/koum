@@ -1,8 +1,6 @@
 <?php
-// auth.php - VERSION SQL (MIGRATED)
-session_start();
-require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/db.php';
 
 setSecureCORS();
 enforceCSRF();
@@ -79,7 +77,8 @@ function handleRegistration($data)
         $hashedPassword = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : null;
         $role = 'client';
 
-        $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), true)";
+        $sql = "INSERT INTO users (id, nom, email, telephone, password, role, created_at, updated_at, active) VALUES (?, ?, ?,
+?, ?, ?, NOW(), NOW(), true)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id, $nom, $email, $telephone_clean, $hashedPassword, $role]);
 
@@ -185,4 +184,3 @@ function handleLogout()
     session_destroy();
     echo json_encode(['success' => true, 'message' => 'Déconnexion réussie']);
 }
-

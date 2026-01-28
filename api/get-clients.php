@@ -1,16 +1,17 @@
 <?php
-// get-clients.php - VERSION SQL (MIGRATED)
-session_start();
+require_once __DIR__ . '/security.php';
 require_once __DIR__ . '/db.php';
+
+setSecureCORS();
+enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
 
 // Vérifier la session (admin, vendeur ou client)
 $isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 $isVendeur = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'vendeur';
-$isClient = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+$isClient = (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) || (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true);
 
 if (!$isAdmin && !$isVendeur && !$isClient) {
     http_response_code(401);
@@ -36,7 +37,7 @@ try {
         // 1. Les devis non claim (claimed_by IS NULL)
         // 2. Les devis qu'il a claim (claimed_by = user_id)
         $userId = $_SESSION['user_id'] ?? '';
-        
+
         $stmt = $pdo->prepare("
             SELECT d.*, u.telephone 
             FROM devis d 
@@ -50,7 +51,7 @@ try {
         // Client voit uniquement ses demandes
         $userId = $_SESSION['user_id'] ?? '';
         $userEmail = $_SESSION['user_email'] ?? '';
-        
+
         $stmt = $pdo->prepare("SELECT * FROM devis WHERE user_id = ? OR user_email = ? ORDER BY created_at DESC");
         $stmt->execute([$userId, $userEmail]);
         $clients = $stmt->fetchAll();

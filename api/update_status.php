@@ -1,11 +1,5 @@
 <?php
-/**
- * NEXT DRIVE IMPORT - Update Status v2.1.0
- * Mise à jour du statut des demandes
- * VERSION SQL (MIGRATED)
- */
-
-session_start();
+require_once __DIR__ . '/security.php';
 require_once __DIR__ . '/db.php';
 
 // ========== VÉRIFICATION AUTHENTIFICATION ==========
