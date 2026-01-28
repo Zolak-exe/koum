@@ -1,0 +1,10 @@
+
+============================================================
+[2026-01-28 00:35:56] FAILED EMAIL NOTIFICATION
+Error: Brevo API Error (HTTP/1.1 401 Unauthorized): {"message":"Key not found","code":"unauthorized"}
+
+To: nextdriveimport@gmail.com
+Subject: Test Forced Brevo
+------------------------------------------------------------
+Test
+============================================================

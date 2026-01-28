@@ -77,24 +77,26 @@ class MailManager
         $smtp_user = env('SMTP_USER');
         $smtp_pass = env('SMTP_PASS');
         $smtp_port = env('SMTP_PORT', 587);
+        $from_email = env('SMTP_FROM_EMAIL', 'nextdriveimport@gmail.com');
 
         // Si on a les identifiants SMTP, on tente un envoi direct via sockets
         if ($smtp_host && $smtp_user && $smtp_pass) {
-            $smtpSent = self::sendViaSmtp($smtp_host, $smtp_port, $smtp_user, $smtp_pass, $to, $subject, $message, $replyTo);
+            $smtpSent = self::sendViaSmtp($smtp_host, $smtp_port, $smtp_user, $smtp_pass, $to, $subject, $message, $replyTo, $from_email);
             if ($smtpSent)
                 return true;
         }
 
         // Sinon on tente l'API Brevo si configurée
         $api_key = env('BREVO_API_KEY');
-        if ($api_key && strpos($api_key, 'xkeysib-') === 0) {
-            return self::sendViaBrevoApi($to, $subject, $message, $replyTo);
+        if ($api_key) {
+            // Brevo keys can start with xkeysib- but let's be more lenient if it's the only option
+            return self::sendViaBrevoApi($to, $subject, $message, $replyTo, $from_email);
         }
 
         // En dernier recours : mail() natif (souvent bloqué sur Render)
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= "From: Next Drive Import <nextdriveimport@gmail.com>" . "\r\n";
+        $headers .= "From: Next Drive Import <$from_email>" . "\r\n";
         if ($replyTo)
             $headers .= "Reply-To: $replyTo" . "\r\n";
 
@@ -111,7 +113,7 @@ class MailManager
      * Simple SMTP Client implementation using sockets
      * Designed to work on Render without PHPMailer
      */
-    private static function sendViaSmtp($host, $port, $user, $pass, $to, $subject, $htmlContent, $replyTo = null)
+    private static function sendViaSmtp($host, $port, $user, $pass, $to, $subject, $htmlContent, $replyTo = null, $from_email = 'nextdriveimport@gmail.com')
     {
         try {
             $socket = fsockopen($host, $port, $errno, $errstr, 10);
@@ -128,35 +130,40 @@ class MailManager
                 return $response;
             };
 
-            $sendCommand = function ($socket, $cmd) use ($getResponse) {
+            $sendCommand = function ($socket, $cmd, $expectedCode = null) use ($getResponse) {
                 fputs($socket, $cmd . "\r\n");
-                return $getResponse($socket);
+                $response = $getResponse($socket);
+                if ($expectedCode && strpos($response, (string) $expectedCode) !== 0) {
+                    throw new Exception("SMTP Error for command '$cmd': Expected $expectedCode, got: " . trim($response));
+                }
+                return $response;
             };
 
             $getResponse($socket); // Banner
-            $sendCommand($socket, "EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
-            $sendCommand($socket, "STARTTLS");
 
-            if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-                throw new Exception("Échec de la négociation TLS");
+            $hostname = $_SERVER['SERVER_NAME'] ?? 'localhost';
+            $sendCommand($socket, "EHLO $hostname", 250);
+
+            $startTlsResponse = $sendCommand($socket, "STARTTLS");
+            // Some servers might not support STARTTLS or already be secure
+            if (strpos($startTlsResponse, '220') === 0) {
+                if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                    throw new Exception("Échec de la négociation TLS");
+                }
+                $sendCommand($socket, "EHLO $hostname", 250);
             }
 
-            $sendCommand($socket, "EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
-            $auth = $sendCommand($socket, "AUTH LOGIN");
-            $sendCommand($socket, base64_encode($user));
-            $passResult = $sendCommand($socket, base64_encode($pass));
+            $sendCommand($socket, "AUTH LOGIN", 334);
+            $sendCommand($socket, base64_encode($user), 334);
+            $passResult = $sendCommand($socket, base64_encode($pass), 235);
 
-            if (strpos($passResult, '235') === false) {
-                throw new Exception("Échec de l'authentification SMTP: " . $passResult);
-            }
-
-            $sendCommand($socket, "MAIL FROM:<nextdriveimport@gmail.com>");
-            $sendCommand($socket, "RCPT TO:<$to>");
-            $sendCommand($socket, "DATA");
+            $sendCommand($socket, "MAIL FROM:<$from_email>", 250);
+            $sendCommand($socket, "RCPT TO:<$to>", 250);
+            $sendCommand($socket, "DATA", 354);
 
             $headers = "MIME-Version: 1.0\r\n";
             $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-            $headers .= "From: Next Drive Import <nextdriveimport@gmail.com>\r\n";
+            $headers .= "From: Next Drive Import <$from_email>\r\n";
             $headers .= "To: <$to>\r\n";
             $headers .= "Subject: $subject\r\n";
             $headers .= "Date: " . date('r') . "\r\n";
@@ -164,8 +171,8 @@ class MailManager
                 $headers .= "Reply-To: <$replyTo>\r\n";
             $headers .= "\r\n";
 
-            $sendCommand($socket, $headers . $htmlContent . "\r\n.");
-            $sendCommand($socket, "QUIT");
+            $sendCommand($socket, $headers . $htmlContent . "\r\n.", 250);
+            $sendCommand($socket, "QUIT", 221);
             fclose($socket);
 
             return true;
@@ -179,13 +186,13 @@ class MailManager
     /**
      * Send email using Brevo REST API
      */
-    private static function sendViaBrevoApi($to, $subject, $htmlContent, $replyTo = null)
+    private static function sendViaBrevoApi($to, $subject, $htmlContent, $replyTo = null, $from_email = 'nextdriveimport@gmail.com')
     {
         $api_url = 'https://api.brevo.com/v3/smtp/email';
         $api_key = env('BREVO_API_KEY');
 
         $data = [
-            'sender' => ['name' => 'Next Drive Import', 'email' => 'nextdriveimport@gmail.com'],
+            'sender' => ['name' => 'Next Drive Import', 'email' => $from_email],
             'to' => [['email' => $to]],
             'subject' => $subject,
             'htmlContent' => $htmlContent
