@@ -81,6 +81,15 @@ function initDevisForm() {
                 has_account: false // Par défaut, pas de compte
             };
 
+            // Vérification CSRF de sécurité
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (!csrfToken) {
+                console.warn('[DevisFlow] CSRF token missing, attempting to refresh...');
+                if (typeof window.checkClientSession === 'function') {
+                    await window.checkClientSession();
+                }
+            }
+
             // Envoyer à l'API
             const apiPath = window.location.pathname.includes('/pages/') ? '../api/submit-devis.php' : 'api/submit-devis.php';
             const response = await secureFetch(apiPath, {

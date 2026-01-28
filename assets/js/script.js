@@ -31,20 +31,46 @@ async function secureFetch(url, options = {}) {
     options.headers = options.headers || {};
     if (csrfToken && options.method && options.method.toUpperCase() !== 'GET') {
         options.headers['X-CSRF-Token'] = csrfToken;
+        console.log(`[secureFetch] Sending CSRF token for ${options.method} ${url}:`, csrfToken.substring(0, 8) + '...');
+    } else if (options.method && options.method.toUpperCase() !== 'GET') {
+        console.warn(`[secureFetch] MISSING CSRF token for ${options.method} ${url}`);
     }
     
     // Ensure credentials (cookies) are sent
     options.credentials = 'include';
     
-    return fetch(url, options);
+    let response = await fetch(url, options);
+
+    // Auto-retry once on 403 (CSRF issue possibly)
+    if (response.status === 403 && !options._isRetry) {
+        console.warn('[secureFetch] 403 Forbidden detected. Attempting to refresh session and retry...');
+        const sessionRefreshed = await checkClientSession();
+        if (sessionRefreshed) {
+            const newTaskToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (newTaskToken) {
+                options.headers['X-CSRF-Token'] = newTaskToken;
+                options._isRetry = true;
+                console.log('[secureFetch] Retrying request with new token...');
+                response = await fetch(url, options);
+            }
+        }
+    }
+    
+    return response;
 }
 
 // Helper: Sync CSRF token from check_session
 function updateCSRFToken(token) {
-    if (!token) return;
+    if (!token) {
+        console.warn('[updateCSRFToken] Received empty token');
+        return;
+    }
     const meta = document.querySelector('meta[name="csrf-token"]');
     if (meta) {
         meta.setAttribute('content', token);
+        console.log('[updateCSRFToken] Token updated:', token.substring(0, 8) + '...');
+    } else {
+        console.error('[updateCSRFToken] Meta tag csrf-token not found in head!');
     }
 }
 
@@ -173,8 +199,10 @@ async function checkClientSession() {
                 updateEspaceClientLink();
             }
         }
+        return true; // Successfully checked
     } catch (error) {
         console.warn('Session check failed:', error);
+        return false;
     }
 }
 

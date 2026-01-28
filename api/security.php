@@ -2,19 +2,26 @@
 require_once __DIR__ . '/env.php';
 
 if (session_status() === PHP_SESSION_NONE) {
-    // Déterminer si on doit forcer le HTTPS (Activé en prod ou si détecté via proxy Render/Heroku)
+    // Déterminer si on doit forcer le HTTPS
     $is_secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
         || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
         || env('APP_ENV') === 'production';
 
-    session_set_cookie_params([
-        'lifetime' => 0,
+    $cookie_params = [
+        'lifetime' => 86400 * 30, // 30 jours
         'path' => '/',
         'domain' => '',
         'secure' => $is_secure,
         'httponly' => true,
         'samesite' => 'Lax'
-    ]);
+    ];
+
+    // Debug session config
+    $debugDir = __DIR__ . '/logs';
+    if (!is_dir($debugDir))
+        mkdir($debugDir, 0755, true);
+
+    session_set_cookie_params($cookie_params);
     session_start();
 }
 
@@ -34,17 +41,18 @@ function generateCSRFToken()
  */
 function validateCSRFToken($token)
 {
+    $logFile = __DIR__ . '/logs/csrf_debug.log';
     if (!isset($_SESSION['csrf_token'])) {
-        file_put_contents(__DIR__ . '/backend_errors.log', "[" . date('Y-m-d H:i:s') . "] CSRF FAIL: No token in session\n", FILE_APPEND);
+        error_log("[" . date('Y-m-d H:i:s') . "] CSRF FAIL: No token in session\n", 3, $logFile);
         return false;
     }
     if (empty($token)) {
-        file_put_contents(__DIR__ . '/backend_errors.log', "[" . date('Y-m-d H:i:s') . "] CSRF FAIL: Empty token in request\n", FILE_APPEND);
+        error_log("[" . date('Y-m-d H:i:s') . "] CSRF FAIL: Empty token in request\n", 3, $logFile);
         return false;
     }
     $match = hash_equals($_SESSION['csrf_token'], $token);
     if (!$match) {
-        file_put_contents(__DIR__ . '/backend_errors.log', "[" . date('Y-m-d H:i:s') . "] CSRF FAIL: Token mismatch. Received: " . substr($token, 0, 8) . "... Expected: " . substr($_SESSION['csrf_token'], 0, 8) . "...\n", FILE_APPEND);
+        error_log("[" . date('Y-m-d H:i:s') . "] CSRF FAIL: Token mismatch. Received: " . substr($token, 0, 8) . "... Expected: " . substr($_SESSION['csrf_token'], 0, 8) . "...\n", 3, $logFile);
     }
     return $match;
 }
@@ -69,6 +77,7 @@ function enforceCSRF()
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
         $token = getCSRFTokenFromRequest();
+        $logFile = __DIR__ . '/logs/csrf_debug.log';
 
         // Debug Log
         $debugInfo = "[" . date('Y-m-d H:i:s') . "] CSRF CHECK: " . $_SERVER['REQUEST_URI'] . "\n";
@@ -76,7 +85,9 @@ function enforceCSRF()
         $debugInfo .= " - Session ID: " . session_id() . "\n";
         $debugInfo .= " - Token in Request: " . (empty($token) ? 'EMPTY' : substr($token, 0, 8) . '...') . "\n";
         $debugInfo .= " - Token in Session: " . (!isset($_SESSION['csrf_token']) ? 'MISSING' : substr($_SESSION['csrf_token'], 0, 8) . '...') . "\n";
-        file_put_contents(__DIR__ . '/backend_errors.log', $debugInfo, FILE_APPEND);
+        $debugInfo .= " - Origin: " . ($_SERVER['HTTP_ORIGIN'] ?? 'NONE') . "\n";
+        $debugInfo .= " - Referer: " . ($_SERVER['HTTP_REFERER'] ?? 'NONE') . "\n";
+        error_log($debugInfo, 3, $logFile);
 
         if (!validateCSRFToken($token)) {
             http_response_code(403);
