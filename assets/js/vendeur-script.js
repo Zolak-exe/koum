@@ -10,7 +10,11 @@ window.addEventListener('load', async function () {
         // Utiliser account-manager pour vérifier la session et récupérer l'ID user
         const response = await fetch('../api/account-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({ action: 'check_session' })
         });
         
@@ -168,7 +172,11 @@ async function claimDevis(devisId) {
     try {
         const response = await fetch('../api/devis-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({ action: 'claim', devis_id: devisId })
         });
 
@@ -199,7 +207,11 @@ async function unclaimDevis(devisId) {
     try {
         const response = await fetch('../api/devis-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({ action: 'unclaim', devis_id: devisId })
         });
 
@@ -226,7 +238,11 @@ async function updateStatus(devisId, newStatus) {
     try {
         const response = await fetch('../api/devis-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({ 
                 action: 'update_status', 
                 devis_id: devisId, 
@@ -260,6 +276,11 @@ function openChat(devisId) {
 function logout() {
     fetch('../api/account-manager.php', {
         method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+        },
+        credentials: 'include',
         body: JSON.stringify({ action: 'logout' })
     }).then(() => window.location.href = '../pages/login.html');
 }

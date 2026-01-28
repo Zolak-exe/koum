@@ -4,16 +4,16 @@ session_start();
 require_once __DIR__ . '/db.php'; // Inclut env.php via db.php
 require_once __DIR__ . '/security.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
 setSecureCORS();
 enforceCSRF();
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
 
 // Configuration
 define('ADMIN_EMAIL', env('ADMIN_EMAIL', 'nextdriveimport@gmail.com'));
@@ -163,56 +163,28 @@ try {
     $rateData['last_submit'] = time();
     file_put_contents($rate_limit_file, json_encode($rateData));
 
-    // Tenter d'envoyer un email
-    $subject = "Nouvelle demande de devis - $nom";
-    $message = "
-    Nouvelle demande de devis reçue:
+    // Envoyer la notification via MailManager
+    require_once __DIR__ . '/mail-manager.php';
 
-    Client: $nom
-    Email: $email
-    Téléphone: $telephone
-
-    Véhicule souhaité:
-    - Marque: $marque
-    - Modèle: $modele
-    - Budget: " . number_format($budget, 0, ',', ' ') . " €
-
-    Année minimum: " . ($annee_min ?? 'Non spécifié') . "
-    Kilométrage maximum: " . ($km_max ?? 'Non spécifié') . " km
-
-    Options: " . ($options ?: 'Aucune') . "
-
-    Commentaires: " . ($commentaires ?: 'Aucun') . "
-
-    ---
-    ID Demande: " . $devis_id . "
-    Date: " . date('Y-m-d H:i:s') . "
-    IP: " . $ip . "
-
-    Lien admin: " . SITE_URL . "/admin.html
-    ";
-
-    $mailSent = false;
-    if (function_exists('mail')) {
-        // Sanitize email to prevent header injection
-        $cleanEmail = str_replace(["\r", "\n"], '', $email);
-
-        $headers = "From: noreply@nextdriveimport.fr\r\n";
-        $headers .= "Reply-To: $cleanEmail\r\n";
-        $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-
-        $mailSent = @mail(ADMIN_EMAIL, $subject, $message, $headers);
+    // Libérer la session avant l'envoi du mail (optionnel mais recommandé pour éviter les verrous)
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
     }
 
-    // Sauvegarder pour traitement manuel si l'email échoue
-    if (!$mailSent) {
-        $emailFile = __DIR__ . '/pending_emails_' . date('Y-m-d') . '.txt';
-        $emailContent = "\n" . str_repeat('=', 50) . "\n";
-        $emailContent .= date('Y-m-d H:i:s') . " - NOUVELLE DEMANDE\n";
-        $emailContent .= str_repeat('=', 50) . "\n";
-        $emailContent .= $message . "\n";
-        file_put_contents($emailFile, $emailContent, FILE_APPEND | LOCK_EX);
-    }
+    $mailSent = MailManager::sendDevisNotification([
+        'nom' => $nom,
+        'email' => $email,
+        'telephone' => $telephone,
+        'marque' => $marque,
+        'modele' => $modele,
+        'budget' => $budget,
+        'annee_min' => $annee_min,
+        'km_max' => $km_max,
+        'options' => $options,
+        'commentaires' => $commentaires
+    ], $devis_id);
+
+    // Note: MailManager gère déjà le fallback interne en cas d'échec de mail()
 
     // Logger
     error_log("Nouvelle demande: $nom ($email) - $marque $modele - " . $devis_id, 3, __DIR__ . '/admin_actions.log');

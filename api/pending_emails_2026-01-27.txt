@@ -1,0 +1,264 @@
+
+============================================================
+[2026-01-27 23:32:19] FAILED EMAIL NOTIFICATION
+To: nextdriveimport@gmail.com
+Subject: 🚗 Nouveau Devis #test_cli_1769556737 - Direct Test User
+------------------------------------------------------------
+
+        
+        
+            
+                Nouvelle demande de devis
+                
+                Une nouvelle demande vient d'être soumise sur Next Drive Import.
+                
+                
+                    
+                        Client:
+                        Direct Test User
+                    
+                    
+                        Email:
+                        direct_test@example.com
+                    
+                    
+                        Téléphone:
+                        0700000000
+                    
+                
+
+                Détails du véhicule
+                
+                    Modèle: Tesla Model S
+                    Budget: 90 000 €
+                    Année min: 2021
+                    KM max: 5 000 km
+                
+
+                Options / Commentaires:
+                Direct test of MailManager logic
+
+                
+                    Accéder au Dashboard Admin
+                
+                
+                
+                    ID Devis: test_cli_1769556737 | Date: 27/01/2026 23:32
+                
+            
+        
+        
+        
+============================================================
+
+============================================================
+[2026-01-27 23:34:16] FAILED EMAIL NOTIFICATION
+To: nextdriveimport@gmail.com
+Subject: 🚗 Nouveau Devis #devis_test_69794b7657419 - CLI Test User
+------------------------------------------------------------
+
+        
+        
+            
+                Nouvelle demande de devis
+                
+                Une nouvelle demande vient d'être soumise sur Next Drive Import.
+                
+                
+                    
+                        Client:
+                        CLI Test User
+                    
+                    
+                        Email:
+                        cli_test@example.com
+                    
+                    
+                        Téléphone:
+                        0611223344
+                    
+                
+
+                Détails du véhicule
+                
+                    Modèle: Lamborghini Urus
+                    Budget: 300 000 €
+                    Année min: 2022
+                    KM max: 5 000 km
+                
+
+                Options / Commentaires:
+                CLI test of full flow
+
+                
+                    Accéder au Dashboard Admin
+                
+                
+                
+                    ID Devis: devis_test_69794b7657419 | Date: 27/01/2026 23:34
+                
+            
+        
+        
+        
+============================================================
+
+============================================================
+[2026-01-27 23:46:30] FAILED EMAIL NOTIFICATION
+To: nextdriveimport@gmail.com
+Subject: 🚗 Nouveau Devis #test_api_1769557590 - Test Brevo API
+------------------------------------------------------------
+
+        
+        
+            
+                Nouvelle demande de devis
+                
+                Une nouvelle demande vient d'être soumise sur Next Drive Import.
+                
+                
+                    
+                        Client:
+                        Test Brevo API
+                    
+                    
+                        Email:
+                        nextdriveimport@gmail.com
+                    
+                    
+                        Téléphone:
+                        0700000000
+                    
+                
+
+                Détails du véhicule
+                
+                    Modèle: Lamborghini Revuelto
+                    Budget: 500 000 €
+                    Année min: 2024
+                    KM max: 100 km
+                
+
+                Options / Commentaires:
+                Test of Brevo API integration via REST
+
+                
+                    Accéder au Dashboard Admin
+                
+                
+                
+                    ID Devis: test_api_1769557590 | Date: 27/01/2026 23:46
+                
+            
+        
+        
+        
+============================================================
+
+============================================================
+[2026-01-27 23:47:07] FAILED EMAIL NOTIFICATION
+Error: Brevo API Error (HTTP/1.1 401 Unauthorized): {"message":"Key not found","code":"unauthorized"}
+
+To: nextdriveimport@gmail.com
+Subject: 🚗 Nouveau Devis #test_api_1769557627 - Test Brevo API
+------------------------------------------------------------
+
+        
+        
+            
+                Nouvelle demande de devis
+                
+                Une nouvelle demande vient d'être soumise sur Next Drive Import.
+                
+                
+                    
+                        Client:
+                        Test Brevo API
+                    
+                    
+                        Email:
+                        nextdriveimport@gmail.com
+                    
+                    
+                        Téléphone:
+                        0700000000
+                    
+                
+
+                Détails du véhicule
+                
+                    Modèle: Lamborghini Revuelto
+                    Budget: 500 000 €
+                    Année min: 2024
+                    KM max: 100 km
+                
+
+                Options / Commentaires:
+                Test of Brevo API integration via REST
+
+                
+                    Accéder au Dashboard Admin
+                
+                
+                
+                    ID Devis: test_api_1769557627 | Date: 27/01/2026 23:47
+                
+            
+        
+        
+        
+============================================================
+
+============================================================
+[2026-01-27 23:48:38] FAILED EMAIL NOTIFICATION
+Error: Brevo API Error (HTTP/1.1 401 Unauthorized): {"message":"Key not found","code":"unauthorized"}
+
+To: nextdriveimport@gmail.com
+Subject: 🚗 Nouveau Devis #test_api_1769557718 - Test Brevo API
+------------------------------------------------------------
+
+        
+        
+            
+                Nouvelle demande de devis
+                
+                Une nouvelle demande vient d'être soumise sur Next Drive Import.
+                
+                
+                    
+                        Client:
+                        Test Brevo API
+                    
+                    
+                        Email:
+                        nextdriveimport@gmail.com
+                    
+                    
+                        Téléphone:
+                        0700000000
+                    
+                
+
+                Détails du véhicule
+                
+                    Modèle: Lamborghini Revuelto
+                    Budget: 500 000 €
+                    Année min: 2024
+                    KM max: 100 km
+                
+
+                Options / Commentaires:
+                Test of Brevo API integration via REST
+
+                
+                    Accéder au Dashboard Admin
+                
+                
+                
+                    ID Devis: test_api_1769557718 | Date: 27/01/2026 23:48
+                
+            
+        
+        
+        
+============================================================

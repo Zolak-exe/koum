@@ -704,7 +704,11 @@ async function saveAdminNotes(clientId) {
     try {
         const response = await fetch('../api/devis-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({
                 action: 'update_notes',
                 devis_id: clientId,
@@ -1050,7 +1054,9 @@ async function saveToJsonFile() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
             },
+            credentials: 'include',
             body: JSON.stringify(allClients)
         });
 
@@ -1083,8 +1089,10 @@ async function updateStatusQuick(clientId, newStatus) {
         const response = await fetch('../api/devis-manager.php', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
             },
+            credentials: 'include',
             body: JSON.stringify({
                 action: 'update_status',
                 devis_id: clientId,

@@ -17,7 +17,11 @@ async function checkAuthSession() {
     try {
         const response = await fetch('../api/account-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({ action: 'check_session' })
         });
 
@@ -220,7 +224,11 @@ window.logout = async function () {
     try {
         await fetch('../api/account-manager.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            credentials: 'include',
             body: JSON.stringify({ action: 'logout' })
         });
 

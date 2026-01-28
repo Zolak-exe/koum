@@ -64,12 +64,18 @@ const CONFIG = {
 
 // ========== INITIALIZATION ==========
 document.addEventListener('DOMContentLoaded', function () {
+    // 1. Initialiser la session et le jeton CSRF (Crucial)
+    checkClientSession();
+
+    // 2. Initialiser les autres composants
     initSmoothScroll();
     initFormHandler();
     initMobileMenu();
     initNavbarScroll();
     initLazyLoading();
     initAccessibility();
+    
+    // 3. Tracking & UI
     trackPageView();
     createStarParticles();
     updateEspaceClientLink();

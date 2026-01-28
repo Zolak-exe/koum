@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="">
     <title>Demande de Devis - NEXT DRIVE IMPORT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet"
@@ -264,8 +265,10 @@
                 const response = await fetch('../api/account-manager.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                     },
+                    credentials: 'include',
                     body: JSON.stringify({ action: 'check_session' })
                 });
 
@@ -309,8 +312,10 @@
                 const sessionResponse = await fetch('../api/account-manager.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                     },
+                    credentials: 'include',
                     body: JSON.stringify({ action: 'check_session' })
                 });
 
@@ -341,8 +346,10 @@
                 const response = await fetch('../api/submit-devis.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                     },
+                    credentials: 'include',
                     body: JSON.stringify(formData)
                 });
 
@@ -379,8 +386,10 @@
                 await fetch('../api/account-manager.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                     },
+                    credentials: 'include',
                     body: JSON.stringify({ action: 'logout' })
                 });
 
