@@ -197,6 +197,8 @@ try {
 
 } catch (Exception $e) {
     http_response_code(500);
+    $errorMsg = "[" . date('Y-m-d H:i:s') . "] ERROR: " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n";
+    file_put_contents(__DIR__ . '/backend_errors.log', $errorMsg, FILE_APPEND);
     error_log($e->getMessage()); // Log error instead of showing it
-    echo json_encode(['success' => false, 'message' => 'Erreur serveur interne']);
+    echo json_encode(['success' => false, 'message' => 'Erreur serveur interne : ' . $e->getMessage()]);
 }

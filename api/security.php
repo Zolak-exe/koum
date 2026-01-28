@@ -34,10 +34,19 @@ function generateCSRFToken()
  */
 function validateCSRFToken($token)
 {
-    if (!isset($_SESSION['csrf_token']) || empty($token)) {
+    if (!isset($_SESSION['csrf_token'])) {
+        file_put_contents(__DIR__ . '/backend_errors.log', "[" . date('Y-m-d H:i:s') . "] CSRF FAIL: No token in session\n", FILE_APPEND);
         return false;
     }
-    return hash_equals($_SESSION['csrf_token'], $token);
+    if (empty($token)) {
+        file_put_contents(__DIR__ . '/backend_errors.log', "[" . date('Y-m-d H:i:s') . "] CSRF FAIL: Empty token in request\n", FILE_APPEND);
+        return false;
+    }
+    $match = hash_equals($_SESSION['csrf_token'], $token);
+    if (!$match) {
+        file_put_contents(__DIR__ . '/backend_errors.log', "[" . date('Y-m-d H:i:s') . "] CSRF FAIL: Token mismatch. Received: " . substr($token, 0, 8) . "... Expected: " . substr($_SESSION['csrf_token'], 0, 8) . "...\n", FILE_APPEND);
+    }
+    return $match;
 }
 
 /**
@@ -60,6 +69,15 @@ function enforceCSRF()
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
         $token = getCSRFTokenFromRequest();
+
+        // Debug Log
+        $debugInfo = "[" . date('Y-m-d H:i:s') . "] CSRF CHECK: " . $_SERVER['REQUEST_URI'] . "\n";
+        $debugInfo .= " - Method: " . $_SERVER['REQUEST_METHOD'] . "\n";
+        $debugInfo .= " - Session ID: " . session_id() . "\n";
+        $debugInfo .= " - Token in Request: " . (empty($token) ? 'EMPTY' : substr($token, 0, 8) . '...') . "\n";
+        $debugInfo .= " - Token in Session: " . (!isset($_SESSION['csrf_token']) ? 'MISSING' : substr($_SESSION['csrf_token'], 0, 8) . '...') . "\n";
+        file_put_contents(__DIR__ . '/backend_errors.log', $debugInfo, FILE_APPEND);
+
         if (!validateCSRFToken($token)) {
             http_response_code(403);
             die(json_encode([
