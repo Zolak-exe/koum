@@ -349,8 +349,11 @@ function initAuthHandler() {
 }
 
 function showDevisForm() {
-    document.getElementById('authSection').style.display = 'none';
-    document.getElementById('devisForm').classList.remove('hidden');
+    const authSection = document.getElementById('authSection');
+    const devisForm = document.getElementById('devisForm');
+
+    if (authSection) authSection.style.display = 'none';
+    if (devisForm) devisForm.classList.remove('hidden');
 
     if (clientData) {
         const clientNameEl = document.getElementById('clientName');

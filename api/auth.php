@@ -94,7 +94,10 @@ function handleRegistration($data)
         $_SESSION['client_data'] = $newAccount;
         $_SESSION['user_role'] = 'client';
         $_SESSION['logged_in'] = true;
+        $_SESSION['user_id'] = $id;
+        $_SESSION['user_name'] = $nom;
         $_SESSION['user_email'] = $email;
+        $_SESSION['user_telephone'] = $telephone_clean;
 
         echo json_encode([
             'success' => true,
@@ -123,9 +126,9 @@ function handleLogin($data)
     try {
         $pdo = getDB();
 
-        // Chercher l'utilisateur par email
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$identifier]);
+        // Chercher l'utilisateur par email ou nom (pseudo)
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? OR nom = ?");
+        $stmt->execute([$identifier, $identifier]);
         $user = $stmt->fetch();
 
         if (!$user || !password_verify($password, $user['password'])) {

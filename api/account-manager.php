@@ -95,7 +95,10 @@ try {
             $_SESSION['user_email'] = $email;
             $_SESSION['user_name'] = $nom;
             $_SESSION['user_role'] = $role;
+            $_SESSION['user_role'] = $role;
             $_SESSION['logged_in'] = true;
+            $_SESSION['client_logged_in'] = true; // Compatibility
+            $_SESSION['user_telephone'] = $telephone;
 
             echo json_encode([
                 'success' => true,
@@ -152,7 +155,9 @@ try {
             $_SESSION['user_name'] = $foundAccount['nom'];
             $_SESSION['user_telephone'] = $foundAccount['telephone'];
             $_SESSION['user_role'] = $foundAccount['role'];
+            $_SESSION['user_role'] = $foundAccount['role'];
             $_SESSION['logged_in'] = true;
+            $_SESSION['client_logged_in'] = true; // Compatibility
 
             $redirect = 'client.html';
             if ($foundAccount['role'] === 'admin') {
